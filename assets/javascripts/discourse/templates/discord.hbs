@@ -1,0 +1,12 @@
+<h1>{{ i18n 'discord_datastore.title' }}</h1>
+
+<form {{ action 'createMessage' content on='submit' }}>
+  <label>
+    {{ i18n 'discord_datastore.test.text_field_label' }}
+    {{ textarea name='message' value=content }}
+  </label>
+
+  <button type='submit' class='btn btn-primary'>
+    {{ i18n 'discord_datastore.test.submit_label' }}
+  </button>
+</form>

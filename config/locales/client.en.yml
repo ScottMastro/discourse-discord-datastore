@@ -1,4 +1,7 @@
 en:
   js:
-    discourse_plugin_name:
-      placeholder: placeholder
+    discord_datastore:
+      title: "Discord Datastore"
+      test: 
+        text_field_label: "New message"
+        submit_label: "Save"

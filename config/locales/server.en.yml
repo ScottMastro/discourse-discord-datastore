@@ -1,1 +1,3 @@
 en:
+  site_settings:
+    discord_datastore_enabled: 'Turn the datastore on'
