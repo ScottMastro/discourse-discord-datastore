@@ -41,16 +41,19 @@ after_initialize do
       isolate_namespace DiscordDatastore
   end
 
-  require_relative 'app/models/discord_messages.rb'
-  require_relative 'app/controllers/discord_controller.rb'
+  require_relative 'app/discord_store.rb'
   require_relative 'app/controllers/discord_messages_controller.rb'
+  require_relative 'app/controllers/discord_controller.rb'
+  #require_relative 'app/models/discord_messages.rb'
   require_relative 'lib/bot.rb'
   
   DiscordDatastore::Engine.routes.draw do
     get "/discord" => "discord#index", constraints: StaffConstraint.new
+
   end
   
   Discourse::Application.routes.append do
+    put '/discord_messages/:message_id' => 'discord_messages#update'
     mount DiscordDatastore::Engine, at: "/"
     get '/admin/plugins/discord-datastore' => 'admin/plugins#index', constraints: StaffConstraint.new
   end
