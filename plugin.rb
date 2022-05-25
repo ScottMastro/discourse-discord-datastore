@@ -49,15 +49,14 @@ after_initialize do
   
   DiscordDatastore::Engine.routes.draw do
     get "/discord" => "discord#index", constraints: StaffConstraint.new
-
+    put '/discord_messages/:message_id' => 'discord_messages#update'
+    get '/discord_messages' => 'discord_messages#index'
+    delete '/discord_messages/:message_id' => 'discord_messages#destroy'
   end
   
   Discourse::Application.routes.append do
     mount DiscordDatastore::Engine, at: "/"
     get '/admin/plugins/discord-datastore' => 'admin/plugins#index', constraints: StaffConstraint.new
-    put '/discord_messages/:message_id' => 'discord_messages#update'
-    get '/discord_messages' => 'discord_messages#index'
-    delete '/discord_messages/:message_id' => 'discord_messages#destroy'
   end
   
   bot_thread = Thread.new do
