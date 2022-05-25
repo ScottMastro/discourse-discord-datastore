@@ -16,7 +16,8 @@
   <ul>
     {{#each messages as |message|}}
       <li>
-        {{ message.content }}
+        {{ message.content }}         
+        {{ message.author_id }}
         <button type="button" class="btn btn-danger" {{ action 'deleteDiscordMessage' message }}>
           {{ i18n 'discord_datastore.test.delete_message_label' }}
         </button>

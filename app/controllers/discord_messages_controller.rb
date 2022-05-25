@@ -19,6 +19,9 @@ module DiscordDatastore
 
       message = {
         'id' => params[:message_id],
+        'author_id' => 6969420,
+        'channel_id' => 42069,
+        'date' => Time.now,
         'content' => params[:discord_message][:content]
       }
 

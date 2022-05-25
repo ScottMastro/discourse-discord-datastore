@@ -41,7 +41,6 @@ after_initialize do
       isolate_namespace DiscordDatastore
   end
 
-  require_relative 'app/discord_store.rb'
   require_relative 'app/controllers/discord_messages_controller.rb'
   require_relative 'app/controllers/discord_controller.rb'
   require_relative 'app/models/discord_message.rb'
