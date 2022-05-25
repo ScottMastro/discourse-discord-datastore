@@ -5,3 +5,4 @@ en:
       test: 
         text_field_label: "New message"
         submit_label: "Save"
+        delete_message_label: "Delete"

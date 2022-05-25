@@ -53,10 +53,11 @@ after_initialize do
   end
   
   Discourse::Application.routes.append do
-    put '/discord_messages/:message_id' => 'discord_messages#update'
-    get '/discord_messages' => 'discord_messages#index'
     mount DiscordDatastore::Engine, at: "/"
     get '/admin/plugins/discord-datastore' => 'admin/plugins#index', constraints: StaffConstraint.new
+    put '/discord_messages/:message_id' => 'discord_messages#update'
+    get '/discord_messages' => 'discord_messages#index'
+    delete '/discord_messages/:message_id' => 'discord_messages#destroy'
   end
   
   bot_thread = Thread.new do

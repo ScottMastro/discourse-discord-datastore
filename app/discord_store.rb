@@ -12,5 +12,12 @@ class DiscordStore
 
       message
     end
+
+    def remove_discord_message(message_id)
+      messages = get_discord_messages()
+      messages.delete(message_id)
+      PluginStore.set('discord', 'discordMessages', messages)
+    end
+
   end
 end

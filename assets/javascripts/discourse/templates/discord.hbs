@@ -15,7 +15,12 @@
 {{#if messages}}
   <ul>
     {{#each messages as |message|}}
-      <li>{{ message.content }}</li>
+      <li>
+        {{ message.content }}
+        <button type="button" class="btn btn-danger" {{ action 'deleteDiscordMessage' message }}>
+          {{ i18n 'discord_datastore.test.delete_message_label' }}
+        </button>
+      </li>
     {{/each}}
   </ul>
 {{/if}}

@@ -6,7 +6,6 @@ class DiscordMessagesController < ApplicationController
     render json: { discord_messages: messages.values }
   end
 
-
   def update
     Rails.logger.info 'Called DiscordMessagesController#update'
 
@@ -18,7 +17,13 @@ class DiscordMessagesController < ApplicationController
     }
 
     DiscordStore.add_discord_message(message_id, message)
-
     render json: { message_id: message }
   end
+
+  def destroy
+    Rails.logger.info 'Called DiscordMessagesController#destroy'
+    DiscordStore.remove_discord_message(params[:message_id])
+    render json: success_json
+  end
+
 end

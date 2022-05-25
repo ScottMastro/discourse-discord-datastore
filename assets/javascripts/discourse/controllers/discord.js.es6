@@ -30,6 +30,15 @@ export default Ember.Controller.extend({
       discordMessage.save()
         .then(console.log)
         .catch(console.error);
+    },
+
+    deleteDiscordMessage(message) {
+      this.store.destroyRecord('discordMessage', message)
+        .then(() => {
+          this.messages.removeObject(message);
+        })
+        .catch(console.error);
     }
+
   }
 });
