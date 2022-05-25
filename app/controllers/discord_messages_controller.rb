@@ -5,10 +5,13 @@ module DiscordDatastore
     PAGE_SIZE = 15
 
     def index
+      page=1
+      #page = params[:page].to_i || 1
       Rails.logger.info 'Called DiscordMessagesController#index'
-      messages = DiscordStore.get_discord_messages()
 
-      render json: { discord_messages: messages.values }
+      messages = DiscordDatastore::DiscordMessage.order(created_at: :desc)
+      messages = messages.offset(page * PAGE_SIZE).limit(PAGE_SIZE)
+      render json: { discord_messages: messages }
     end
 
     def create
@@ -20,16 +23,14 @@ module DiscordDatastore
       }
 
       message = DiscordDatastore::DiscordMessage.create(message)
-      #DiscordStore.add_discord_message(message_id, message)
-      
-      #render_serialized(message, DiscordMessageSerializer)
       render json: { message_id: message }
     end
 
     def destroy
       Rails.logger.info 'Called DiscordMessagesController#destroy'
-      DiscordStore.remove_discord_message(params[:message_id])
+      DiscordDatastore::DiscordMessage.destroy_by(id: params[:message_id])
       render json: success_json
     end
   end
 end
+
