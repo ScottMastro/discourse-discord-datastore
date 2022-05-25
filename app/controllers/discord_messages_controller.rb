@@ -1,4 +1,12 @@
 class DiscordMessagesController < ApplicationController
+  def index
+    Rails.logger.info 'Called DiscordMessagesController#index'
+    messages = DiscordStore.get_discord_messages()
+
+    render json: { discord_messages: messages.values }
+  end
+
+
   def update
     Rails.logger.info 'Called DiscordMessagesController#update'
 

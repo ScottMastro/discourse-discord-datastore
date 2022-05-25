@@ -10,3 +10,12 @@
     {{ i18n 'discord_datastore.test.submit_label' }}
   </button>
 </form>
+
+
+{{#if messages}}
+  <ul>
+    {{#each messages as |message|}}
+      <li>{{ message.content }}</li>
+    {{/each}}
+  </ul>
+{{/if}}
