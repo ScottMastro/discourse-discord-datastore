@@ -50,6 +50,8 @@ after_initialize do
     get "/discord" => "discord#index", constraints: StaffConstraint.new
     put '/discord_messages/:message_id' => 'discord_messages#create'
     get '/discord_messages' => 'discord_messages#index'
+    get '/discord_messages_total' => 'discord_messages#total_messages'
+
     delete '/discord_messages/:message_id' => 'discord_messages#destroy'
   end
   
