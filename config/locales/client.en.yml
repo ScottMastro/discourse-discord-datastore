@@ -3,6 +3,9 @@ en:
     discord_datastore:
       title: "Discord Datastore"
       user_search: "Search user..."
+      message_pagination_next: "next→"
+      message_pagination_previous: "←prev"
+
       test: 
         text_field_label: "New message"
         submit_label: "Save"

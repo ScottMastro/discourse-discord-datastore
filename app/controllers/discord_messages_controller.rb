@@ -2,7 +2,7 @@ module DiscordDatastore
   class DiscordMessagesController < ApplicationController
 
     requires_login
-    PAGE_SIZE = 20
+    PAGE_SIZE = 10
 
     def index
       page=1
