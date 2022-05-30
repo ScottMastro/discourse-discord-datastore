@@ -10,8 +10,9 @@ module DiscordDatastore
       Rails.logger.info 'Called DiscordMessagesController#index'
 
       messages = DiscordDatastore::DiscordMessage.order(created_at: :desc)
+      nMessages = messages.length
       messages = messages.offset(page * PAGE_SIZE).limit(PAGE_SIZE)
-      render json: { discord_messages: messages }
+      render json: { discord_messages: messages, test: nMessages }
     end
 
     def total_messages

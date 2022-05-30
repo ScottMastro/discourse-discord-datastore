@@ -38,6 +38,10 @@ export default Ember.Controller.extend({
           this.messages.removeObject(message);
         })
         .catch(console.error);
+    },
+
+    onChangeSearchTermForUsername(username){
+      this.set("searched_username", username.length ? username : null);
     }
 
   }

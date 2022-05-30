@@ -2,6 +2,7 @@ en:
   js:
     discord_datastore:
       title: "Discord Datastore"
+      user_search: "Search user..."
       test: 
         text_field_label: "New message"
         submit_label: "Save"

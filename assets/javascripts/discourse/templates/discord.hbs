@@ -1,5 +1,15 @@
 <h1>{{ i18n 'discord_datastore.title' }}</h1>
 
+<div>
+    {{ "messageTotal: " }}{{ model.test }}
+</div><div>
+    {{ "Selected user: " }}{{ searched_username }}
+</div>
+
+<div> <hr> </div>
+
+<!-- 
+
 <form {{ action 'createDiscordMessage' content on='submit' }}>
   <label>
     {{ i18n 'discord_datastore.test.text_field_label' }}
@@ -12,13 +22,29 @@
 </form>
 
 <label>
-  {{ "messageTotal: " }}{{ totalMessages }}
-</label>
+
+-->
+<div><h4>  {{ i18n 'discord_datastore.user_search' }} </h4></div>
+
+<div>
+{{user-chooser
+  id="filter-by-user"
+  value=searchedTerms.username
+  onChange=(action "onChangeSearchTermForUsername")
+    options=(hash
+    headerAriaLabel=(i18n "discord_datastore.user_search")
+    maximum=1
+    excludeCurrentUser=false
+  )
+}}
+</div>
 
 {{#if messages}}
+<div class ="discord-message-list" >
   <ul>
     {{#each messages as |message|}}
       <li>
+        <img src="https://i.imgur.com/Xz4OOh9.png" alt=""/>
         {{ message.content }}         
         {{ message.author_id }}
         <button type="button" class="btn btn-danger" {{ action 'deleteDiscordMessage' message }}>
@@ -27,4 +53,5 @@
       </li>
     {{/each}}
   </ul>
+</div>
 {{/if}}
