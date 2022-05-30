@@ -58,7 +58,10 @@ after_initialize do
     get '/discord_messages' => 'discord_messages#index'
    
     get '/discord_channels' => 'discord_channels#index'
+    put '/discord_channels/:channel_id' => 'discord_channels#create'
+
     get '/discord_users' => 'discord_users#index'
+    put '/discord_users/:user_id' => 'discord_users#create'
 
     delete '/discord_messages/:message_id' => 'discord_messages#destroy'
   end
@@ -81,4 +84,3 @@ STDERR.puts 'Datastore should be spawned, say "!ping" on Discord!'
 STDERR.puts '----------------------------------------------------'
 STDERR.puts '(--------       If not check logs         ---------)'
 end
-

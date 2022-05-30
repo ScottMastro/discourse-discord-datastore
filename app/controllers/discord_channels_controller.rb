@@ -8,9 +8,22 @@ module DiscordDatastore
         Rails.logger.info 'Called DiscordChannelsController#index'
         
         channels = DiscordDatastore::DiscordChannel.order(created_at: :desc)
-        nChannels = channels.length
+        render json: { discord_channels: channels }
+        end
 
-        render json: { discord_channels: "hello" }
+      def create
+        Rails.logger.info 'Called DiscordChannelsController#create'
+  
+        channel = {
+          'id' => params[:channel_id],
+          'name' => "fake-channel",
+          'voice' => false,
+          'permissions' => [],
+        }
+  
+        channel = DiscordDatastore::DiscordChannel.create(channel)
+        render json: success_json
       end
+
     end
   end

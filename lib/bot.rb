@@ -62,6 +62,19 @@ class Bot
           DiscordDatastore::DiscordMessage.create(newMessage)
         end
       end
+
+      bot.command(:channels) do |event|
+        event.server.channels.each do |channel|
+          newChannel = {
+            'id' => channel.id,
+            'name' => channel.name,
+            'voice' => (! channel.text?) ,
+            'permissions' => []
+          }
+          puts newChannel
+          DiscordDatastore::DiscordChannel.create(newChannel)
+        end
+      end
       
       bot.message() do |event|
         event.server.channels.each do |channel|
