@@ -5,17 +5,14 @@ textarea {
   margin-left: 5px;
 }
 
-
-
 .discord-message-list{
+  background: #36383f;
+  color: #dcddde;
+
   ul {
-    background: #36383f;
     padding: 20px;
   }
-
   ul li {
-    background: #36383f;
-    color: #dcddde;
     margin: 5px;
   }
 }

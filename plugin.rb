@@ -42,15 +42,23 @@ after_initialize do
   end
 
   require_relative 'app/controllers/discord_messages_controller.rb'
+  require_relative 'app/controllers/discord_channels_controller.rb'
+  require_relative 'app/controllers/discord_users_controller.rb'
+
   require_relative 'app/controllers/discord_controller.rb'
   require_relative 'app/models/discord_message.rb'
+  require_relative 'app/models/discord_channel.rb'
+  require_relative 'app/models/discord_user.rb'
+
   require_relative 'lib/bot.rb'
   
   DiscordDatastore::Engine.routes.draw do
     get "/discord" => "discord#index", constraints: StaffConstraint.new
     put '/discord_messages/:message_id' => 'discord_messages#create'
     get '/discord_messages' => 'discord_messages#index'
-    get '/discord_messages_total' => 'discord_messages#total_messages'
+   
+    get '/discord_channels' => 'discord_channels#index'
+    get '/discord_users' => 'discord_users#index'
 
     delete '/discord_messages/:message_id' => 'discord_messages#destroy'
   end

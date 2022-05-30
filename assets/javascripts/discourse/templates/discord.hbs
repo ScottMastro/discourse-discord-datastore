@@ -53,7 +53,7 @@
       <button type='submit' class='btn btn-message-prev'>
       {{ i18n "discord_datastore.message_pagination_previous" }}
     </button>
-      <button type='submit' class='btn btn-primary-message-next'>
+      <button type='submit' class='btn btn-primary-message-next' {{ action "nextMessagePage" currentPage }}>
       {{ i18n "discord_datastore.message_pagination_next" }}
     </button>
     </div>

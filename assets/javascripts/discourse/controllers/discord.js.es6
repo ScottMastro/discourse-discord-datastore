@@ -4,6 +4,7 @@ export default Ember.Controller.extend({
     this._super();
     this.set('messages', []);
     this.fetchMessages();
+    this.set('currentPage', 1);
   },
 
   fetchMessages() {
@@ -32,6 +33,11 @@ export default Ember.Controller.extend({
         .catch(console.error);
     },
 
+    nextMessagePage(){
+      this.currentPage = this.currentPage+1;
+      console.log(this.currentPage);
+    },
+
     deleteDiscordMessage(message) {
       this.store.destroyRecord('discordMessage', message)
         .then(() => {
@@ -43,6 +49,8 @@ export default Ember.Controller.extend({
     onChangeSearchTermForUsername(username){
       this.set("searched_username", username.length ? username : null);
     }
+
+    
 
   }
 });

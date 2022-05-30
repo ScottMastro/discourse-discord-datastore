@@ -5,19 +5,13 @@ module DiscordDatastore
     PAGE_SIZE = 10
 
     def index
-      page=1
-      #page = params[:page].to_i || 1
+      page = params[:page].to_i || 2
       Rails.logger.info 'Called DiscordMessagesController#index'
-
+      
       messages = DiscordDatastore::DiscordMessage.order(created_at: :desc)
       nMessages = messages.length
       messages = messages.offset(page * PAGE_SIZE).limit(PAGE_SIZE)
-      render json: { discord_messages: messages, test: nMessages }
-    end
-
-    def total_messages
-      totalMessages = DiscordDatastore::DiscordMessage.count
-      render json: { total_messages: totalMessages }
+      render json: { discord_messages: messages, total: nMessages }
     end
 
     def create
