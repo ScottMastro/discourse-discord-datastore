@@ -5,6 +5,7 @@ en:
       user_search: "Search user..."
       message_pagination_next: "next→"
       message_pagination_previous: "←prev"
+      channel_message_total: "total messages"
 
       test: 
         text_field_label: "New message"

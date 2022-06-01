@@ -4,12 +4,13 @@ module DiscordDatastore
       requires_login
   
       def index
-        page = params[:page].to_i || 2
         Rails.logger.info 'Called DiscordChannelsController#index'
         
-        channels = DiscordDatastore::DiscordChannel.order(created_at: :desc)
-        render json: { discord_channels: channels }
-        end
+        chs = DiscordDatastore::DiscordChannel.order(created_at: :desc)
+        channels = chs.map { |ch| ch.as_json.merge(:length => DiscordDatastore::DiscordMessage.where(channel_id: ch.id).length) }
+        
+        render json: { discord_channels: channels} 
+      end
 
       def create
         Rails.logger.info 'Called DiscordChannelsController#create'

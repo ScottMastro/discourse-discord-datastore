@@ -39,13 +39,26 @@
 }}
 </div>
 
+<br>
+
+{{#if channels}}
+  <div class ="discord-channel-list" >
+    {{#each channels as |channel|}}
+      <div class="discord-channel-list-element">
+        <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.length }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
+      </div>
+    {{/each}}
+  </div>
+{{/if}}
+
+
 {{#if messages}}
   <div class ="discord-message-list" >
     <ul>
       {{#each messages as |message|}}
         <li>
           <img src="https://i.imgur.com/Xz4OOh9.png" alt=""/>
-          {{ message.author_id }}{{ " in " }}{{ message.channel_id }}{{ ": " }}{{ message.content }}
+          {{ message.author_id }}{{ " in " }}{{ action "getChannelNameByID" message.channel_id }}{{ ": " }}{{ message.content }}
         </li>
       {{/each}}
     </ul>

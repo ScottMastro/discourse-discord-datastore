@@ -64,6 +64,22 @@ class Bot
       end
 
       bot.command(:channels) do |event|
+        event.server.members.each do |member|
+          newMember = {
+            'id' => member.id,
+            'tag' => member.username,
+            'nickname' => member.display_name,
+            'avatar' => member.avatar_url,
+            'roles' => [],
+            'verified' => true,
+            'discourse_account_id' => 696969
+          }
+          puts newMember
+          DiscordDatastore::DiscordUser.create(newMember)
+        end
+      end
+
+      bot.command(:users) do |event|
         event.server.channels.each do |channel|
           newChannel = {
             'id' => channel.id,
