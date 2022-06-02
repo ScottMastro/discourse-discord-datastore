@@ -63,23 +63,22 @@ class Bot
         end
       end
 
-      bot.command(:channels) do |event|
+      bot.command(:users) do |event|
         event.server.members.each do |member|
           newMember = {
             'id' => member.id,
-            'tag' => member.username,
+            'tag' => member.username + "#" + member.discriminator,
             'nickname' => member.display_name,
             'avatar' => member.avatar_url,
             'roles' => [],
-            'verified' => true,
-            'discourse_account_id' => 696969
+            'verified' => false,
+            'discourse_account_id' => -1
           }
-          puts newMember
           DiscordDatastore::DiscordUser.create(newMember)
         end
       end
 
-      bot.command(:users) do |event|
+      bot.command(:channels) do |event|
         event.server.channels.each do |channel|
           newChannel = {
             'id' => channel.id,
@@ -87,52 +86,10 @@ class Bot
             'voice' => (! channel.text?) ,
             'permissions' => []
           }
-          puts newChannel
           DiscordDatastore::DiscordChannel.create(newChannel)
         end
       end
       
-      bot.message() do |event|
-        event.server.channels.each do |channel|
-          if channel.text?
-
-            messages = DiscordDatastore::DiscordMessage.order(date: :desc)
-            messages = messages.where(discord_channel_id: channel.id)
-            messages = messages.limit(1)
-            message = messages[0]
-
-            if (message)
-              loop do
-                puts "channel name:", channel.name
-                puts "last message id:", message.id
-                newMessages = channel.history(HISTORY_CHUNK_LIMIT, after=message.id)
-
-                if !newMessages
-                  break
-                end
-
-                newRecords = newMessages.map do |message|
-	          {
-                    'id' => message.id,
-                    'discord_user_id' => message.author.id,
-                    'discord_channel_id' => message.channel.id,
-                    'date' => message.timestamp,
-                    'content' => message.content,
-                    'created_at' => Time.now,
-                    'updated_at' => Time.now
-                  }
-	        end
-
-                #puts newRecords
-                DiscordDatastore::DiscordMessage.insert_all(newRecords)
-                message = newMessages[-1]
-                sleep 5
-                
-              end
-            end
-          end
-        end
-      end
 
       bot.run
     end

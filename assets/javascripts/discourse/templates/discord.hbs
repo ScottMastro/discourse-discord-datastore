@@ -41,36 +41,51 @@
 
 <br>
 
-{{#if channels}}
-  <div class ="discord-channel-list" >
-    {{#each channels as |channel|}}
-      <div class="discord-channel-list-element">
-        <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.length }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
+<div class="discord-data">
+  <div class="discord-data-messages">
+
+    {{#if messages}}
+      <div class="discord-message-list" >
+
+        <div class ="message-pagination">
+          <button type='submit' class='btn btn-message-prev'>
+          {{ i18n "discord_datastore.message_pagination_previous" }}
+        </button>
+        <b>{{ currentPage }}</b>
+        <button type='submit' class='btn btn-primary-message-next' {{ action "nextMessagePage" currentPage }}>
+          {{ i18n "discord_datastore.message_pagination_next" }}
+        </button>
+        </div>
+
+        <ul>
+          {{#each messages as |message|}}
+            <li>
+              <div class="discord-message">
+                <div class="discord-avatar"><img src="{{message.user_avatar}}" alt="" /></div>
+                <div class="discord-message-content">
+                  {{ message.user_nickname }}{{ " in " }}<b>{{"#"}}{{ message.channel_name }}</b>{{ ": " }}<br>
+                  {{ message.content }}
+                </div>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
       </div>
-    {{/each}}
-  </div>
-{{/if}}
+    {{/if}}
 
-
-{{#if messages}}
-  <div class ="discord-message-list" >
-    <ul>
-      {{#each messages as |message|}}
-        <li>
-          <img src="https://i.imgur.com/Xz4OOh9.png" alt=""/>
-          {{ message.discord_user_id }}{{ " in " }}
-          <b>{{"#"}}{{ message.channel_name }}</b>{{ ": " }}
-          {{ message.content }}
-        </li>
-      {{/each}}
-    </ul>
-    <div class ="message-pagination">
-      <button type='submit' class='btn btn-message-prev'>
-      {{ i18n "discord_datastore.message_pagination_previous" }}
-    </button>
-      <button type='submit' class='btn btn-primary-message-next' {{ action "nextMessagePage" currentPage }}>
-      {{ i18n "discord_datastore.message_pagination_next" }}
-    </button>
-    </div>
   </div>
-{{/if}}
+
+  <div class="discord-data-channels">
+
+    {{#if channels}}
+      <div class ="discord-channel-list" >
+        {{#each channels as |channel|}}
+          <div class="discord-channel-list-element">
+            <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.length }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
+          </div>
+        {{/each}}
+      </div>
+    {{/if}}
+  </div>
+
+</div>

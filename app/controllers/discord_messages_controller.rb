@@ -2,18 +2,23 @@ module DiscordDatastore
   class DiscordMessagesController < ApplicationController
 
     requires_login
-    PAGE_SIZE = 10
+    PAGE_SIZE = 20
 
     def index
-      page = params[:page].to_i || 2
+      page = params[:page].to_i || 1
       Rails.logger.info 'Called DiscordMessagesController#index'
       
       messages = DiscordDatastore::DiscordMessage.order(created_at: :desc)
       nMessages = messages.length
       messages = messages.offset(page * PAGE_SIZE).limit(PAGE_SIZE)
-      messages = messages.includes(:discord_channel)
-      
-      messages = messages.map { |msg| msg.as_json.merge(:channel_name => msg.discord_channel.name) }
+      messages = messages.includes(:discord_user).includes(:discord_channel)
+
+      messages = messages.map { |msg| msg.as_json.merge({
+        :channel_name => msg.discord_channel.name,
+        :user_nickname => msg.discord_user.nickname,
+        :user_tag => msg.discord_user.tag,
+        :user_avatar => msg.discord_user.avatar
+      }) }
 
       render json: { discord_messages: messages, total: nMessages }
     end

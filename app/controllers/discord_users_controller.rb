@@ -13,11 +13,16 @@ module DiscordDatastore
       def create
         Rails.logger.info 'Called DiscordUsersController#create'
   
+        #https://i.imgur.com/Xz4OOh9.png
+
         user = {
           'id' => params[:user_id],
-          'name' => "fake-channel",
-          'voice' => false,
-          'permissions' => [],
+          'tag' => params[:tag],
+          'nickname' => params[:nickname],
+          'avatar' => params[:avatar],
+          'roles' => [],
+          'verified' => params[:verified],
+          'discourse_account_id' => params[:discourse_account_id]
         }
   
         user = DiscordDatastore::DiscordUser.create(user)
