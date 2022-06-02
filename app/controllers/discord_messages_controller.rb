@@ -11,6 +11,10 @@ module DiscordDatastore
       messages = DiscordDatastore::DiscordMessage.order(created_at: :desc)
       nMessages = messages.length
       messages = messages.offset(page * PAGE_SIZE).limit(PAGE_SIZE)
+      messages = messages.includes(:discord_channel)
+      
+      messages = messages.map { |msg| msg.as_json.merge(:channel_name => msg.discord_channel.name) }
+
       render json: { discord_messages: messages, total: nMessages }
     end
 
@@ -19,8 +23,8 @@ module DiscordDatastore
 
       message = {
         'id' => params[:message_id],
-        'author_id' => 6969420,
-        'channel_id' => 42069,
+        'discord_user_id' => 6969420,
+        'discord_channel_id' => 42069,
         'date' => Time.now,
         'content' => params[:discord_message][:content]
       }

@@ -3,8 +3,8 @@
 module DiscordDatastore 
   class DiscordMessageSerializer < ApplicationSerializer
     attributes :id,
-               :author_id,
-               :channel_id,
+               :discord_user_id,
+               :discord_channel_id,
                :content,
                :date
   end

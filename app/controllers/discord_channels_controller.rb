@@ -7,9 +7,9 @@ module DiscordDatastore
         Rails.logger.info 'Called DiscordChannelsController#index'
         
         chs = DiscordDatastore::DiscordChannel.order(created_at: :desc)
-        channels = chs.map { |ch| ch.as_json.merge(:length => DiscordDatastore::DiscordMessage.where(channel_id: ch.id).length) }
+        channels = chs.map { |ch| ch.as_json.merge(:length => DiscordDatastore::DiscordMessage.where(discord_channel_id: ch.id).length) }
         
-        render json: { discord_channels: channels} 
+        render json: { discord_channels: channels}
       end
 
       def create

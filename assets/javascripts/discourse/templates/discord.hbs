@@ -58,7 +58,9 @@
       {{#each messages as |message|}}
         <li>
           <img src="https://i.imgur.com/Xz4OOh9.png" alt=""/>
-          {{ message.author_id }}{{ " in " }}{{ action "getChannelNameByID" message.channel_id }}{{ ": " }}{{ message.content }}
+          {{ message.discord_user_id }}{{ " in " }}
+          <b>{{"#"}}{{ message.channel_name }}</b>{{ ": " }}
+          {{ message.content }}
         </li>
       {{/each}}
     </ul>

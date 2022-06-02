@@ -54,8 +54,8 @@ class Bot
 
           newMessage = {
             'id' => message.id,
-            'author_id' => message.author.id,
-            'channel_id' => message.channel.id,
+            'discord_user_id' => message.author.id,
+            'discord_channel_id' => message.channel.id,
             'date' => message.timestamp,
             'content' => message.content
           }
@@ -97,7 +97,7 @@ class Bot
           if channel.text?
 
             messages = DiscordDatastore::DiscordMessage.order(date: :desc)
-            messages = messages.where(channel_id: channel.id)
+            messages = messages.where(discord_channel_id: channel.id)
             messages = messages.limit(1)
             message = messages[0]
 
@@ -114,8 +114,8 @@ class Bot
                 newRecords = newMessages.map do |message|
 	          {
                     'id' => message.id,
-                    'author_id' => message.author.id,
-                    'channel_id' => message.channel.id,
+                    'discord_user_id' => message.author.id,
+                    'discord_channel_id' => message.channel.id,
                     'date' => message.timestamp,
                     'content' => message.content,
                     'created_at' => Time.now,

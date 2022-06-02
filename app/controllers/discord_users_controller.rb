@@ -6,7 +6,7 @@ module DiscordDatastore
       def index
         Rails.logger.info 'Called DiscordUsersController#index'
         
-        users = DiscordDatastore::DiscordChannel.order(created_at: :desc)
+        users = DiscordDatastore::DiscordUser.order(created_at: :desc)
         render json: { discord_users: users }
         end
 
