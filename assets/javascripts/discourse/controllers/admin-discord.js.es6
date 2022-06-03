@@ -1,9 +1,13 @@
+import { ajax } from 'discourse/lib/ajax';
+import { popupAjaxError } from "discourse/lib/ajax-error";
+
 export default Ember.Controller.extend({
 
   init() {
-    
     this._super();
     this.set('messages', []);
+    this.set('message_total', 0);
+
     this.set('channels', []);
 
     this.fetchMessages();
@@ -12,22 +16,21 @@ export default Ember.Controller.extend({
   },
 
   fetchMessages() {
-    this.store.findAll('discordMessage')
-      .then(result => {
-        for (const message of result.content) {
+    ajax("/admin/discord_messages.json")
+      .then((result) => {
+        for (const message of result.discord_messages) {
           this.messages.pushObject(message);
         }
-      })
-      .catch(console.error);
+      }).catch(popupAjaxError);
   },
+
   fetchChannels() {
-    this.store.findAll('discordChannel')
-      .then(result => {
-        for (const channel of result.content) {
+    ajax("/admin/discord_channels.json")
+      .then((result) => {
+        for (const channel of result.discord_channels) {
           this.channels.pushObject(channel);
         }
-      })
-      .catch(console.error);
+      }).catch(popupAjaxError);
   },
 
   actions: {

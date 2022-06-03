@@ -59,14 +59,17 @@ after_initialize do
     get "/discord" => "discord#index", constraints: StaffConstraint.new
     put '/discord_messages/:message_id' => 'discord_messages#create'
     get '/discord_messages' => 'discord_messages#index'
-   
+
+    get '/admin/discord' => 'admin_discord#index', constraints: StaffConstraint.new
+    get '/admin/discord_messages' => 'discord_messages#admin'
+    get '/admin/discord_channels' => 'discord_channels#admin'
+
     get '/discord_channels' => 'discord_channels#index'
     put '/discord_channels/:channel_id' => 'discord_channels#create'
 
     get '/discord_users' => 'discord_users#index'
     put '/discord_users/:user_id' => 'discord_users#create'
 
-    get '/admin/discord' => 'admin_discord#index', constraints: StaffConstraint.new
 
     delete '/discord_messages/:message_id' => 'discord_messages#destroy'
   end
