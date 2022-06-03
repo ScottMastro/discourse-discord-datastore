@@ -2,3 +2,18 @@ plugins:
   discord_datastore_enabled:
     default: true
     client: true
+
+  discord_server_id:
+    default: ""
+    client: true
+  discord_bot_token:
+    default: ""
+  discord_bot_channel:
+    default: ""
+
+  discord_invite_url:
+    default: ""
+    client: true
+  discord_show_widget:
+    default: false
+    client: true

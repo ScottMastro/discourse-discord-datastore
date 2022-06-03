@@ -1,11 +1,17 @@
 en:
   js:
-    discord_datastore:
-      title: "Discord Datastore"
+    discord_datastore:        
+      user_title: "Discord Stats"
       user_search: "Search user..."
       message_pagination_next: "next→"
       message_pagination_previous: "←prev"
       channel_message_total: "total messages"
+      invite_url: "Discord Invite URL"
+      join_discord_message: "Join our Discord server"
+      connect_discord_message: "Connect your Discord account"
+      
+      admin:
+        title: "Discord Datastore"
 
       test: 
         text_field_label: "New message"

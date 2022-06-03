@@ -4,11 +4,22 @@ module DiscordDatastore
     requires_login
     PAGE_SIZE = 20
 
-    def index
-      page = params[:page].to_i || 1
+    def index   
       Rails.logger.info 'Called DiscordMessagesController#index'
-      
+   
+      user_id = params[:user_id] || nil
+      if ! current_user.staff?
+        user_id = current_user.id
+        #current_user.associated_accounts
+      end
+      user_id=366068461027459073
+
+      page = params[:page].to_i || 1
+
       messages = DiscordDatastore::DiscordMessage.order(created_at: :desc)
+      if user_id
+        messages = messages.where(discord_user_id: user_id)
+      end
       nMessages = messages.length
       messages = messages.offset(page * PAGE_SIZE).limit(PAGE_SIZE)
       messages = messages.includes(:discord_user).includes(:discord_channel)
@@ -24,6 +35,12 @@ module DiscordDatastore
     end
 
     def create
+
+      if ! current_user.staff?
+        render json: { "error": "permission_denied" }
+        return
+      end
+      
       Rails.logger.info 'Called DiscordMessagesController#create'
 
       message = {

@@ -3,6 +3,6 @@
 class DiscordDatastore::DiscordController < ::ApplicationController
 
   def index
-    render json: { name: "donut", description: "delicious!" }
+    render json: { name: "discord", description: "user" }
   end    
 end

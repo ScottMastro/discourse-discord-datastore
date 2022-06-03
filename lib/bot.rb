@@ -2,13 +2,15 @@
 #https://discord.com/api/oauth2/authorize?client_id=975850832195112991&permissions=17448381440&scope=bot
 
 require 'discordrb'
+HISTORY_CHUNK_LIMIT = 100
+CHANNEL_HOME = SiteSetting.discord_bot_channel
 
 # Container for the initialized bot
 module Instance
   @@bot = nil
 
   def self.init
-    @@bot = Discordrb::Commands::CommandBot.new token: "OTc1ODUwODMyMTk1MTEyOTkx.Gnat6X.Mr53nWZeEPOtCTc5h0-YtJu197uY4N4UmZjcas", prefix: "!"
+    @@bot = Discordrb::Commands::CommandBot.new token: SiteSetting.discord_bot_token, prefix: "!"
     @@bot
   end
 
@@ -16,9 +18,6 @@ module Instance
     @@bot
   end
 end
-
-HISTORY_CHUNK_LIMIT = 100
-CHANNEL_HOME = "556166816909623311"
 
 class Bot
   def self.run_bot

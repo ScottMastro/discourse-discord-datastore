@@ -6,8 +6,23 @@ module DiscordDatastore
       def index
         Rails.logger.info 'Called DiscordChannelsController#index'
         
-        chs = DiscordDatastore::DiscordChannel.order(created_at: :desc)
-        channels = chs.map { |ch| ch.as_json.merge(:length => DiscordDatastore::DiscordMessage.where(discord_channel_id: ch.id).length) }
+        user_id = params[:user_id] || nil
+        if ! current_user.staff?
+          user_id = current_user.id
+          #current_user.associated_accounts
+        end  
+
+        channels = DiscordDatastore::DiscordChannel.order(created_at: :desc)
+
+        #todo: hide channels based on permissions
+        
+        if user_id
+          channels = channels.map { |ch| ch.as_json.merge(:length => 
+            DiscordDatastore::DiscordMessage.where(discord_user_id: user_id, discord_channel_id: ch.id).length) }
+        else
+          channels = channels.map { |ch| ch.as_json.merge(:length => 
+            DiscordDatastore::DiscordMessage.where(discord_channel_id: ch.id).length) }
+        end
         
         render json: { discord_channels: channels}
       end

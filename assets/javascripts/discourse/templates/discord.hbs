@@ -1,46 +1,19 @@
-<h1>{{ i18n 'discord_datastore.title' }}</h1>
+<h1>{{ i18n 'discord_datastore.user_title' }}</h1>
 
-<div>
-    {{ "messageTotal: " }}{{ model.test }}
-</div><div>
-    {{ "Selected user: " }}{{ searched_username }}
-</div>
+{{#if siteSettings.discord_show_widget }}
+  {{#if siteSettings.discord_server_id }}
+    <iframe src="https://discord.com/widget?id={{ siteSettings.discord_server_id }}&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+    <br>
+  {{/if}}
+{{/if}}
 
-<div> <hr> </div>
+{{#if siteSettings.discord_invite_url }}
+  <h2>{{'1. '}}<a href={{siteSettings.discord_invite_url}}>{{i18n 'discord_datastore.join_discord_message' }}</a></h2>
+  <h2>{{'2. '}}<a href={{'/my/preferences/account'}}>{{i18n 'discord_datastore.connect_discord_message' }}</a></h2>
 
-<!-- 
 
-<form {{ action 'createDiscordMessage' content on='submit' }}>
-  <label>
-    {{ i18n 'discord_datastore.test.text_field_label' }}
-    {{ textarea name='discordmessage' value=content }}
-  </label>
-
-  <button type='submit' class='btn btn-primary'>
-    {{ i18n 'discord_datastore.test.submit_label' }}
-  </button>
-</form>
-
-<label>
-
--->
-<div><h4>  {{ i18n 'discord_datastore.user_search' }} </h4></div>
-
-<div>
-{{user-chooser
-  id="filter-by-user"
-  value=searchedTerms.username
-  onChange=(action "onChangeSearchTermForUsername")
-    options=(hash
-    headerAriaLabel=(i18n "discord_datastore.user_search")
-    maximum=1
-    excludeCurrentUser=false
-  )
-}}
-</div>
-
-<br>
-
+  
+{{/if}}
 <div class="discord-data">
   <div class="discord-data-messages">
 
@@ -75,17 +48,5 @@
 
   </div>
 
-  <div class="discord-data-channels">
-
-    {{#if channels}}
-      <div class ="discord-channel-list" >
-        {{#each channels as |channel|}}
-          <div class="discord-channel-list-element">
-            <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.length }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
-          </div>
-        {{/each}}
-      </div>
-    {{/if}}
-  </div>
 
 </div>

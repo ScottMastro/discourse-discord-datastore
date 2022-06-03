@@ -1,3 +1,11 @@
 en:
   site_settings:
     discord_datastore_enabled: 'Turn the datastore on'
+    
+    discord_server_id: 'Discord server ID'
+    discord_bot_token: 'Discord bot token'
+    discord_bot_channel: 'Discord bot channel ID'
+
+    discord_invite_url: 'Discord server invite URL'
+    discord_show_widget: 'Show widget on /discord page'
+
