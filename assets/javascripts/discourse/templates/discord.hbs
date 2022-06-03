@@ -8,12 +8,16 @@
 {{/if}}
 
 {{#if siteSettings.discord_invite_url }}
-  <h2>{{'1. '}}<a href={{siteSettings.discord_invite_url}}>{{i18n 'discord_datastore.join_discord_message' }}</a></h2>
-  <h2>{{'2. '}}<a href={{'/my/preferences/account'}}>{{i18n 'discord_datastore.connect_discord_message' }}</a></h2>
+  <div class="discord-join-info">
+    {{ "We could not find a Discord account associated with you" }}
+    <br><br>
 
-
-  
+    <h2>{{'1. '}}<a href={{siteSettings.discord_invite_url}}>{{i18n 'discord_datastore.join_discord_message' }}</a></h2>
+    <h2>{{'2. '}}<a href={{'/my/preferences/account'}}>{{i18n 'discord_datastore.connect_discord_message' }}</a></h2>
+  </div>
 {{/if}}
+<br>
+
 <div class="discord-data">
   <div class="discord-data-messages">
 
