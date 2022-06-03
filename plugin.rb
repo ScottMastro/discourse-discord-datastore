@@ -27,6 +27,7 @@ gem 'discordrb', '3.3.0'
 enabled_site_setting :discord_datastore_enabled
 
 register_asset 'stylesheets/common/discord.scss'
+register_asset 'stylesheets/common/admin-discord.scss'
 
 after_initialize do
 
@@ -45,7 +46,9 @@ after_initialize do
   require_relative 'app/controllers/discord_channels_controller.rb'
   require_relative 'app/controllers/discord_users_controller.rb'
 
+  require_relative 'app/controllers/admin_discord_controller.rb'
   require_relative 'app/controllers/discord_controller.rb'
+  
   require_relative 'app/models/discord_message.rb'
   require_relative 'app/models/discord_channel.rb'
   require_relative 'app/models/discord_user.rb'
@@ -62,6 +65,8 @@ after_initialize do
 
     get '/discord_users' => 'discord_users#index'
     put '/discord_users/:user_id' => 'discord_users#create'
+
+    get '/admin/discord' => 'admin_discord#index', constraints: StaffConstraint.new
 
     delete '/discord_messages/:message_id' => 'discord_messages#destroy'
   end

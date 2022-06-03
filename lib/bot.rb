@@ -8,7 +8,7 @@ module Instance
   @@bot = nil
 
   def self.init
-    @@bot = Discordrb::Commands::CommandBot.new token: "OTc1ODUwODMyMTk1MTEyOTkx.G7TNrM.UeKMu11BGGD2EJ2mOXCeNONLv2xbm_X5xQV_iY", prefix: "!"
+    @@bot = Discordrb::Commands::CommandBot.new token: "OTc1ODUwODMyMTk1MTEyOTkx.Gnat6X.Mr53nWZeEPOtCTc5h0-YtJu197uY4N4UmZjcas", prefix: "!"
     @@bot
   end
 
