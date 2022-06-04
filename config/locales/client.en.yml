@@ -1,6 +1,6 @@
 en:
   js:
-    discord_datastore:        
+    discord_datastore:     
       user_title: "Discord Stats"
       user_search: "Search user..."
       message_pagination_next: "next→"
@@ -8,8 +8,13 @@ en:
       channel_message_total: "total messages"
       invite_url: "Discord Invite URL"
       
+      messages: "messages"
+
+
       message_history_title: "MESSAGE HISTORY"
       channel_title: "CHANNELS"
+      rank_title: "RANKS"
+      stat_title: "STATS"
 
       no_messages: "No messages found"
       no_channels: "No channels found"

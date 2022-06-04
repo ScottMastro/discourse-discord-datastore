@@ -25,6 +25,64 @@
     <div class="discord-stat"><div class="discord-stat-value">{{"0"}}</div><div class="discord-stat-label">{{"Reacts received"}}</div></div>
   </div>
   
+  <hr> <!-- ==================================================================================== -->
+  
+  <div class="discord-data-rank-header">
+    <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.rank_title" }}</h3>
+  </div>
+
+  <div class="discord-data-rank">
+
+    {{#if siteSettings.discord_rank_1_id}}<div class="discord-rank">
+      <img class="discord-rank-img " src="{{ siteSettings.discord_rank_1_image }}" alt="" />
+      <div class="discord-rank-label">{{ siteSettings.discord_rank_1_id }}</div>
+      <div class="discord-rank-count">{{ siteSettings.discord_rank_1_count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+    </div>{{/if}}
+    {{#if siteSettings.discord_rank_2_id}}<div class="discord-rank">
+      <img class="discord-rank-img" src="{{ siteSettings.discord_rank_2_image }}" alt="" />
+      <div class="discord-rank-label">{{ siteSettings.discord_rank_2_id }}</div>
+      <div class="discord-rank-count">{{ siteSettings.discord_rank_2_count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+    </div>{{/if}}
+    {{#if siteSettings.discord_rank_3_id}}<div class="discord-rank">
+      <img class="discord-rank-img" src="{{ siteSettings.discord_rank_3_image }}" alt="" />
+      <div class="discord-rank-label">{{ siteSettings.discord_rank_3_id }}</div>
+      <div class="discord-rank-count">{{ siteSettings.discord_rank_3_count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+    </div>{{/if}}
+    {{#if siteSettings.discord_rank_4_id}}<div class="discord-rank missing-rank">
+      <img class="discord-rank-img" src="{{ siteSettings.discord_rank_4_image }}" alt="" />
+      <div class="discord-rank-label">{{ siteSettings.discord_rank_4_id }}</div>
+      <div class="discord-rank-count">{{ siteSettings.discord_rank_4_count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+    </div>{{/if}}
+    {{#if siteSettings.discord_rank_5_id}}<div class="discord-rank missing-rank">
+      <img class="discord-rank-img" src="{{ siteSettings.discord_rank_5_image }}" alt="" />
+      <div class="discord-rank-label">{{ siteSettings.discord_rank_5_id }}</div>
+      <div class="discord-rank-count">{{ siteSettings.discord_rank_5_count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+    </div>{{/if}}
+    {{#if siteSettings.discord_rank_6_id}}<div class="discord-rank missing-rank">
+      <img class="discord-rank-img" src="{{ siteSettings.discord_rank_6_image }}" alt="" />
+      <div class="discord-rank-label">{{ siteSettings.discord_rank_6_id }}</div>
+      <div class="discord-rank-count">{{ siteSettings.discord_rank_6_count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+    </div>{{/if}}
+    {{#if siteSettings.discord_rank_7_id}}<div class="discord-rank">
+      <img class="discord-rank-img" src="{{ siteSettings.discord_rank_7_image }}" alt="" />
+      <div class="discord-rank-label">{{ siteSettings.discord_rank_7_id }}</div>
+      <div class="discord-rank-count">{{ siteSettings.discord_rank_7_count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+    </div>{{/if}}
+    {{#if siteSettings.discord_rank_8_id}}<div class="discord-rank">
+      <img class="discord-rank-img" src="{{ siteSettings.discord_rank_8_image }}" alt="" />
+      <div class="discord-rank-label">{{ siteSettings.discord_rank_8_id }}</div>
+      <div class="discord-rank-count">{{ siteSettings.discord_rank_8_count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+    </div>{{/if}}
+    {{#if siteSettings.discord_rank_9_id}}<div class="discord-rank">
+      <img class="discord-rank-img" src="{{ siteSettings.discord_rank_9_image }}" alt="" />
+      <div class="discord-rank-label">{{ siteSettings.discord_rank_9_id }}</div>
+      <div class="discord-rank-count">{{ siteSettings.discord_rank_9_count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+    </div>{{/if}}
+
+  </div>
+
+  <hr> <!-- ==================================================================================== -->
+
   <div class="discord-data-columns">
 
     <div class="discord-data-channels">
@@ -43,7 +101,7 @@
         {{ i18n "discord_datastore.no_channels" }}
       {{/if}}  
     </div>
-    
+
     <div class="discord-data-messages">
       {{#if messages}}
         <div class ="discord-data-messages-header">

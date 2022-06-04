@@ -13,6 +13,43 @@ textarea {
   margin-left: 5px;
 }
 
+.discord-data-rank-header{
+  margin-left: 30px;
+  margin-bottom: 15px;
+}
+
+.missing-rank{
+  color: #96979d;
+  background: #2f3036 !important;
+
+  img{
+    filter: brightness(0.2) blur(2px);
+  }
+}
+
+.discord-data-rank{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  text-align: center;
+
+  .discord-rank{
+    padding: 10px;
+    background: #40434b ;
+    border: 1px solid #2f3036;
+    border-radius: 5px;
+  }
+  .discord-rank-label{
+    font-weight: bold;
+  }
+  .discord-rank-img{
+    width: 100px;
+    max-width: 100px;
+    max-height: 100px;
+  }
+  
+}
+
 .discord-data{
   background: #36383f;
   color: #dcddde;
@@ -33,7 +70,7 @@ textarea {
   }  
   .discord-stat-value{
     margin-right: 5px;
-    font-size: xx-large;
+    font-size: x-large;
   }
   .discord-stat-label{
     color: #96979d;
@@ -123,4 +160,11 @@ textarea {
       margin-left: 7px;
     }
   }
+}
+
+
+
+.discord-data-user{
+  margin-left: 15px;
+  margin-top: 15px;
 }
