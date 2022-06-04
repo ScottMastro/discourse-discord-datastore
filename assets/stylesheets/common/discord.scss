@@ -45,15 +45,37 @@ textarea {
   align-items: baseline;
   justify-content: space-between;
 
+  .discord-data-channels{
+    margin-left: 20px;
+    margin-top: 15px;
+    flex: 1;
+  }
   .discord-data-messages{
     margin-right: 15px;
     margin-top: 15px;
     flex: 2;
   }
-  .discord-data-channels{
-    margin-right: 20px;
-    margin-top: 15px;
-    flex: 1;
+}
+
+.discord-data-channels-header{
+  padding:9px;
+}
+
+.discord-channel-list{
+
+  ul li {
+    margin: 5px;
+  }
+  
+  .discord-channel-list-element{
+    background: #2f3036;
+    border: 1px solid #2f3036;
+    border-radius: 5px;
+    margin-top: 8px;
+    padding: 10px;
+  }
+  .discord-channel-list-element:hover{
+    border: 1px solid #5865F2;
   }
 }
 
@@ -76,7 +98,6 @@ textarea {
 }
 
 .discord-message-list{
-
   ul {
     list-style-type: none;
   }
@@ -103,26 +124,3 @@ textarea {
     }
   }
 }
-
-.discord-data-channels-header{
-  padding:9px;
-}
-
-.discord-channel-list{
-
-  ul li {
-    margin: 5px;
-  }
-  
-  .discord-channel-list-element{
-    background: #2f3036;
-    border: 1px solid #2f3036;
-    border-radius: 5px;
-    margin-top: 8px;
-    padding: 10px;
-  }
-  .discord-channel-list-element:hover{
-    border: 1px solid #5865F2;
-  }
-}
-

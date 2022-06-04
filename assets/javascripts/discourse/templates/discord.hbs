@@ -27,6 +27,23 @@
   
   <div class="discord-data-columns">
 
+    <div class="discord-data-channels">
+      {{#if channels}}
+        <div class="discord-data-channels-header">
+          <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.channel_title" }}</h3>
+        </div>
+        <div class="discord-channel-list" >
+          {{#each channels as |channel|}}
+            <div class="discord-channel-list-element">
+              <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.length }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
+            </div>
+          {{/each}}
+        </div>
+      {{else}}
+        {{ i18n "discord_datastore.no_channels" }}
+      {{/if}}  
+    </div>
+    
     <div class="discord-data-messages">
       {{#if messages}}
         <div class ="discord-data-messages-header">
@@ -65,21 +82,5 @@
 
     </div>
 
-    <div class="discord-data-channels">
-      {{#if channels}}
-        <div class="discord-data-channels-header">
-          <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.channel_title" }}</h3>
-        </div>
-        <div class="discord-channel-list" >
-          {{#each channels as |channel|}}
-            <div class="discord-channel-list-element">
-              <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.length }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
-            </div>
-          {{/each}}
-        </div>
-      {{else}}
-        {{ i18n "discord_datastore.no_channels" }}
-      {{/if}}  
-    </div>
   </div>
 </div>
