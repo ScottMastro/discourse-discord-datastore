@@ -41,6 +41,21 @@ export default Ember.Controller.extend({
     var counts = this.siteSettings.discord_rank_count.split("|");
     var badges = this.siteSettings.discord_rank_badge.split("|");
 
+    for (let i = 0; i < counts.length; i++) {
+      if(counts[i].endsWith("000")){
+        counts[i] = counts[i].slice(0, -3);
+        counts[i] = counts[i] + "k"
+      }
+      if(counts[i].endsWith("000k")){
+        counts[i] = counts[i].slice(0, -4);
+        counts[i] = counts[i] + "M"
+      }
+      if(counts[i].endsWith("000M")){
+        counts[i] = counts[i].slice(0, -4);
+        counts[i] = counts[i] + "B"
+      }
+    }
+
     var n = Math.min(ids.length, imgs.length, counts.length)
 
     for (let i = 0; i < n; i++) {
