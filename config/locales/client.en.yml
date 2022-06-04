@@ -7,12 +7,20 @@ en:
       message_pagination_previous: "←prev"
       channel_message_total: "total messages"
       invite_url: "Discord Invite URL"
+      
+      message_history_title: "MESSAGE HISTORY"
+      channel_title: "CHANNELS"
+
+      no_messages: "No messages found"
+      no_channels: "No channels found"
+
+      warning_no_account_found: "Your associated Discord account could not be found."
       join_discord_message: "Join our Discord server"
       connect_discord_message: "Connect your Discord account"
-      
+
       admin:
         title: "Discord Datastore"
-
+        
       test: 
         text_field_label: "New message"
         submit_label: "Save"

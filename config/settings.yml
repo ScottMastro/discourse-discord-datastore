@@ -17,3 +17,8 @@ plugins:
   discord_show_widget:
     default: false
     client: true
+
+  discord_header_image:
+    default: ""
+    type: upload
+    client: true

@@ -1,4 +1,8 @@
-<h1>{{ i18n 'discord_datastore.admin.title' }}</h1>
+{{#if siteSettings.discord_header_image }}
+  <img src="{{ siteSettings.discord_header_image }}" alt="header_image">
+{{else}}
+  <h1>{{ i18n 'discord_datastore.admin.title' }}</h1>
+{{/if}}
 
 <div>
     {{ "messageTotal: " }}{{ message_total }}

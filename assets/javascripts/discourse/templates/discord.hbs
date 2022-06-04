@@ -1,4 +1,8 @@
-<h1>{{ i18n 'discord_datastore.user_title' }}</h1>
+{{#if siteSettings.discord_header_image }}
+  <img src="{{ siteSettings.discord_header_image }}" alt="header_image">
+{{else}}
+  <h1>{{ i18n 'discord_datastore.user_title' }}</h1>
+{{/if}}
 
 {{#if siteSettings.discord_show_widget }}
   {{#if siteSettings.discord_server_id }}
@@ -7,50 +11,80 @@
   {{/if}}
 {{/if}}
 
-{{#if siteSettings.discord_invite_url }}
-  <div class="discord-join-info">
-    {{ "We could not find a Discord account associated with you" }}
-    <br><br>
-
+<div class="discord-join-info">
+  {{ i18n "discord_datastore.warning_no_account_found" }}
+  <br><br>
+  {{#if siteSettings.discord_invite_url }}
     <h2>{{'1. '}}<a href={{siteSettings.discord_invite_url}}>{{i18n 'discord_datastore.join_discord_message' }}</a></h2>
-    <h2>{{'2. '}}<a href={{'/my/preferences/account'}}>{{i18n 'discord_datastore.connect_discord_message' }}</a></h2>
-  </div>
-{{/if}}
+  {{else}}
+    <h2>{{'1. '}}{{i18n 'discord_datastore.join_discord_message' }}</h2>
+  {{/if}}
+  <h2>{{'2. '}}<a href={{'/my/preferences/account'}}>{{i18n 'discord_datastore.connect_discord_message' }}</a></h2>
+</div>
 <br>
 
 <div class="discord-data">
-  <div class="discord-data-messages">
 
-    {{#if messages}}
-      <div class="discord-message-list" >
+  <div class="discord-data-stats">
+    {{"0"}}{{" "}}{{"Messages sent"}} {{"0"}}{{" "}}{{"Messages sent in the last 30 days"}} {{"0"}}{{" "}}{{"Reacts sent"}}  {{"0"}}{{" "}}{{"Reacts received"}}
+  </div>
+  <br>
+  
+  <div class="discord-data-columns">
 
-        <div class ="message-pagination">
-          <button type='submit' class='btn btn-message-prev'>
-          {{ i18n "discord_datastore.message_pagination_previous" }}
-        </button>
-        <b>{{ currentPage }}</b>
-        <button type='submit' class='btn btn-primary-message-next' {{ action "nextMessagePage" currentPage }}>
-          {{ i18n "discord_datastore.message_pagination_next" }}
-        </button>
+    <div class="discord-data-messages">
+      {{#if messages}}
+        <div class ="discord-data-messages-header">
+          
+          <h3>{{ i18n "discord_datastore.message_history_title" }}</h3>
+          <div class="message-paginate-buttons">
+            <button type='submit' class='discord-button'>
+              {{ i18n "discord_datastore.message_pagination_previous" }}
+            </button>
+            <b>{{ currentPage }}</b>
+            <button type='submit' class='discord-button' {{ action "nextMessagePage" currentPage }}>
+              {{ i18n "discord_datastore.message_pagination_next" }}
+            </button>
+          </div>
+
         </div>
 
-        <ul>
-          {{#each messages as |message|}}
-            <li>
-              <div class="discord-message">
-                <div class="discord-avatar"><img src="{{message.user_avatar}}" alt="" /></div>
-                <div class="discord-message-content">
-                  {{ message.user_nickname }}{{ " in " }}<b>{{"#"}}{{ message.channel_name }}</b>{{ ": " }}<br>
-                  {{ message.content }}
+        <div class="discord-message-list" >
+          <ul>
+            {{#each messages as |message|}}
+              <li>
+                <div class="discord-message">
+                  <div class="discord-avatar"><img src="{{message.user_avatar}}" alt="" /></div>
+                  <div class="discord-message-content">
+                    {{ message.user_nickname }}{{ " in " }}<b>{{"#"}}{{ message.channel_name }}</b>{{ ": " }}<br>
+                    {{ message.content }}
+                  </div>
                 </div>
-              </div>
-            </li>
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      {{else}}
+        {{ i18n "discord_datastore.no_messages" }}
+      {{/if}}
+
+    </div>
+
+    <div class="discord-data-channels">
+      {{#if channels}}
+        <div class ="discord-data-messages-header">
+          <h3>{{ i18n "discord_datastore.channel_title" }}</h3>
+        </div>
+        <div class="discord-channel-list" >
+          {{#each channels as |channel|}}
+            <div class="discord-channel-list-element">
+              <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.length }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
+            </div>
           {{/each}}
-        </ul>
-      </div>
-    {{/if}}
-
+        </div>
+      {{else}}
+        {{ i18n "discord_datastore.no_channels" }}
+      {{/if}}  
+    </div>
   </div>
-
-
 </div>

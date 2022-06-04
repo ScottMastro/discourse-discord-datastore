@@ -1,3 +1,11 @@
+.discord-join-info{
+  background: #2f3036;
+  color: #dcddde;
+  border: 5px solid #ED4245;
+  padding: 20px;
+  width: fit-content;
+}
+
 textarea {
   display: block;
   min-width: 500px;
@@ -5,76 +13,87 @@ textarea {
   margin-left: 5px;
 }
 
-.discord-message-list{
-  background: #36383f;
-  color: #dcddde;
-  margin-top: 25px;
-  margin-left: 15px;
-
-  ul {
-    list-style-type: none;
-  }
-  ul li {
-    margin: 5px;
-  }
-}
-
-.discord-message{
-  display: flex;
-  align-items: center;
-}
-
-.discord-avatar{
-  img {
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-  } 
-}
-
-.discord-message{
-  display: flex;
-  align-items: center;
-}
-
 .discord-data{
-  background: #36383f;
   color: #dcddde;
+  border-radius: 10px;
+  border: 1px solid #5865F2;
+  flex-direction: column;
+}
+.discord-data-stats{
+  margin: auto;
+  padding: 10px;
+}
 
+.discord-data-columns{
   display: flex;
   align-items: baseline ;
   justify-content: space-between;
 
-  .discord-data-channels{
-    background: #2f3036;
+  .discord-data-messages{
     margin-right: 25px;
     margin-top: 15px;
-
+    flex: 2;
   }
   .discord-data-channels{
-    background: #2f3036;
     margin-right: 25px;
     margin-top: 15px;
-
+    flex: 1;
   }
 }
 
-.discord-message-content{
-  padding-left: 7px;
+.discord-data-messages-header{
+  margin-left: 30px;
+  display: flex;
+  align-items: baseline ;
+  justify-content: space-between;
+
 }
+
+.discord-button{
+  background-color: #40434b;
+  border: 2px solid #2f3036;
+  border-radius: 5px;
+  padding: 10px;
+}
+.discord-button:hover{
+  border: 2px solid #5865F2;
+}
+
+.discord-message-list{
+  margin-left: 0px !important;
+
+  .discord-avatar{
+    img {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+    } 
+  }
+  .discord-message{
+    background: #2f3036;
+    border: 1px solid #2f3036;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+
+    .discord-message-content{
+      margin-left: 7px;
+    }
+  }
+  .discord-message:hover{
+    border: 1px solid #5865F2;
+  }
+}
+
 
 .discord-channel-list{
   column-count: 2;
 
   .discord-channel-list-element{
     padding: 10px;
+    background: #2f3036;
+
   }
 }
 
-.discord-join-info{
-  background: #2f3036;
-  color: #dcddde;
-  border: 5px solid rgb(172, 28, 28);
-  padding: 20px;
-  width: fit-content;
-}
