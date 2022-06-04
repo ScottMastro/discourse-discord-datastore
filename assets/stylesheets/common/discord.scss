@@ -14,9 +14,11 @@ textarea {
 }
 
 .discord-data{
+  background: #36383f;
   color: #dcddde;
   border-radius: 10px;
   border: 1px solid #5865F2;
+  display: flex;
   flex-direction: column;
 }
 .discord-data-stats{
@@ -60,7 +62,13 @@ textarea {
 }
 
 .discord-message-list{
-  margin-left: 0px !important;
+
+  ul {
+    list-style-type: none;
+  }
+  ul li {
+    margin: 5px;
+  }
 
   .discord-avatar{
     img {
@@ -86,14 +94,11 @@ textarea {
   }
 }
 
-
 .discord-channel-list{
   column-count: 2;
 
   .discord-channel-list-element{
     padding: 10px;
-    background: #2f3036;
-
   }
 }
 

@@ -1,7 +1,7 @@
 {{#if siteSettings.discord_header_image }}
   <img src="{{ siteSettings.discord_header_image }}" alt="header_image">
 {{else}}
-  <h1>{{ i18n 'discord_datastore.user_title' }}</h1>
+  <h1>{{d-icon 'fab-discord'}}{{" "}}{{ i18n 'discord_datastore.user_title' }}</h1>
 {{/if}}
 
 {{#if siteSettings.discord_show_widget }}
@@ -36,7 +36,7 @@
       {{#if messages}}
         <div class ="discord-data-messages-header">
           
-          <h3>{{ i18n "discord_datastore.message_history_title" }}</h3>
+          <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.message_history_title" }}</h3>
           <div class="message-paginate-buttons">
             <button type='submit' class='discord-button'>
               {{ i18n "discord_datastore.message_pagination_previous" }}

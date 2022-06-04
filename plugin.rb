@@ -28,6 +28,7 @@ enabled_site_setting :discord_datastore_enabled
 
 register_asset 'stylesheets/common/discord.scss'
 register_asset 'stylesheets/common/admin-discord.scss'
+register_svg_icon "fab-discord" if respond_to?(:register_svg_icon)
 
 after_initialize do
 

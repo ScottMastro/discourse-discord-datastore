@@ -1,5 +1,6 @@
 import { ajax } from 'discourse/lib/ajax';
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { iconNode } from "discourse-common/lib/icon-library";
 
 export default Ember.Controller.extend({
 
@@ -13,6 +14,7 @@ export default Ember.Controller.extend({
     this.fetchMessages();
     this.fetchChannels();
     this.set('currentPage', 1);
+    let discord_icon = iconNode('fab-discord');
   },
 
   fetchMessages() {
