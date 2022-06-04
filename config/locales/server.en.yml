@@ -10,48 +10,7 @@ en:
 
     discord_header_image: 'Image to show on top of /discord page instead of title'
 
-
-    discord_rank_1_id: 'Discord rank ID for rank 1'
-    discord_rank_1_count: 'Discord message count threshold to assign rank 1'
-    discord_rank_1_image: 'Image for rank 1 (used for /discord page)'
-    discord_rank_1_badge: 'Badge to assign on Discourse for rank 1 (leave empty if no badge is to be assigned)'
-
-    discord_rank_2_id: 'Discord rank ID for rank 2'
-    discord_rank_2_count: 'Discord message count threshold to assign rank 2'
-    discord_rank_2_image: 'Image for rank 2 (used for /discord page)'
-    discord_rank_2_badge: 'Badge to assign on Discourse for rank 2 (leave empty if no badge is to be assigned)'
-
-    discord_rank_3_id: 'Discord rank ID for rank 3'
-    discord_rank_3_count: 'Discord message count threshold to assign rank 3'
-    discord_rank_3_image: 'Image for rank 3 (used for /discord page)'
-    discord_rank_3_badge: 'Badge to assign on Discourse for rank 3 (leave empty if no badge is to be assigned)'
-
-    discord_rank_4_id: 'Discord rank ID for rank 4'
-    discord_rank_4_count: 'Discord message count threshold to assign rank 4'
-    discord_rank_4_image: 'Image for rank 4 (used for /discord page)'
-    discord_rank_4_badge: 'Badge to assign on Discourse for rank 4 (leave empty if no badge is to be assigned)'
-
-    discord_rank_5_id: 'Discord rank ID for rank 5'
-    discord_rank_5_count: 'Discord message count threshold to assign rank 5'
-    discord_rank_5_image: 'Image for rank 5 (used for /discord page)'
-    discord_rank_5_badge: 'Badge to assign on Discourse for rank 5 (leave empty if no badge is to be assigned)'
-
-    discord_rank_6_id: 'Discord rank ID for rank 6'
-    discord_rank_6_count: 'Discord message count threshold to assign rank 6'
-    discord_rank_6_image: 'Image for rank 6 (used for /discord page)'
-    discord_rank_6_badge: 'Badge to assign on Discourse for rank 6 (leave empty if no badge is to be assigned)'
-
-    discord_rank_7_id: 'Discord rank ID for rank 7'
-    discord_rank_7_count: 'Discord message count threshold to assign rank 7'
-    discord_rank_7_image: 'Image for rank 7 (used for /discord page)'
-    discord_rank_7_badge: 'Badge to assign on Discourse for rank 7 (leave empty if no badge is to be assigned)'
-
-    discord_rank_8_id: 'Discord rank ID for rank 8'
-    discord_rank_8_count: 'Discord message count threshold to assign rank 8'
-    discord_rank_8_image: 'Image for rank 8 (used for /discord page)'
-    discord_rank_8_badge: 'Badge to assign on Discourse for rank 8 (leave empty if no badge is to be assigned)'
-
-    discord_rank_9_id: 'Discord rank ID for rank 9'
-    discord_rank_9_count: 'Discord message count threshold to assign rank 9'
-    discord_rank_9_image: 'Image for rank 9 (used for /discord page)'
-    discord_rank_9_badge: 'Badge to assign on Discourse for rank 9 (leave empty if no badge is to be assigned)'
+    discord_rank_id: 'Discord rank IDs for awarded ranks'
+    discord_rank_count: 'Discord message count threshold to award ranks'
+    discord_rank_image: 'Image URLs for awarded ranks (used for /discord page)'
+    discord_rank_badge: 'Badge to assign on Discourse when rank awarded (leave empty if no badge is to be assigned)'

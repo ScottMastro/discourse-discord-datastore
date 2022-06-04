@@ -6,15 +6,18 @@ export default Ember.Controller.extend({
 
   init() {
     this._super();
+    let discord_icon = iconNode('fab-discord');
+
     this.set('messages', []);
     this.set('message_total', 0);
-
     this.set('channels', []);
+    this.set('rank_settings', []);
 
     this.fetchMessages();
     this.fetchChannels();
     this.set('currentPage', 1);
-    let discord_icon = iconNode('fab-discord');
+
+    this.parseRankSettings();
   },
 
   fetchMessages() {
@@ -33,6 +36,21 @@ export default Ember.Controller.extend({
           this.channels.pushObject(channel);
         }
       }).catch(popupAjaxError);
+  },
+
+  parseRankSettings() {
+    var ids = this.siteSettings.discord_rank_id.split("|");
+    var imgs = this.siteSettings.discord_rank_image.split("|");
+    var counts = this.siteSettings.discord_rank_count.split("|");
+    var badges = this.siteSettings.discord_rank_badge.split("|");
+
+    var n = Math.min(ids.length, imgs.length, counts.length)
+
+    for (let i = 0; i < n; i++) {
+      var rank = {"id": ids[i], "img": imgs[i], "count": counts[i]}
+      this.rank_settings.pushObject(rank)
+    }
+    console.log(this.rank_settings)
   },
 
   actions: {

@@ -20,128 +20,19 @@ plugins:
     type: upload
     client: true
 
-  discord_rank_1_id:
-      default: ""
-      client: true
-  discord_rank_1_count:
-      default: ""
-      client: true
-  discord_rank_1_image:
-      default: ""
-      type: upload
-      client: true
-  discord_rank_1_badge:
-      default: ""
-      client: true
-
-  discord_rank_2_id:
-      default: ""
-      client: true
-  discord_rank_2_count:
-      default: ""
-      client: true
-  discord_rank_2_image:
-      default: ""
-      type: upload
-      client: true
-  discord_rank_2_badge:
-      default: ""
-      client: true
-
-  discord_rank_3_id:
-      default: ""
-      client: true
-  discord_rank_3_count:
-      default: ""
-      client: true
-  discord_rank_3_image:
-      default: ""
-      type: upload
-      client: true
-  discord_rank_3_badge:
-      default: ""
-      client: true
-
-  discord_rank_4_id:
-      default: ""
-      client: true
-  discord_rank_4_count:
-      default: ""
-      client: true
-  discord_rank_4_image:
-      default: ""
-      type: upload
-      client: true
-  discord_rank_4_badge:
-      default: ""
-      client: true
-
-  discord_rank_5_id:
-      default: ""
-      client: true
-  discord_rank_5_count:
-      default: ""
-      client: true
-  discord_rank_5_image:
-      default: ""
-      type: upload
-      client: true
-  discord_rank_5_badge:
-      default: ""
-      client: true
-
-  discord_rank_6_id:
-      default: ""
-      client: true
-  discord_rank_6_count:
-      default: ""
-      client: true
-  discord_rank_6_image:
-      default: ""
-      type: upload
-      client: true
-  discord_rank_6_badge:
-      default: ""
-      client: true
-
-  discord_rank_7_id:
-      default: ""
-      client: true
-  discord_rank_7_count:
-      default: ""
-      client: true
-  discord_rank_7_image:
-      default: ""
-      type: upload
-      client: true
-  discord_rank_7_badge:
-      default: ""
-      client: true
-
-  discord_rank_8_id:
-      default: ""
-      client: true
-  discord_rank_8_count:
-      default: ""
-      client: true
-  discord_rank_8_image:
-      default: ""
-      type: upload
-      client: true
-  discord_rank_8_badge:
-      default: ""
-      client: true
-
-  discord_rank_9_id:
-      default: ""
-      client: true
-  discord_rank_9_count:
-      default: ""
-      client: true
-  discord_rank_9_image:
-      default: ""
-      type: upload
-      client: true
-  discord_rank_9_badge:
-      default: ""
-      client: true
+  discord_rank_id:
+    default: ""
+    type: list
+    client: true
+  discord_rank_count:
+    default: ""
+    type: list
+    client: true
+  discord_rank_image:
+    default: ""
+    type: list
+    client: true
+  discord_rank_badge:
+    default: ""
+    type: list
+    client: true
