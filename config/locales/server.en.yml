@@ -7,6 +7,5 @@ en:
     discord_bot_channel: 'Discord bot channel ID'
 
     discord_invite_url: 'Discord server invite URL'
-    discord_show_widget: 'Show widget on /discord page'
 
     discord_header_image: 'Image to show on top of /discord page instead of title'

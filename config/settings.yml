@@ -14,9 +14,7 @@ plugins:
   discord_invite_url:
     default: ""
     client: true
-  discord_show_widget:
-    default: false
-    client: true
+
 
   discord_header_image:
     default: ""

@@ -4,13 +4,6 @@
   <h1>{{d-icon 'fab-discord'}}{{" "}}{{ i18n 'discord_datastore.user_title' }}</h1>
 {{/if}}
 
-{{#if siteSettings.discord_show_widget }}
-  {{#if siteSettings.discord_server_id }}
-    <iframe src="https://discord.com/widget?id={{ siteSettings.discord_server_id }}&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-    <br>
-  {{/if}}
-{{/if}}
-
 <div class="discord-join-info">
   {{ i18n "discord_datastore.warning_no_account_found" }}
   <br><br>
@@ -26,9 +19,11 @@
 <div class="discord-data">
 
   <div class="discord-data-stats">
-    {{"0"}}{{" "}}{{"Messages sent"}} {{"0"}}{{" "}}{{"Messages sent in the last 30 days"}} {{"0"}}{{" "}}{{"Reacts sent"}}  {{"0"}}{{" "}}{{"Reacts received"}}
+    <div class="discord-stat"><div class="discord-stat-value">{{"0"}}</div><div class="discord-stat-label">{{"Messages sent"}}</div></div>
+    <div class="discord-stat"><div class="discord-stat-value">{{"0"}}</div><div class="discord-stat-label">{{"Messages in the last 30 days"}}</div></div>
+    <div class="discord-stat"><div class="discord-stat-value">{{"0"}}</div><div class="discord-stat-label">{{"Reacts sent"}}</div></div>
+    <div class="discord-stat"><div class="discord-stat-value">{{"0"}}</div><div class="discord-stat-label">{{"Reacts received"}}</div></div>
   </div>
-  <br>
   
   <div class="discord-data-columns">
 
@@ -72,8 +67,8 @@
 
     <div class="discord-data-channels">
       {{#if channels}}
-        <div class ="discord-data-messages-header">
-          <h3>{{ i18n "discord_datastore.channel_title" }}</h3>
+        <div class="discord-data-channels-header">
+          <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.channel_title" }}</h3>
         </div>
         <div class="discord-channel-list" >
           {{#each channels as |channel|}}
