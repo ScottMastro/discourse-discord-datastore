@@ -54,6 +54,7 @@ after_initialize do
   require_relative 'app/models/discord_channel.rb'
   require_relative 'app/models/discord_user.rb'
 
+  require_relative 'lib/bot_helper.rb'
   require_relative 'lib/bot.rb'
   
   DiscordDatastore::Engine.routes.draw do

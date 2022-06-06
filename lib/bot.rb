@@ -2,23 +2,24 @@
 #https://discord.com/api/oauth2/authorize?client_id=975850832195112991&permissions=17448381440&scope=bot
 
 require 'discordrb'
+
 HISTORY_CHUNK_LIMIT = 100
-CHANNEL_HOME = SiteSetting.discord_bot_channel
+HISTORY_WAIT_SECONDS = 2
 
 module DiscordDatastore::BotInstance
   @@bot = nil
 
   def self.init
-    @@bot = Discordrb::Commands::CommandBot.new token: SiteSetting.discord_bot_token, prefix: "!"
-    
+    @@bot = Discordrb::Commands::CommandBot.new token: SiteSetting.discord_bot_token, prefix: SiteSetting.discord_bot_command_prefix
+    STDERR.puts '------------------------------------------------------------'
+    STDERR.puts 'Discord Datastore should be spawned, say ' + SiteSetting.discord_bot_command_prefix + 'ping" on Discord!'
+    STDERR.puts '------------------------------------------------------------'
+    STDERR.puts '(------------       If not check logs         -------------)'
+
     @@bot.ready do |event|
       puts "Logged in as #{@@bot.profile.username} (ID:#{@@bot.profile.id}) | #{@@bot.servers.size} servers"
-      @@bot.send_message(CHANNEL_HOME, "Datastore is alive!")
+      @@bot.send_message(SiteSetting.discord_bot_channel, "Datastore is alive!")
 
-      STDERR.puts '------------------------------------------------------------'
-      STDERR.puts 'Discord Datastore should be spawned, say "!ping" on Discord!'
-      STDERR.puts '------------------------------------------------------------'
-      STDERR.puts '(------------       If not check logs         -------------)'
     end
     @@bot
   end
@@ -26,73 +27,17 @@ module DiscordDatastore::BotInstance
   def self.bot
     @@bot
   end
-
-  def self.server
-    @@bot.servers.each do |s|
-      server_id = s[0]
-      
-      if server_id.to_s == SiteSetting.discord_server_id
-        return @@bot.servers[server_id]     
-      end
-    end
-
-    return nil
-  end
-
-  def self.channels
-    if self.server
-      return self.server.channels
-    end
-    return []
-  end
 end
 
 
+class DiscordDatastore::MessageHistory
 
-def upsert_channels
-  existingchannels = DiscordDatastore::DiscordChannel.all
-
-  DiscordDatastore::DiscordChannel.delete_all
-
-  DiscordDatastore::BotInstance.channels.each do |channel|
-
-    if channel.type == 0 #text channel
-
-      create_time = Time.now
-      existingchannels.each do |c|
-        if c.id == channel.id
-          create_time = c.created_at
-        end
-      end
-      
-      discordchannel = {
-        'id' => channel.id,
-        'name' => channel.name,
-        'voice' => (! channel.text?) ,
-        'permissions' => [],
-        'position' => channel.position,
-        'created_at' => create_time,
-        'updated_at'=> Time.now
-      }
-      DiscordDatastore::DiscordChannel.upsert(discordchannel)
-    end
-  end
-end
-
-
-class DiscordDatastore::HistoryBot
-
-  def self.run_bot
+  def self.collect
     bot = DiscordDatastore::BotInstance::bot
-    
-    bot.ready do |event|
-      bot.game=("Scanning history...")
-
-      upsert_channels
-
-    end
+    bot.game=("Scanning message history...")
 
 
+    sleep HISTORY_WAIT_SECONDS
 
   end
 end 
@@ -102,47 +47,30 @@ class DiscordDatastore::Bot
 
   def self.run_bot
     bot = DiscordDatastore::BotInstance::init
+    bot.ready do |event|
 
-    history_thread = Thread.new do
-      begin
-        DiscordDatastore::HistoryBot.run_bot
-      rescue Exception => ex
-        Rails.logger.error("DiscordDatastore HistoryBot: There was a problem: #{ex}")
-      end
-    end  
-
-    STDERR.puts '------------------------------------------------------------'
-    STDERR.puts '------------------------------------------------------------'
-    STDERR.puts '------------------------------------------------------------'
-    STDERR.puts '------------------------------------------------------------'
-    STDERR.puts '------------------------------------------------------------'
-    STDERR.puts '------------------------------------------------------------'
-    STDERR.puts '------------------------------------------------------------'
-
-    bot.channel_update do
       upsert_channels
-    end
-    bot.channel_create do
-      upsert_channels
-    end
+      upsert_users
 
-    bot.command(:ping) do |event|
-      event.respond 'pong!'
-    end
-
-    bot.command(:check) do |event|
-      event.server.channels.each do |channel|
-        event.respond channel.to_s
-        if channel.text?
-          begin  # "try" block
-            channel.send_message "hi"
-    rescue # optionally: `rescue Exception => ex`
-            event.respond 'I am rescued.'
-    end 
+      history_thread = Thread.new do
+        begin
+          DiscordDatastore::MessageHistory.collect
+        rescue Exception => ex
+          Rails.logger.error("DiscordDatastore HistoryBot: There was a problem: #{ex}")
         end
-        sleep 2
       end
-    end
+
+      bot.command(:ping, channels: [SiteSetting.discord_bot_channel]) do |event|
+        event.respond 'pong!'
+      end
+
+      bot.channel_update do
+        upsert_channels
+      end
+      bot.channel_create do
+        upsert_channels
+      end
+  end
 
     bot.command(:fetch) do |event|
       event.channel.history(HISTORY_CHUNK_LIMIT).each do |message|
@@ -155,21 +83,6 @@ class DiscordDatastore::Bot
           'content' => message.content
         }
         DiscordDatastore::DiscordMessage.create(newMessage)
-      end
-    end
-
-    bot.command(:users) do |event|
-      event.server.members.each do |member|
-        newMember = {
-          'id' => member.id,
-          'tag' => member.username + "#" + member.discriminator,
-          'nickname' => member.display_name,
-          'avatar' => member.avatar_url,
-          'roles' => [],
-          'verified' => false,
-          'discourse_account_id' => -1
-        }
-        DiscordDatastore::DiscordUser.create(newMember)
       end
     end
 
@@ -189,4 +102,3 @@ class DiscordDatastore::Bot
     bot.run
   end
 end
-

@@ -8,6 +8,8 @@ plugins:
     client: true
   discord_bot_token:
     default: ""
+  discord_bot_command_prefix:
+    default: "!"
   discord_bot_channel:
     default: ""
 

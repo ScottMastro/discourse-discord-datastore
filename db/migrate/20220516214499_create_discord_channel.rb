@@ -6,6 +6,7 @@ class CreateDiscordChannel < ActiveRecord::Migration[6.0]
       t.string :name
       t.boolean :voice
       t.bigint :permissions, array: true, default: []
+      t.integer :position
 
       t.timestamps
     end

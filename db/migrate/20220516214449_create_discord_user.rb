@@ -8,7 +8,7 @@ class CreateDiscordUser < ActiveRecord::Migration[6.0]
       t.string :avatar
       t.bigint :roles, array: true, default: []
       t.boolean :verified
-      t.boolean :discourse_account_id
+      t.bigint :discourse_account_id
 
       t.timestamps
     end
