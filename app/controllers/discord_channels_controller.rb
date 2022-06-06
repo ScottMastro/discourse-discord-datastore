@@ -11,7 +11,7 @@ module DiscordDatastore
         #todo
         user_id=366068461027459073
 
-        channels = DiscordDatastore::DiscordChannel.order(created_at: :desc)
+        channels = DiscordDatastore::DiscordChannel.order(:position )
 
         #todo: hide channels based on permissions
         
@@ -29,7 +29,7 @@ module DiscordDatastore
           return
         end
 
-        channels = DiscordDatastore::DiscordChannel.order(created_at: :desc)
+        channels = DiscordDatastore::DiscordChannel.order(:position)
         channels = channels.map { |ch| ch.as_json.merge(:length => 
             DiscordDatastore::DiscordMessage.where(discord_channel_id: ch.id).length) }
         

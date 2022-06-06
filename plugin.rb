@@ -71,7 +71,6 @@ after_initialize do
     get '/discord_users' => 'discord_users#index'
     put '/discord_users/:user_id' => 'discord_users#create'
 
-
     delete '/discord_messages/:message_id' => 'discord_messages#destroy'
   end
   
@@ -82,14 +81,10 @@ after_initialize do
   
   bot_thread = Thread.new do
     begin
-      Bot.run_bot
+      DiscordDatastore::Bot.run_bot
     rescue Exception => ex
-      Rails.logger.error("Discord Bot: There was a problem: #{ex}")
+      Rails.logger.error("DiscordDatastore Bot: There was a problem: #{ex}")
     end
   end
 
-STDERR.puts '----------------------------------------------------'
-STDERR.puts 'Datastore should be spawned, say "!ping" on Discord!'
-STDERR.puts '----------------------------------------------------'
-STDERR.puts '(--------       If not check logs         ---------)'
 end
