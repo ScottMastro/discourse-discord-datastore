@@ -3,9 +3,6 @@
 
 require 'discordrb'
 
-HISTORY_CHUNK_LIMIT = 100
-HISTORY_WAIT_SECONDS = 2
-
 module DiscordDatastore::BotInstance
   @@bot = nil
 
@@ -19,7 +16,6 @@ module DiscordDatastore::BotInstance
     @@bot.ready do |event|
       puts "Logged in as #{@@bot.profile.username} (ID:#{@@bot.profile.id}) | #{@@bot.servers.size} servers"
       @@bot.send_message(SiteSetting.discord_bot_channel, "Datastore is alive!")
-
     end
     @@bot
   end
@@ -29,20 +25,7 @@ module DiscordDatastore::BotInstance
   end
 end
 
-
-class DiscordDatastore::MessageHistory
-
-  def self.collect
-    bot = DiscordDatastore::BotInstance::bot
-    bot.game=("Scanning message history...")
-
-
-    sleep HISTORY_WAIT_SECONDS
-
-  end
-end 
-
-
+#todo: trigger browse_history after xxxxx posts?
 class DiscordDatastore::Bot
 
   def self.run_bot
@@ -51,53 +34,33 @@ class DiscordDatastore::Bot
 
       upsert_channels
       upsert_users
-
-      history_thread = Thread.new do
-        begin
-          DiscordDatastore::MessageHistory.collect
-        rescue Exception => ex
-          Rails.logger.error("DiscordDatastore HistoryBot: There was a problem: #{ex}")
-        end
-      end
+      browse_history
 
       bot.command(:ping, channels: [SiteSetting.discord_bot_channel]) do |event|
         event.respond 'pong!'
       end
 
-      bot.channel_update do
+      bot.command(:sync) do |event|
         upsert_channels
+        upsert_users
+        browse_history
       end
+
       bot.channel_create do
         upsert_channels
       end
-  end
-
-    bot.command(:fetch) do |event|
-      event.channel.history(HISTORY_CHUNK_LIMIT).each do |message|
-
-        newMessage = {
-          'id' => message.id,
-          'discord_user_id' => message.author.id,
-          'discord_channel_id' => message.channel.id,
-          'date' => message.timestamp,
-          'content' => message.content
-        }
-        DiscordDatastore::DiscordMessage.create(newMessage)
+      bot.channel_update do
+        upsert_channels
       end
-    end
 
-    bot.command(:channels) do |event|
-      event.server.channels.each do |channel|
-        newChannel = {
-          'id' => channel.id,
-          'name' => channel.name,
-          'voice' => (! channel.text?) ,
-          'permissions' => []
-        }
-        DiscordDatastore::DiscordChannel.create(newChannel)
+      bot.member_join do |event|
+        upsert_user event.user
       end
+      bot.member_update do |event|
+        upsert_user event.user
+      end
+
     end
-    
 
     bot.run
   end

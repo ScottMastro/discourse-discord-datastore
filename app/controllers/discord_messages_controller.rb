@@ -14,7 +14,7 @@ module DiscordDatastore
 
       page = params[:page].to_i || 1
 
-      messages = DiscordDatastore::DiscordMessage.order(created_at: :desc).where(discord_user_id: user_id)
+      messages = DiscordDatastore::DiscordMessage.order(date: :desc).where(discord_user_id: user_id)
       nMessages = messages.length
       messages = messages.offset(page * PAGE_SIZE).limit(PAGE_SIZE)
       messages = messages.includes(:discord_user).includes(:discord_channel)
