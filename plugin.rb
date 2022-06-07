@@ -59,7 +59,6 @@ after_initialize do
   
   DiscordDatastore::Engine.routes.draw do
     get "/discord" => "discord#index", constraints: StaffConstraint.new
-    put '/discord_messages/:message_id' => 'discord_messages#create'
     get '/discord_messages' => 'discord_messages#index'
 
     get '/admin/discord' => 'admin_discord#index', constraints: StaffConstraint.new
@@ -70,9 +69,7 @@ after_initialize do
     put '/discord_channels/:channel_id' => 'discord_channels#create'
 
     get '/discord_users' => 'discord_users#index'
-    put '/discord_users/:user_id' => 'discord_users#create'
 
-    delete '/discord_messages/:message_id' => 'discord_messages#destroy'
   end
   
   Discourse::Application.routes.append do

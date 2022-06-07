@@ -1,19 +1,22 @@
 import { ajax } from 'discourse/lib/ajax';
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { iconNode } from "discourse-common/lib/icon-library";
 
 export default Ember.Controller.extend({
 
   init() {
     this._super();
+    let discord_icon = iconNode('fab-discord');
+
     this.set('messages', []);
-    this.set('message_total', 0);
     this.set('channels', []);
-    this.set('rank_settings', []);
+    this.set('ranks', []);
 
     this.fetchMessages();
     this.fetchChannels();
-    this.set('currentPage', 1);
-  
+    this.set('current_page', 1);
+    this.set('filter_channel', "0");
+
     this.parseRankSettings();
   },
 
@@ -23,6 +26,7 @@ export default Ember.Controller.extend({
         for (const message of result.discord_messages) {
           this.messages.pushObject(message);
         }
+        this.set('stats', result.stats);
       }).catch(popupAjaxError);
   },
 
@@ -60,12 +64,24 @@ export default Ember.Controller.extend({
 
     for (let i = 0; i < n; i++) {
       var rank = {"id": ids[i], "img": imgs[i], "count": counts[i]}
-      this.rank_settings.pushObject(rank)
+      this.ranks.pushObject(rank)
     }
-    console.log(this.rank_settings)
   },
 
   actions: {
+
+    filterChannel(channel_id) {
+      this.set('current_page', 1);
+      this.set('messages', []);
+      this.set('filter_channel', channel_id);
+      ajax('/admin/discord_messages.json?channel='+channel_id)
+      .then((result) => {
+        for (const message of result.discord_messages) {
+          this.messages.pushObject(message);
+        }
+      }).catch(popupAjaxError);
+    },
+
     createDiscordMessage(content) {
       if (!content) {
         return;
@@ -82,23 +98,35 @@ export default Ember.Controller.extend({
     },
 
     nextMessagePage(){
-      this.currentPage = this.currentPage+1;
-      console.log(this.currentPage);
+      this.set('current_page', this.current_page+1);
+
+      this.set('messages', []);
+      ajax('/admin/discord_messages.json?channel='+this.filter_channel + '&page=' + (this.current_page-1).toString())
+      .then((result) => {
+        for (const message of result.discord_messages) {
+          this.messages.pushObject(message);
+        }
+      }).catch(popupAjaxError);
     },
 
-    deleteDiscordMessage(message) {
-      this.store.destroyRecord('discordMessage', message)
-        .then(() => {
-          this.messages.removeObject(message);
-        })
-        .catch(console.error);
+    prevMessagePage(){
+      if (this.current_page == 1){
+        return
+      }
+      this.set('current_page', this.current_page-1);
+      this.set('messages', []);
+      ajax('/admin/discord_messages.json?channel='+this.filter_channel + '&page=' + (this.current_page-1).toString())
+      .then((result) => {
+        for (const message of result.discord_messages) {
+          this.messages.pushObject(message);
+        }
+      }).catch(popupAjaxError);
+
     },
 
     onChangeSearchTermForUsername(username){
       this.set("searched_username", username.length ? username : null);
     }
-
-    
 
   }
 });

@@ -1,6 +1,6 @@
 HISTORY_CHUNK_LIMIT = 100
 HISTORY_WAIT_SECONDS = 3
-
+#todo: get message attachments??
 
 def get_server
     DiscordDatastore::BotInstance.bot.servers.each do |s|
@@ -99,7 +99,7 @@ def upsert_user(user)
         is_verified = u.verified
         discourse_id = u.discourse_account_id
     end
-    
+
     discorduser = {
         'id' => user.id,
         'tag' => user.username + "#" + user.discriminator,

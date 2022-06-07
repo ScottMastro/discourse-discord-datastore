@@ -15,9 +15,12 @@ module DiscordDatastore
 
         #todo: hide channels based on permissions
         
-        channels = channels.map { |ch| ch.as_json.merge(:length => 
-          DiscordDatastore::DiscordMessage.where(discord_user_id: user_id, discord_channel_id: ch.id).length) }
-        
+        channels = channels.map { |ch| ch.as_json.merge({
+          :length => DiscordDatastore::DiscordMessage.where(discord_user_id: user_id, discord_channel_id: ch.id).length,
+          #avoid javascript rounding issues
+          :id => ch.id.to_s
+        })}
+  
         render json: { discord_channels: channels}
       end
 
@@ -30,25 +33,14 @@ module DiscordDatastore
         end
 
         channels = DiscordDatastore::DiscordChannel.order(:position)
-        channels = channels.map { |ch| ch.as_json.merge(:length => 
-            DiscordDatastore::DiscordMessage.where(discord_channel_id: ch.id).length) }
-        
+                    
+        channels = channels.map { |ch| ch.as_json.merge({
+          :length => DiscordDatastore::DiscordMessage.where(discord_channel_id: ch.id).length,
+          #avoid javascript rounding issues
+          :id => ch.id.to_s
+        })}
+
         render json: { discord_channels: channels}
-      end
-
-
-      def create
-        Rails.logger.info 'Called DiscordChannelsController#create'
-  
-        channel = {
-          'id' => params[:channel_id],
-          'name' => "fake-channel",
-          'voice' => false,
-          'permissions' => [],
-        }
-  
-        channel = DiscordDatastore::DiscordChannel.create(channel)
-        render json: success_json
       end
 
     end

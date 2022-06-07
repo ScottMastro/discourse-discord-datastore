@@ -9,13 +9,14 @@ export default Ember.Controller.extend({
     let discord_icon = iconNode('fab-discord');
 
     this.set('messages', []);
-    this.set('message_total', 0);
     this.set('channels', []);
-    this.set('rank_settings', []);
+    this.set('stats', []);
+    this.set('ranks', []);
 
     this.fetchMessages();
     this.fetchChannels();
-    this.set('currentPage', 1);
+    this.set('current_page', 1);
+    this.set('filter_channel', "0");
 
     this.parseRankSettings();
   },
@@ -25,6 +26,11 @@ export default Ember.Controller.extend({
       .then((result) => {
         for (const message of result.discord_messages) {
           this.messages.pushObject(message);
+        }
+        this.stats = result.stats;
+        for (let i = 0; i < this.ranks.length; i++) {
+          var missing = this.stats["total"] < this.ranks[i]["count_values"] ? "missing-rank" : "";
+          this.ranks[i]["missing"] = missing;
         }
       }).catch(popupAjaxError);
   },
@@ -42,6 +48,7 @@ export default Ember.Controller.extend({
     var ids = this.siteSettings.discord_rank_id.split("|");
     var imgs = this.siteSettings.discord_rank_image.split("|");
     var counts = this.siteSettings.discord_rank_count.split("|");
+    var count_values = this.siteSettings.discord_rank_count.split("|");
     var badges = this.siteSettings.discord_rank_badge.split("|");
 
     for (let i = 0; i < counts.length; i++) {
@@ -62,46 +69,51 @@ export default Ember.Controller.extend({
     var n = Math.min(ids.length, imgs.length, counts.length)
 
     for (let i = 0; i < n; i++) {
-      var rank = {"id": ids[i], "img": imgs[i], "count": counts[i]}
-      this.rank_settings.pushObject(rank)
+      var rank = {"id": ids[i], "img": imgs[i], "count": counts[i], "count_values":count_values[i]}
+      this.ranks.pushObject(rank)
     }
-    console.log(this.rank_settings)
   },
 
   actions: {
-    createDiscordMessage(content) {
-      if (!content) {
-        return;
-      }
 
-      const discordMessage = this.store.createRecord('discordMessage', {
-        id: Date.now(),
-        content: content
-      });
-
-      discordMessage.save()
-        .then(console.log)
-        .catch(console.error);
+    filterChannel(channel_id) {
+      this.set('current_page', 1);
+      this.set('messages', []);
+      this.set('filter_channel', channel_id);
+      console.log('/discord_messages.json?channel='+channel_id)
+      ajax('/discord_messages.json?channel='+channel_id)
+      .then((result) => {
+        for (const message of result.discord_messages) {
+          this.messages.pushObject(message);
+        }
+      }).catch(popupAjaxError);
     },
 
     nextMessagePage(){
-      this.currentPage = this.currentPage+1;
-      console.log(this.currentPage);
+      this.set('current_page', this.current_page+1);
+
+      this.set('messages', []);
+      ajax('/discord_messages.json?channel='+this.filter_channel + '&page=' + (this.current_page-1).toString())
+      .then((result) => {
+        for (const message of result.discord_messages) {
+          this.messages.pushObject(message);
+        }
+      }).catch(popupAjaxError);
     },
 
-    deleteDiscordMessage(message) {
-      this.store.destroyRecord('discordMessage', message)
-        .then(() => {
-          this.messages.removeObject(message);
-        })
-        .catch(console.error);
+    prevMessagePage(){
+      if (this.current_page == 1){
+        return
+      }
+      this.set('current_page', this.current_page-1);
+      this.set('messages', []);
+      ajax('/discord_messages.json?channel='+this.filter_channel + '&page=' + (this.current_page-1).toString())
+      .then((result) => {
+        for (const message of result.discord_messages) {
+          this.messages.pushObject(message);
+        }
+      }).catch(popupAjaxError);
+
     },
-
-    onChangeSearchTermForUsername(username){
-      this.set("searched_username", username.length ? username : null);
-    }
-
-    
-
   }
 });

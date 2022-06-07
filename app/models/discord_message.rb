@@ -5,5 +5,6 @@ module DiscordDatastore
     self.table_name = 'discord_messages'
     belongs_to :discord_channel
     belongs_to :discord_user
+    has_many :discord_reactions
   end
 end

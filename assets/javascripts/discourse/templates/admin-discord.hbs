@@ -23,10 +23,10 @@
   <hr> <!-- ==================================================================================== -->
   
   <div class="discord-data-stats">
-    <div class="discord-stat"><div class="discord-stat-value">{{"0"}}</div><div class="discord-stat-label">{{"Messages sent"}}</div></div>
-    <div class="discord-stat"><div class="discord-stat-value">{{"0"}}</div><div class="discord-stat-label">{{"Messages in the last 30 days"}}</div></div>
-    <div class="discord-stat"><div class="discord-stat-value">{{"0"}}</div><div class="discord-stat-label">{{"Reacts sent"}}</div></div>
-    <div class="discord-stat"><div class="discord-stat-value">{{"0"}}</div><div class="discord-stat-label">{{"Reacts received"}}</div></div>
+    <div class="discord-stat"><div class="discord-stat-value">{{ stats.total }}</div><div class="discord-stat-label">{{i18n 'discord_datastore.stat_total_message'}}</div></div>
+    <div class="discord-stat"><div class="discord-stat-value">{{ stats.total_monthly }}</div><div class="discord-stat-label">{{i18n 'discord_datastore.stat_monthly_message'}}</div></div>
+    <div class="discord-stat"><div class="discord-stat-value">{{ stats.total_weekly }}</div><div class="discord-stat-label">{{i18n 'discord_datastore.stat_weekly_message'}}</div></div>
+    <div class="discord-stat"><div class="discord-stat-value">{{ stats.first_message }}</div><div class="discord-stat-label">{{i18n 'discord_datastore.stat_first_message'}}</div></div>
   </div>
 
   <hr> <!-- ==================================================================================== -->
@@ -36,7 +36,7 @@
   </div>
 
   <div class="discord-data-rank">
-    {{#each rank_settings as |rank|}}
+    {{#each ranks as |rank|}}
       <div class="discord-rank">
         <img class="discord-rank-img" src="{{ rank.img }}" alt="" />
         <div class="discord-rank-label">{{ rank.id }}</div>
@@ -56,9 +56,9 @@
         </div>
         <div class="discord-channel-list" >
           {{#each channels as |channel|}}
-            <div class="discord-channel-list-element">
+            <div><button {{action "filterChannel" channel.id }} type='submit' class="discord-channel-list-element">
               <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.length }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
-            </div>
+            </button></div>
           {{/each}}
         </div>
       {{else}}
@@ -67,22 +67,21 @@
     </div>
     
     <div class="discord-data-messages">
-      {{#if messages}}
         <div class ="discord-data-messages-header">
           
           <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.message_history_title" }}</h3>
           <div class="message-paginate-buttons">
-            <button type='submit' class='discord-button'>
+            <button {{ action "prevMessagePage" }} type='submit' class='discord-button'>
               {{ i18n "discord_datastore.message_pagination_previous" }}
             </button>
-            <b>{{ currentPage }}</b>
-            <button type='submit' class='discord-button' {{ action "nextMessagePage" currentPage }}>
+            <b>{{ current_page }}</b>
+            <button {{ action "nextMessagePage" }} type='submit' class='discord-button' >
               {{ i18n "discord_datastore.message_pagination_next" }}
             </button>
           </div>
 
         </div>
-
+      {{#if messages}}
         <div class="discord-message-list" >
           <ul>
             {{#each messages as |message|}}
@@ -99,7 +98,7 @@
           </ul>
         </div>
       {{else}}
-        {{ i18n "discord_datastore.no_messages" }}
+        <div class="no-messages">{{ i18n "discord_datastore.no_messages" }}</div>
       {{/if}}
 
     </div>

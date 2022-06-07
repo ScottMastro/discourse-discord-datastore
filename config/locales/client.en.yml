@@ -16,6 +16,11 @@ en:
       rank_title: "RANKS"
       stat_title: "STATS"
 
+      stat_total_message: "Messages sent"
+      stat_monthly_message: "Messages in the last 30 days"
+      stat_weekly_message: "Messages in the last 7 days"
+      stat_first_message: "First message sent"
+
       no_messages: "No messages found"
       no_channels: "No channels found"
 
