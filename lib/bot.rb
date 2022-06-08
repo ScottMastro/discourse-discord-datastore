@@ -2,11 +2,14 @@
 #https://discord.com/api/oauth2/authorize?client_id=975850832195112991&permissions=17448381440&scope=bot
 
 require 'discordrb'
+MESSAGES_BEFORE_RESYNC = 200
 
 module DiscordDatastore::BotInstance
   @@bot = nil
+  @@message_count = 0
 
   def self.init
+    @@message_count = 0
     @@bot = Discordrb::Commands::CommandBot.new token: SiteSetting.discord_bot_token, prefix: SiteSetting.discord_bot_command_prefix
     STDERR.puts '------------------------------------------------------------'
     STDERR.puts 'Discord Datastore should be spawned, say ' + SiteSetting.discord_bot_command_prefix + 'ping" on Discord!'
@@ -23,9 +26,23 @@ module DiscordDatastore::BotInstance
   def self.bot
     @@bot
   end
+
+  def self.add_message
+    STDERR.puts '------------------------------------------------------------'
+    STDERR.puts '------------------------------------------------------------'
+    @@message_count = @@message_count+1
+    STDERR.puts @@message_count
+    STDERR.puts '------------------------------------------------------------'
+    STDERR.puts '------------------------------------------------------------'
+    if @@message_count > MESSAGES_BEFORE_RESYNC
+      @@message_count = 0
+      return true
+    end
+    return false
+  end
+
 end
 
-#todo: trigger browse_history after xxxxx posts?
 class DiscordDatastore::Bot
 
   def self.run_bot
@@ -59,6 +76,14 @@ class DiscordDatastore::Bot
       bot.member_update do |event|
         upsert_user event.user
       end
+
+      bot.message do
+        if DiscordDatastore::BotInstance::add_message
+          browse_history
+
+        end
+      end
+
 
     end
 

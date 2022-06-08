@@ -12,7 +12,9 @@ plugins:
     default: "!"
   discord_bot_channel:
     default: ""
-
+  messages_before_resync:
+    default: 200
+    
   discord_invite_url:
     default: ""
     client: true

@@ -6,6 +6,8 @@ en:
     discord_bot_token: 'Discord bot token'
     discord_bot_command_prefix: "Prefix for Discord bot commands"
     discord_bot_channel: 'Discord bot channel ID'
+    messages_before_resync: 'Amount of messages recieved before Discord message history is updated'
+
 
     discord_invite_url: 'Discord server invite URL'
 
