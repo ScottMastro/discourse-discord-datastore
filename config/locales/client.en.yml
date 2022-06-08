@@ -9,7 +9,9 @@ en:
       invite_url: "Discord Invite URL"
       
       messages: "messages"
-
+      collect_rank: "Collect!"
+      locked_rank: "Locked"
+      collected_rank: "Acquired"
 
       message_history_title: "MESSAGE HISTORY"
       channel_title: "CHANNELS"

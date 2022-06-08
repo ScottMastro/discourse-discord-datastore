@@ -38,6 +38,21 @@
         <img class="discord-rank-img" src="{{ rank.img }}" alt="" />
         <div class="discord-rank-label">{{ rank.id }}</div>
         <div class="discord-rank-count">{{ rank.count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+
+        {{#if rank.badge }}
+
+          {{#if rank.missing }}
+            <div class="discord-locked-button">{{ i18n "discord_datastore.locked_rank" }}</div>
+          {{else}}
+            {{#if rank.collected }}
+              <div class="discord-collected-button">{{ i18n "discord_datastore.collected_rank" }}</div>
+            {{else}}
+              <button {{action "collectRank" rank.badge }} class="discord-collect-button">{{ i18n "discord_datastore.collect_rank" }}</button>
+            {{/if}}
+          {{/if}}
+          
+        {{/if}}
+
       </div>
     {{/each}}
 
@@ -83,7 +98,7 @@
           </div>
 
         </div>
-        
+
       {{#if messages}}
 
         <div class="discord-message-list" >

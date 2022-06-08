@@ -47,7 +47,9 @@ textarea {
     max-width: 100px;
     max-height: 100px;
   }
-  
+  .discord-rank-count{
+    margin-bottom: 5px;
+  }
 }
 
 .discord-data{
@@ -123,6 +125,26 @@ textarea {
   display: flex;
   align-items: baseline ;
   justify-content: space-between;
+}
+
+.discord-locked-button{
+  background-color: 2px solid #40434b;
+  padding: 10px;
+}
+
+.discord-collect-button{
+  background-color: #57F287;
+  border: 2px solid #2f3036;
+  color: #2f3036 !important;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.discord-collected-button{
+  background-color: #40434b;
+  border: 2px solid #2f3036;
+  border-radius: 5px;
+  padding: 10px;
 }
 
 .discord-button{

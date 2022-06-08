@@ -59,6 +59,10 @@ after_initialize do
   
   DiscordDatastore::Engine.routes.draw do
     get "/discord" => "discord#index", constraints: StaffConstraint.new
+
+    get '/discord/badge' => 'discord#badge'
+    get '/discord/badge_check' => 'discord#check'
+
     get '/discord_messages' => 'discord_messages#index'
 
     get '/admin/discord' => 'admin_discord#index', constraints: StaffConstraint.new

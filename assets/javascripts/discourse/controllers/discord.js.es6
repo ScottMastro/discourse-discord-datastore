@@ -67,11 +67,26 @@ export default Ember.Controller.extend({
     }
 
     var n = Math.min(ids.length, imgs.length, counts.length)
-
+    
     for (let i = 0; i < n; i++) {
-      var rank = {"id": ids[i], "img": imgs[i], "count": counts[i], "count_values":count_values[i]}
+      var rank = {"id": ids[i], "img": imgs[i], "count": counts[i], "count_values":count_values[i], "badge": 0, "collected":0}
       this.ranks.pushObject(rank)
     }
+
+    ajax("/discord/badge_check.json")
+      .then((result) => {
+
+        for (let i = 0; i < badges.length; i++) {
+          this.ranks[i]["badge"] = result.badges[i];
+          this.ranks[i]["collected"] = result.have[i];
+        }
+    
+      }).catch(popupAjaxError);
+
+
+    console.log(this.ranks)
+
+
   },
 
   actions: {
@@ -115,5 +130,23 @@ export default Ember.Controller.extend({
       }).catch(popupAjaxError);
 
     },
+
+    collectRank(badge_id){
+
+      ajax('/discord/badge.json?badge='+badge_id.toString())
+      .then((result) => {
+
+        if (result.result == "success"){
+          for (let i = 0; i < this.ranks.length; i++) {  
+            if (this.ranks[i]["badge"] == badge_id){
+              Ember.set(this.get('ranks').objectAt(i), 'collected', 1);
+            }
+          }
+        }
+
+      }).catch(popupAjaxError);
+
+
+    }
   }
 });
