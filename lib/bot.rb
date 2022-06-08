@@ -2,7 +2,7 @@
 #https://discord.com/api/oauth2/authorize?client_id=975850832195112991&permissions=17448381440&scope=bot
 
 require 'discordrb'
-MESSAGES_BEFORE_RESYNC = 200
+MESSAGES_BEFORE_RESYNC = SiteSetting.messages_before_resync
 
 module DiscordDatastore::BotInstance
   @@bot = nil
@@ -28,12 +28,7 @@ module DiscordDatastore::BotInstance
   end
 
   def self.add_message
-    STDERR.puts '------------------------------------------------------------'
-    STDERR.puts '------------------------------------------------------------'
     @@message_count = @@message_count+1
-    STDERR.puts @@message_count
-    STDERR.puts '------------------------------------------------------------'
-    STDERR.puts '------------------------------------------------------------'
     if @@message_count > MESSAGES_BEFORE_RESYNC
       @@message_count = 0
       return true
@@ -80,7 +75,6 @@ class DiscordDatastore::Bot
       bot.message do
         if DiscordDatastore::BotInstance::add_message
           browse_history
-
         end
       end
 
