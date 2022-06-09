@@ -40,10 +40,9 @@ export default Ember.Controller.extend({
   },
 
   parseRankSettings() {
-    var ids = this.siteSettings.discord_rank_id.split("|");
+    var ids = this.siteSettings.discord_rank_name.split("|");
     var imgs = this.siteSettings.discord_rank_image.split("|");
     var counts = this.siteSettings.discord_rank_count.split("|");
-    var badges = this.siteSettings.discord_rank_badge.split("|");
 
     for (let i = 0; i < counts.length; i++) {
       if(counts[i].endsWith("000")){

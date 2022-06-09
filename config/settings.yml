@@ -12,19 +12,20 @@ plugins:
     default: "!"
   discord_bot_channel:
     default: ""
-  messages_before_resync:
+  discord_bot_status:
+    default: "Watching."
+  discord_messages_before_resync:
     default: 200
-    
   discord_invite_url:
     default: ""
     client: true
-
+  discord_verified_rank:
+    default: ""
   discord_header_image:
     default: ""
     type: upload
     client: true
-
-  discord_rank_id:
+  discord_rank_name:
     default: ""
     type: list
     client: true

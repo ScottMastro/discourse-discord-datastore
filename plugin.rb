@@ -56,7 +56,8 @@ after_initialize do
 
   require_relative 'lib/bot_helper.rb'
   require_relative 'lib/bot.rb'
-  
+  require_relative 'lib/verifier.rb'
+
   DiscordDatastore::Engine.routes.draw do
     get "/discord" => "discord#index", constraints: StaffConstraint.new
 
@@ -87,6 +88,10 @@ after_initialize do
     rescue Exception => ex
       Rails.logger.error("DiscordDatastore Bot: There was a problem: #{ex}")
     end
+  end
+
+  DiscourseEvent.on(:after_auth) do |authenticator, auth_result|
+    if authenticator.name == "discord" && auth_result.user.id > 0 then DiscordDatastore::Verifier.verify_user(auth_result.user) end
   end
 
 end

@@ -45,7 +45,7 @@ export default Ember.Controller.extend({
   },
 
   parseRankSettings() {
-    var ids = this.siteSettings.discord_rank_id.split("|");
+    var ids = this.siteSettings.discord_rank_name.split("|");
     var imgs = this.siteSettings.discord_rank_image.split("|");
     var counts = this.siteSettings.discord_rank_count.split("|");
     var count_values = this.siteSettings.discord_rank_count.split("|");

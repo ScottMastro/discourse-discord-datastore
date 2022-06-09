@@ -16,7 +16,6 @@ class DiscordDatastore::DiscordController < ::ApplicationController
     end
 
     render json: { have: have, badges: badges }
-    
   end
 
   def badge

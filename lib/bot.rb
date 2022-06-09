@@ -2,7 +2,7 @@
 #https://discord.com/api/oauth2/authorize?client_id=975850832195112991&permissions=17448381440&scope=bot
 
 require 'discordrb'
-MESSAGES_BEFORE_RESYNC = SiteSetting.messages_before_resync
+MESSAGES_BEFORE_RESYNC = SiteSetting.discord_messages_before_resync
 
 module DiscordDatastore::BotInstance
   @@bot = nil
@@ -19,6 +19,7 @@ module DiscordDatastore::BotInstance
     @@bot.ready do |event|
       puts "Logged in as #{@@bot.profile.username} (ID:#{@@bot.profile.id}) | #{@@bot.servers.size} servers"
       @@bot.send_message(SiteSetting.discord_bot_channel, "Datastore is alive!")
+
     end
     @@bot
   end
@@ -47,6 +48,7 @@ class DiscordDatastore::Bot
       upsert_channels
       upsert_users
       browse_history
+      #update_ranks
 
       bot.command(:ping, channels: [SiteSetting.discord_bot_channel]) do |event|
         event.respond 'pong!'
@@ -67,6 +69,7 @@ class DiscordDatastore::Bot
 
       bot.member_join do |event|
         upsert_user event.user
+        DiscordDatastore::Verifier.verify_from_discord(event.user.id)
       end
       bot.member_update do |event|
         upsert_user event.user
@@ -75,10 +78,9 @@ class DiscordDatastore::Bot
       bot.message do
         if DiscordDatastore::BotInstance::add_message
           browse_history
+          #update_ranks
         end
       end
-
-
     end
 
     bot.run

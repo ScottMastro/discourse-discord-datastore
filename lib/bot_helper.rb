@@ -28,6 +28,14 @@ def get_users
     return []
 end
 
+def get_ranks
+    server = get_server
+    if server
+      return server.roles
+    end
+    return []
+end
+
 def upsert_channels
     existingchannels = DiscordDatastore::DiscordChannel.all
     #DiscordDatastore::DiscordChannel.delete_all
@@ -213,9 +221,62 @@ def browse_history
 
             sleep HISTORY_WAIT_SECONDS
         end
-
-
     end
 
-    bot.game=("Scanning complete.")
+    bot.game=(SiteSetting.discord_bot_status)
+end
+
+def update_ranks
+    bot = DiscordDatastore::BotInstance.bot
+    bot.game=("Updating ranks...")
+
+    rank_names = SiteSetting.discord_rank_name.split("|")
+    requirements = SiteSetting.discord_rank_count.split("|")
+
+    ranks = []
+    all_ranks = get_ranks
+
+    rank_names.each do |rank_name|
+        all_ranks.each do |rank|
+            if rank_name == rank.name 
+                ranks.push(rank)
+            end
+        end
+    end
+
+    counts = DiscordDatastore::DiscordMessage.group(:discord_user_id).count
+    users = get_users
+
+    users.each do |user|
+        next if user.bot_account
+
+        count = counts[user.id]
+        target_rank_id = -1
+        i=0
+        requirements.each do |requirement|
+            if count >= requirement.to_i
+                target_rank_id = ranks[i].id
+            end
+            i+=1
+        end
+
+        user_ranks = user.roles
+
+        ranks.each do |rank|
+
+            if user.role? rank
+                if rank.id != target_rank_id
+                    user_ranks.delete(rank)
+                end
+            else
+                if rank.id == target_rank_id
+                    user_ranks.push(rank)
+                end
+            end
+        end
+
+        user.set_roles user_ranks
+    end
+
+    bot.game=(SiteSetting.discord_bot_status)
 end
