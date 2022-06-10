@@ -186,7 +186,12 @@ def browse_history
     get_channels.each do |channel|
         next if channel.type != 0
 
-        last_id = get_oldest_message_id channel
+        begin
+            last_id = get_oldest_message_id channel
+        rescue
+            next # cannot access channel
+        end
+
         next if last_id == -1
         
         loop do
