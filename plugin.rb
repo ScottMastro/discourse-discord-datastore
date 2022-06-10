@@ -2,7 +2,7 @@
 
 # name: discord-datastore
 # about: Datastore for discord messages
-# version: 0.0.1
+# version: 1.0.0
 # authors: ScottMastro
 # url: discord
 # required_version: 2.7.0

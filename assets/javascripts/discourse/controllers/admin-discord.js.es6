@@ -17,6 +17,8 @@ export default Ember.Controller.extend({
     this.set('current_page', 1);
     this.set('filter_channel', "0");
 
+    this.set("searched_discord_id", "");
+
     this.parseRankSettings();
   },
 
@@ -73,7 +75,9 @@ export default Ember.Controller.extend({
       this.set('current_page', 1);
       this.set('messages', []);
       this.set('filter_channel', channel_id);
-      ajax('/admin/discord_messages.json?channel='+channel_id)
+      var discord_id_param = this.searched_discord_id.length ? "&discord_id="+this.searched_discord_id : ""
+      console.log(discord_id_param)
+      ajax('/admin/discord_messages.json?channel='+channel_id + discord_id_param)
       .then((result) => {
         for (const message of result.discord_messages) {
           this.messages.pushObject(message);
@@ -100,7 +104,8 @@ export default Ember.Controller.extend({
       this.set('current_page', this.current_page+1);
 
       this.set('messages', []);
-      ajax('/admin/discord_messages.json?channel='+this.filter_channel + '&page=' + (this.current_page-1).toString())
+      var discord_id_param = this.searched_discord_id.length ? "&discord_id="+this.searched_discord_id : ""
+      ajax('/admin/discord_messages.json?channel='+this.filter_channel + '&page=' + (this.current_page-1).toString() + discord_id_param)
       .then((result) => {
         for (const message of result.discord_messages) {
           this.messages.pushObject(message);
@@ -114,7 +119,8 @@ export default Ember.Controller.extend({
       }
       this.set('current_page', this.current_page-1);
       this.set('messages', []);
-      ajax('/admin/discord_messages.json?channel='+this.filter_channel + '&page=' + (this.current_page-1).toString())
+      var discord_id_param = this.searched_discord_id.length ? "&discord_id="+this.searched_discord_id : ""
+      ajax('/admin/discord_messages.json?channel='+this.filter_channel + '&page=' + (this.current_page-1).toString() + discord_id_param)
       .then((result) => {
         for (const message of result.discord_messages) {
           this.messages.pushObject(message);
@@ -125,6 +131,49 @@ export default Ember.Controller.extend({
 
     onChangeSearchTermForUsername(username){
       this.set("searched_username", username.length ? username : null);
+
+      var user_id=-1
+      ajax("/u/"+username+".json")
+      .then((result) => {
+        var user_id = result.user.id
+
+        ajax("/discord_users.json?user_id="+user_id.to_s)
+        .then((result) => {
+          
+          if(result.discord_users.length ==0){
+            this.set("searched_discord_username", "");
+          }
+          else{
+            this.set("searched_discord_username", "@"+result.discord_users[0].tag);
+            this.set("searched_discord_id", result.discord_users[0].id);
+
+            this.set('messages', []);
+            this.set('channels', []);
+            
+            ajax("/admin/discord_messages.json?discord_id="+result.discord_users[0].id)
+            .then((result) => {
+              for (const message of result.discord_messages) {
+                this.messages.pushObject(message);
+              }
+              this.set('stats', result.stats);
+            }).catch(popupAjaxError);
+
+            ajax("/admin/discord_channels.json?discord_id="+result.discord_users[0].id)
+            .then((result) => {
+              for (const channel of result.discord_channels) {
+                this.channels.pushObject(channel);
+              }
+            }).catch(popupAjaxError);
+      
+          }
+
+        }).catch(popupAjaxError);
+
+
+      }).catch(popupAjaxError);
+
+
+
     }
 
   }

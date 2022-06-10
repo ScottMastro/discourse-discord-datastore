@@ -8,16 +8,26 @@
   
   <div class="discord-data-user">
     {{user-chooser
-      id="filter-by-user"
+      id="search-posted-by"
       value=searchedTerms.username
       onChange=(action "onChangeSearchTermForUsername")
         options=(hash
-        headerAriaLabel=(i18n "discord_datastore.user_search")
         maximum=1
         excludeCurrentUser=false
       )
     }}
-    {{ "Selected user: " }}{{ searched_username }}
+    {{ i18n "discord_datastore.selected_user" }}:
+    {{#if searched_username}}
+      {{ searched_username }}{{" | "}}
+      {{#if searched_discord_username}}
+        ✅ {{ searched_discord_username }}
+      {{else}}
+        ❌ {{ i18n "discord_datastore.selected_user_not_found" }}
+      {{/if}}
+
+
+      
+    {{/if}}
   </div>
   
   <hr> <!-- ==================================================================================== -->
@@ -89,7 +99,14 @@
                 <div class="discord-message">
                   <div class="discord-avatar"><img src="{{message.user_avatar}}" alt="" /></div>
                   <div class="discord-message-content">
-                    {{ message.user_nickname }}{{ " in " }}<b>{{"#"}}{{ message.channel_name }}</b>{{ ": " }}<br>
+                    {{ message.user_nickname }}{{ " in " }}<b>{{"#"}}{{ message.channel_name }}</b>{{ " on " }}{{ message.date }}{{":"}}<br>
+                    {{#if message.attachments}}
+                      <div class="discord-attachments">{{"attachments: " }}
+                      {{#each message.attachments as |attachment|}}
+                        <a class="discord-attachment" href={{attachment}}>📎</a>
+                      {{/each}}
+                      </div>
+                    {{/if}}
                     {{ message.content }}
                   </div>
                 </div>

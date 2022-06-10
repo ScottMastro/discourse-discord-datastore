@@ -2,12 +2,13 @@ en:
   js:
     discord_datastore:     
       user_title: "Discord Stats"
-      user_search: "Search user..."
       message_pagination_next: "next→"
       message_pagination_previous: "←prev"
       channel_message_total: "total messages"
       invite_url: "Discord Invite URL"
-      
+      selected_user: "Selected user"
+      selected_user_not_found: "No associated Discord account found."
+
       messages: "messages"
       collect_rank: "Collect!"
       locked_rank: "Locked"

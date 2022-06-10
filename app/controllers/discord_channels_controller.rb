@@ -7,21 +7,27 @@ module DiscordDatastore
         Rails.logger.info 'Called DiscordChannelsController#index'
 
         user_id = current_user.id
-        #current_user.associated_accounts
-        #todo
-        user_id=366068461027459073
 
-        channels = DiscordDatastore::DiscordChannel.order(:position )
+        discord_id = nil
+        discord_account = UserAssociatedAccount.find_by(provider_name: "discord", user_id: user_id)
+        unless discord_account.nil? then
+          discord_id = discord_account.user_id
+        end
 
-        #todo: hide channels based on permissions
-        
-        channels = channels.map { |ch| ch.as_json.merge({
-          :length => DiscordDatastore::DiscordMessage.where(discord_user_id: user_id, discord_channel_id: ch.id).length,
-          #avoid javascript rounding issues
-          :id => ch.id.to_s
-        })}
-  
-        render json: { discord_channels: channels}
+        unless discord_id.nil? then
+          
+          channels = DiscordDatastore::DiscordChannel.order(:position )
+          
+          channels = channels.map { |ch| ch.as_json.merge({
+            :length => DiscordDatastore::DiscordMessage.where(discord_user_id: discord_id, discord_channel_id: ch.id).length,
+            #avoid javascript rounding issues
+            :id => ch.id.to_s
+          })}
+    
+          render json: { discord_channels: channels}
+        else
+          render json: { discord_channels: []}
+        end
       end
 
       def admin
@@ -32,13 +38,26 @@ module DiscordDatastore
           return
         end
 
+        discord_id = nil
+        if params[:discord_id]
+          discord_id = params[:discord_id].to_i
+        end
+
         channels = DiscordDatastore::DiscordChannel.order(:position)
-                    
-        channels = channels.map { |ch| ch.as_json.merge({
-          :length => DiscordDatastore::DiscordMessage.where(discord_channel_id: ch.id).length,
-          #avoid javascript rounding issues
-          :id => ch.id.to_s
-        })}
+
+        if discord_id.nil? 
+          channels = channels.map { |ch| ch.as_json.merge({
+            :length => DiscordDatastore::DiscordMessage.where(discord_channel_id: ch.id).length,
+            #avoid javascript rounding issues
+            :id => ch.id.to_s
+          })}
+        else
+          channels = channels.map { |ch| ch.as_json.merge({
+            :length => DiscordDatastore::DiscordMessage.where(discord_user_id: discord_id, discord_channel_id: ch.id).length,
+            #avoid javascript rounding issues
+            :id => ch.id.to_s
+          })}
+        end
 
         render json: { discord_channels: channels}
       end

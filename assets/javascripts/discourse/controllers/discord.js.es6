@@ -12,6 +12,7 @@ export default Ember.Controller.extend({
     this.set('channels', []);
     this.set('stats', []);
     this.set('ranks', []);
+    this.set('discord_id', 0);
 
     this.fetchMessages();
     this.fetchChannels();
@@ -24,13 +25,18 @@ export default Ember.Controller.extend({
   fetchMessages() {
     ajax("/discord_messages.json")
       .then((result) => {
-        for (const message of result.discord_messages) {
-          this.messages.pushObject(message);
-        }
-        this.stats = result.stats;
-        for (let i = 0; i < this.ranks.length; i++) {
-          var missing = this.stats["total"] < this.ranks[i]["count_values"] ? "missing-rank" : "";
-          this.ranks[i]["missing"] = missing;
+
+        this.discord_id = result.discord_id
+
+        if (result.discord_id != 0){
+          for (const message of result.discord_messages) {
+            this.messages.pushObject(message);
+          }
+          this.stats = result.stats;
+          for (let i = 0; i < this.ranks.length; i++) {
+            var missing = this.stats["total"] < this.ranks[i]["count_values"] ? "missing-rank" : "";
+            this.ranks[i]["missing"] = missing;
+          }
         }
       }).catch(popupAjaxError);
   },
@@ -82,10 +88,6 @@ export default Ember.Controller.extend({
         }
     
       }).catch(popupAjaxError);
-
-
-    console.log(this.ranks)
-
 
   },
 

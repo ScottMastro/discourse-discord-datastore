@@ -6,7 +6,6 @@ module DiscordDatastore
                :tag,
                :nickname,
                :avatar,
-               :roles,
                :verified,
                :discourse_account_id
   end

@@ -5,7 +5,6 @@ module DiscordDatastore
     attributes :id,
                :name,
                :voice,
-               :permissions,
                :position
   end
 end

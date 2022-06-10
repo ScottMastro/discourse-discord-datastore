@@ -7,7 +7,8 @@ class CreateDiscordMessage < ActiveRecord::Migration[6.0]
       t.bigint :discord_channel_id
       t.text :content
       t.datetime :date
-      
+      t.text :attachments, array: true, default: []
+
       t.timestamps
     end
 

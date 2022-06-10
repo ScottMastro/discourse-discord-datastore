@@ -4,123 +4,133 @@
   <h1>{{d-icon 'fab-discord'}}{{" "}}{{ i18n 'discord_datastore.user_title' }}</h1>
 {{/if}}
 
-<div class="discord-join-info">
-  {{ i18n "discord_datastore.warning_no_account_found" }}
-  <br><br>
-  {{#if siteSettings.discord_invite_url }}
-    <h2>{{'1. '}}<a href={{siteSettings.discord_invite_url}}>{{i18n 'discord_datastore.join_discord_message' }}</a></h2>
-  {{else}}
-    <h2>{{'1. '}}{{i18n 'discord_datastore.join_discord_message' }}</h2>
-  {{/if}}
-  <h2>{{'2. '}}<a href={{'/my/preferences/account'}}>{{i18n 'discord_datastore.connect_discord_message' }}</a></h2>
-</div>
-<br>
+{{#if discord_id }}
 
-<div class="discord-data">
+  <div class="discord-data">
 
-  <div class="discord-data-stats">
-    <div class="discord-stat"><div class="discord-stat-value">{{ stats.total }}</div><div class="discord-stat-label">{{i18n 'discord_datastore.stat_total_message'}}</div></div>
-    <div class="discord-stat"><div class="discord-stat-value">{{ stats.total_monthly }}</div><div class="discord-stat-label">{{i18n 'discord_datastore.stat_monthly_message'}}</div></div>
-    <div class="discord-stat"><div class="discord-stat-value">{{ stats.total_weekly }}</div><div class="discord-stat-label">{{i18n 'discord_datastore.stat_weekly_message'}}</div></div>
-    <div class="discord-stat"><div class="discord-stat-value">{{ stats.first_message }}</div><div class="discord-stat-label">{{i18n 'discord_datastore.stat_first_message'}}</div></div>
-  </div>
-  
-  <hr> <!-- ==================================================================================== -->
-  
-  <div class="discord-data-rank-header">
-    <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.rank_title" }}</h3>
-  </div>
+    <div class="discord-data-stats">
+      <div class="discord-stat"><div class="discord-stat-value">{{ stats.total }}</div><div class="discord-stat-label">{{i18n 'discord_datastore.stat_total_message'}}</div></div>
+      <div class="discord-stat"><div class="discord-stat-value">{{ stats.total_monthly }}</div><div class="discord-stat-label">{{i18n 'discord_datastore.stat_monthly_message'}}</div></div>
+      <div class="discord-stat"><div class="discord-stat-value">{{ stats.total_weekly }}</div><div class="discord-stat-label">{{i18n 'discord_datastore.stat_weekly_message'}}</div></div>
+      <div class="discord-stat"><div class="discord-stat-value">{{ stats.first_message }}</div><div class="discord-stat-label">{{i18n 'discord_datastore.stat_first_message'}}</div></div>
+    </div>
+    
+    <hr> <!-- ==================================================================================== -->
+    
+    <div class="discord-data-rank-header">
+      <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.rank_title" }}</h3>
+    </div>
 
-  <div class="discord-data-rank">
-    {{#each ranks as |rank|}}
-      
-      <div class="discord-rank {{ rank.missing }}">
-        <img class="discord-rank-img" src="{{ rank.img }}" alt="" />
-        <div class="discord-rank-label">{{ rank.id }}</div>
-        <div class="discord-rank-count">{{ rank.count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+    <div class="discord-data-rank">
+      {{#each ranks as |rank|}}
+        
+        <div class="discord-rank {{ rank.missing }}">
+          <img class="discord-rank-img" src="{{ rank.img }}" alt="" />
+          <div class="discord-rank-label">{{ rank.id }}</div>
+          <div class="discord-rank-count">{{ rank.count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
 
-        {{#if rank.badge }}
+          {{#if rank.badge }}
 
-          {{#if rank.missing }}
-            <div class="discord-locked-button">{{ i18n "discord_datastore.locked_rank" }}</div>
-          {{else}}
-            {{#if rank.collected }}
-              <div class="discord-collected-button">{{ i18n "discord_datastore.collected_rank" }}</div>
+            {{#if rank.missing }}
+              <div class="discord-locked-button">{{ i18n "discord_datastore.locked_rank" }}</div>
             {{else}}
-              <button {{action "collectRank" rank.badge }} class="discord-collect-button">{{ i18n "discord_datastore.collect_rank" }}</button>
+              {{#if rank.collected }}
+                <div class="discord-collected-button">{{ i18n "discord_datastore.collected_rank" }}</div>
+              {{else}}
+                <button {{action "collectRank" rank.badge }} class="discord-collect-button">{{ i18n "discord_datastore.collect_rank" }}</button>
+              {{/if}}
             {{/if}}
+            
           {{/if}}
-          
+
+        </div>
+      {{/each}}
+
+    </div>
+
+    <hr> <!-- ==================================================================================== -->
+
+    <div class="discord-data-columns">
+
+      <div class="discord-data-channels">
+        {{#if channels}}
+          <div class="discord-data-channels-header">
+            <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.channel_title" }}</h3>
+          </div>
+          <div class="discord-channel-list" >
+            {{#each channels as |channel|}}
+
+              {{#if channel.length}}
+                <div><button {{action "filterChannel" channel.id }} type='submit' class='discord-channel-list-element'>
+                  <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.length }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
+                </button></div>
+              {{/if}}
+
+            {{/each}}
+          </div>
+        {{else}}
+          {{ i18n "discord_datastore.no_channels" }}
+        {{/if}}  
+      </div>
+
+      <div class="discord-data-messages">
+          <div class ="discord-data-messages-header">
+            
+            <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.message_history_title" }}</h3>
+            <div class="message-paginate-buttons">
+              <button {{ action "prevMessagePage" }} type='submit' class='discord-button'>
+                {{ i18n "discord_datastore.message_pagination_previous" }}
+              </button>
+              <b>{{ current_page }}</b>
+              <button {{ action "nextMessagePage" }} type='submit' class='discord-button' >
+                {{ i18n "discord_datastore.message_pagination_next" }}
+              </button>
+            </div>
+
+          </div>
+
+        {{#if messages}}
+
+          <div class="discord-message-list" >
+            <ul>
+              {{#each messages as |message|}}
+                <li>
+                  <div class="discord-message">
+                    <div class="discord-avatar"><img src="{{message.user_avatar}}" alt="" /></div>
+                    <div class="discord-message-content">
+                      {{ message.user_nickname }}{{ " in " }}<b>{{"#"}}{{ message.channel_name }}</b>{{ " on " }}{{ message.date }}{{":"}}<br>
+                      {{#if message.attachments}}
+                        <div class="discord-attachments">{{"attachments: " }}
+                        {{#each message.attachments as |attachment|}}
+                          <a class="discord-attachment" href={{attachment}}>📎</a>
+                        {{/each}}
+                        </div>
+                      {{/if}}
+                      {{ message.content }}
+                    </div>
+                  </div>
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        {{else}}
+          <div class="no-messages">{{ i18n "discord_datastore.no_messages" }}</div>
         {{/if}}
 
       </div>
-    {{/each}}
-
-  </div>
-
-  <hr> <!-- ==================================================================================== -->
-
-  <div class="discord-data-columns">
-
-    <div class="discord-data-channels">
-      {{#if channels}}
-        <div class="discord-data-channels-header">
-          <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.channel_title" }}</h3>
-        </div>
-        <div class="discord-channel-list" >
-          {{#each channels as |channel|}}
-
-            {{#if channel.length}}
-              <div><button {{action "filterChannel" channel.id }} type='submit' class='discord-channel-list-element'>
-                <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.length }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
-              </button></div>
-            {{/if}}
-
-          {{/each}}
-        </div>
-      {{else}}
-        {{ i18n "discord_datastore.no_channels" }}
-      {{/if}}  
-    </div>
-
-    <div class="discord-data-messages">
-        <div class ="discord-data-messages-header">
-          
-          <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.message_history_title" }}</h3>
-          <div class="message-paginate-buttons">
-            <button {{ action "prevMessagePage" }} type='submit' class='discord-button'>
-              {{ i18n "discord_datastore.message_pagination_previous" }}
-            </button>
-            <b>{{ current_page }}</b>
-            <button {{ action "nextMessagePage" }} type='submit' class='discord-button' >
-              {{ i18n "discord_datastore.message_pagination_next" }}
-            </button>
-          </div>
-
-        </div>
-
-      {{#if messages}}
-
-        <div class="discord-message-list" >
-          <ul>
-            {{#each messages as |message|}}
-              <li>
-                <div class="discord-message">
-                  <div class="discord-avatar"><img src="{{message.user_avatar}}" alt="" /></div>
-                  <div class="discord-message-content">
-                    {{ message.user_nickname }}{{ " in " }}<b>{{"#"}}{{ message.channel_name }}</b>{{ " on " }}{{ message.date }}{{":"}}<br>
-                    {{ message.content }}
-                  </div>
-                </div>
-              </li>
-            {{/each}}
-          </ul>
-        </div>
-      {{else}}
-        <div class="no-messages">{{ i18n "discord_datastore.no_messages" }}</div>
-      {{/if}}
 
     </div>
-
   </div>
-</div>
+
+{{else}}
+  <div class="discord-join-info">
+    {{ i18n "discord_datastore.warning_no_account_found" }}
+    <br><br>
+    {{#if siteSettings.discord_invite_url }}
+      <h2>{{'1. '}}<a href={{siteSettings.discord_invite_url}}>{{i18n 'discord_datastore.join_discord_message' }}</a></h2>
+    {{else}}
+      <h2>{{'1. '}}{{i18n 'discord_datastore.join_discord_message' }}</h2>
+    {{/if}}
+    <h2>{{'2. '}}<a href={{'/my/preferences/account'}}>{{i18n 'discord_datastore.connect_discord_message' }}</a></h2>
+  </div>
+{{/if}}

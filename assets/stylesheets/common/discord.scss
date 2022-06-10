@@ -191,6 +191,20 @@ textarea {
     }
   }
 }
+
+.discord-attachments{
+  background: #40434b;
+  border-radius: 5px;
+  padding: 5px;
+  font-style: italic;
+
+  .discord-attachment{
+    background: #2f3036;
+    border-radius: 5px;
+    padding: 5px;
+  }
+}
+
 .no-messages{
   text-align: center;
 }

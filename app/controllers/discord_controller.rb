@@ -24,34 +24,40 @@ class DiscordDatastore::DiscordController < ::ApplicationController
     result="success"
     
     begin
-      badge_id = params[:badge]
-  
-      #current_user.associated_accounts
-      #todo
-      user_id=366068461027459073
-    rescue 
-      result="param_error"
-    end
-
-    begin
-      total_messages = DiscordDatastore::DiscordMessage.where(discord_user_id: user_id).length
-    rescue 
-      result="query_error"
-    end
-
-    begin
       badges = SiteSetting.discord_rank_badge.split("|")
-      i = badges.index(badge_id)
-      requirement = SiteSetting.discord_rank_count.split("|")[i].to_i
+      requirements = SiteSetting.discord_rank_count.split("|")
     rescue 
       result="site_setting_error"
     end  
 
     begin
-      if requirement <= total_messages
-        BadgeGranter.grant(Badge.find(badge_id.to_i), current_user)
-      else
-        result="insufficient_message_total"
+      badge_id = params[:badge]
+      i = badges.index(badge_id)
+      requirement = requirements[i].to_i
+
+      discord_id = nil
+      discord_account = UserAssociatedAccount.find_by(provider_name: "discord", user_id: current_user.id)
+      unless discord_account.nil? then
+        discord_id = discord_account.user_id
+      end
+
+    rescue 
+      result="param_error"
+    end
+
+    begin
+      total_messages = DiscordDatastore::DiscordMessage.where(discord_user_id: discord_id).length
+    rescue 
+      result="query_error"
+    end
+
+    begin
+      if result == "success"
+        if requirement <= total_messages
+          BadgeGranter.grant(Badge.find(badge_id.to_i), current_user)
+        else
+          result="insufficient_message_total"
+        end
       end
     rescue 
       result="site_setting_error"

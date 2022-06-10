@@ -6,7 +6,6 @@ class CreateDiscordUser < ActiveRecord::Migration[6.0]
       t.string :tag
       t.string :nickname
       t.string :avatar
-      t.bigint :roles, array: true, default: []
       t.boolean :verified
       t.bigint :discourse_account_id
 

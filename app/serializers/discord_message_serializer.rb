@@ -6,6 +6,7 @@ module DiscordDatastore
                :discord_user_id,
                :discord_channel_id,
                :content,
-               :date
+               :date,
+               :attachments
   end
 end

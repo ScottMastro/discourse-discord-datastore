@@ -54,7 +54,6 @@ def upsert_channels
             'id' => channel.id,
             'name' => channel.name,
             'voice' => (! channel.text?) ,
-            'permissions' => [],
             'position' => channel.position,
             'created_at' => create_time,
             'updated_at'=> Time.now  
@@ -84,7 +83,6 @@ def upsert_users
             'tag' => user.username + "#" + user.discriminator,
             'nickname' => user.display_name,
             'avatar' => user.avatar_url,
-            'roles' => [],
             'verified' => is_verified,
             'discourse_account_id' => discourse_id,
             'created_at' => create_time,
@@ -113,7 +111,6 @@ def upsert_user(user)
         'tag' => user.username + "#" + user.discriminator,
         'nickname' => user.display_name,
         'avatar' => user.avatar_url,
-        'roles' => [],
         'verified' => is_verified,
         'discourse_account_id' => discourse_id,
         'created_at' => create_time,
@@ -159,12 +156,20 @@ end
 
 def parse_discord_messages(messages)
     parsed = messages.map do |message|
+        
+        attachments = []
+
+        message.attachments.each do |attachment|
+            attachments.push(attachment.url)
+        end
+
         {
             'id' => message.id,
             'discord_user_id' => message.author.id,
             'discord_channel_id' => message.channel.id,
             'date' => message.timestamp,
             'content' => message.content,
+            'attachments' => attachments,
             'created_at' => Time.now,
             'updated_at' => Time.now
         }

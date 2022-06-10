@@ -18,7 +18,7 @@ class DiscordDatastore::Verifier
     
         result = builder.query
     
-        if result.size > 0 then
+        if result.size == 0 then
             
             # No profile on Discourse
             server = get_server()
