@@ -1,16 +1,17 @@
 en:
   site_settings:
     discord_datastore_enabled: 'Turn the datastore on'
-    discord_server_id: 'Discord server ID'
     discord_bot_token: 'Discord bot token'
+    discord_server_id: 'Discord server ID'
+    discord_bot_channel_id: 'Discord bot channel ID'
     discord_bot_command_prefix: "Prefix for Discord bot commands"
-    discord_bot_channel: 'Discord bot channel ID'
     discord_bot_status: 'Bot status when idle'
-    discord_messages_before_resync: 'Amount of messages recieved before Discord message history is updated'
-    discord_invite_url: 'Discord server invite URL'
-    discord_verified_rank: 'Role to give verified users'
     discord_header_image: 'Image to show on top of /discord page instead of title'
+    discord_invite_url: 'Discord server invite URL'
+    discord_messages_before_resync: 'Amount of messages recieved before Discord message history is updated'
+    discord_verified_rank: 'Role to give verified users'
     discord_rank_name: 'Discord ranks for awarded ranks'
     discord_rank_count: 'Discord message count threshold to award ranks'
     discord_rank_image: 'Image URLs for awarded ranks (used for /discord page)'
     discord_rank_badge: 'Badge to assign on Discourse when rank awarded (leave empty if no badge is to be assigned)'
+

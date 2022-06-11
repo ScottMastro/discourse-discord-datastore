@@ -18,7 +18,7 @@ module DiscordDatastore::BotInstance
 
     @@bot.ready do |event|
       puts "Logged in as #{@@bot.profile.username} (ID:#{@@bot.profile.id}) | #{@@bot.servers.size} servers"
-      @@bot.send_message(SiteSetting.discord_bot_channel, "Datastore is alive!")
+      @@bot.send_message(SiteSetting.discord_bot_channel_id, "Datastore is alive!")
 
     end
     @@bot
@@ -50,7 +50,7 @@ class DiscordDatastore::Bot
       browse_history
       #update_ranks
 
-      bot.command(:ping, channels: [SiteSetting.discord_bot_channel]) do |event|
+      bot.command(:ping, channels: [SiteSetting.discord_bot_channel_id]) do |event|
         event.respond 'pong!'
       end
 

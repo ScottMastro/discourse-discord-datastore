@@ -1,40 +1,36 @@
 en:
   js:
-    discord_datastore:     
+    discord_datastore:
+
       user_title: "Discord Stats"
-      message_pagination_next: "next→"
-      message_pagination_previous: "←prev"
-      channel_message_total: "total messages"
-      invite_url: "Discord Invite URL"
+      admin_title: "Discord Datastore"
+
+      warning_no_account_found: "Your associated Discord account could not be found."
+      join_discord_message: "Join our Discord server"
+      connect_discord_message: "Connect your Discord account"
+
       selected_user: "Selected user"
       selected_user_not_found: "No associated Discord account found."
 
+      stat_title: "STATS"
+      rank_title: "RANKS"
+      channel_title: "CHANNELS"
+      message_history_title: "MESSAGE HISTORY"
+
       messages: "messages"
+
       collect_rank: "Collect!"
       locked_rank: "Locked"
       collected_rank: "Acquired"
-
-      message_history_title: "MESSAGE HISTORY"
-      channel_title: "CHANNELS"
-      rank_title: "RANKS"
-      stat_title: "STATS"
 
       stat_total_message: "Messages sent"
       stat_monthly_message: "Messages in the last 30 days"
       stat_weekly_message: "Messages in the last 7 days"
       stat_first_message: "First message sent"
 
-      no_messages: "No messages found"
+      channel_message_total: "total messages"
       no_channels: "No channels found"
+      message_pagination_previous: "←prev"
+      message_pagination_next: "next→"
 
-      warning_no_account_found: "Your associated Discord account could not be found."
-      join_discord_message: "Join our Discord server"
-      connect_discord_message: "Connect your Discord account"
-
-      admin:
-        title: "Discord Datastore"
-        
-      test: 
-        text_field_label: "New message"
-        submit_label: "Save"
-        delete_message_label: "Delete"
+      no_messages: "No messages found"

@@ -12,7 +12,7 @@ export default Ember.Controller.extend({
     this.set('channels', []);
     this.set('stats', []);
     this.set('ranks', []);
-    this.set('discord_id', 0);
+    this.set('discord_id', "366068461027459073");
 
     this.fetchMessages();
     this.fetchChannels();

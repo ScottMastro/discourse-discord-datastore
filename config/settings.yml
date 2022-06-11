@@ -2,29 +2,28 @@ plugins:
   discord_datastore_enabled:
     default: true
     client: true
-
+  discord_bot_token:
+    default: ""
   discord_server_id:
     default: ""
     client: true
-  discord_bot_token:
+  discord_bot_channel_id:
     default: ""
   discord_bot_command_prefix:
     default: "!"
-  discord_bot_channel:
-    default: ""
   discord_bot_status:
     default: "Watching."
-  discord_messages_before_resync:
-    default: 200
-  discord_invite_url:
-    default: ""
-    client: true
-  discord_verified_rank:
-    default: ""
   discord_header_image:
     default: ""
     type: upload
     client: true
+  discord_invite_url:
+    default: ""
+    client: true
+  discord_messages_before_resync:
+    default: 200
+  discord_verified_rank:
+    default: ""
   discord_rank_name:
     default: ""
     type: list

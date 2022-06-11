@@ -27,12 +27,10 @@ gem 'discordrb', '3.3.0'
 enabled_site_setting :discord_datastore_enabled
 
 register_asset 'stylesheets/common/discord.scss'
-register_asset 'stylesheets/common/admin-discord.scss'
 register_svg_icon "fab-discord" if respond_to?(:register_svg_icon)
 
 after_initialize do
 
-  add_admin_route 'discord_datastore.title', 'discord-datastore'
 
   module ::DiscordDatastore
     PLUGIN_NAME = "discord-datastore"
@@ -79,7 +77,6 @@ after_initialize do
   
   Discourse::Application.routes.append do
     mount DiscordDatastore::Engine, at: "/"
-    get '/admin/plugins/discord-datastore' => 'admin/plugins#index', constraints: StaffConstraint.new
   end
   
   bot_thread = Thread.new do

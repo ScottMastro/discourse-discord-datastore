@@ -66,7 +66,7 @@ class DiscordDatastore::Verifier
                 role = self.find_role(SiteSetting.discord_verified_rank)
                 unless role.nil? || (member.role? role) then
                     member.add_role(role)
-                    DiscordDatastore::BotInstance.bot.send_message(SiteSetting.discord_bot_channel, "Verified Discourse:#{user.username}, id=#{user.id} | Discord: #{member.username}, id=#{member.id}")
+                    DiscordDatastore::BotInstance.bot.send_message(SiteSetting.discord_bot_channel_id, "Verified Discourse:#{user.username}, id=#{user.id} | Discord: #{member.username}, id=#{member.id}")
                 end
             end 
         end
