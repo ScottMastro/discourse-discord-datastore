@@ -78,7 +78,7 @@ class DiscordDatastore::DiscordRanksController < ::ApplicationController
         end
 
         if !have
-          total_messages = DiscordDatastore::DiscordMessage.where(discord_user_id: discord_id).length
+          total_messages = DiscordDatastore::DiscordMessage.where(discord_user_id: discord_id).size
           if total_messages >requirement
             can_collect=true
           end

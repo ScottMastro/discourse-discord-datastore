@@ -45,12 +45,12 @@ module DiscordDatastore
 
       if discord_id.nil? 
         channels = channels.map { |ch| ch.as_json.merge({
-          :total => DiscordDatastore::DiscordMessage.where(discord_channel_id: ch.id).length,
+          :total => DiscordDatastore::DiscordMessage.where(discord_channel_id: ch.id).size,
           :id => ch.id.to_s
         })}
       else
         channels = channels.map { |ch| ch.as_json.merge({
-          :total => DiscordDatastore::DiscordMessage.where(discord_user_id: discord_id, discord_channel_id: ch.id).length,
+          :total => DiscordDatastore::DiscordMessage.where(discord_user_id: discord_id, discord_channel_id: ch.id).size,
           :id => ch.id.to_s
         })}
       end

@@ -60,9 +60,9 @@ module DiscordDatastore
           messages = messages.where(discord_channel_id: params[:channel].to_i)
         end
           
-        total_messages = messages.length
-        total_30_day = messages.where(date: (Date.today - 30.days)..Date.today).length
-        total_7_day = messages.where(date: (Date.today - 7.days)..Date.today).length
+        total_messages = messages.size
+        total_30_day = messages.where(date: (Date.today - 30.days)..Date.today).size
+        total_7_day = messages.where(date: (Date.today - 7.days)..Date.today).size
 
         first = "-"
         if total_messages > 0
