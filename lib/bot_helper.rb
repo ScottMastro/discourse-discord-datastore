@@ -108,7 +108,7 @@ def upsert_user(user)
 
     discorduser = {
         'id' => user.id,
-        'tag' => user.username + "#" + user.discriminator,
+        'tag' => user.username + "#" + user.discriminator.to_s,
         'nickname' => user.display_name,
         'avatar' => user.avatar_url,
         'verified' => is_verified,
