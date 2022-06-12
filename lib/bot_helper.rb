@@ -36,6 +36,7 @@ def get_ranks
 end
 
 def upsert_channels
+    bot = DiscordDatastore::BotInstance.bot
     bot.game=("Scanning channels...")
 
     existingchannels = DiscordDatastore::DiscordChannel.all
@@ -65,6 +66,7 @@ def upsert_channels
 end
 
 def upsert_users
+    bot = DiscordDatastore::BotInstance.bot
     bot.game=("Scanning users...")
 
     existingusers = DiscordDatastore::DiscordUser.all
@@ -193,15 +195,8 @@ def browse_history
         next if channel.type != 0
 
         begin
-            STDERR.puts '(-------------------------)'
-            STDERR.puts channel.name
-            STDERR.puts '(-------------------------)'
             last_id = get_oldest_message_id channel
-
         rescue
-
-            STDERR.puts 'failed'
-
             next # cannot access channel
         end
 
