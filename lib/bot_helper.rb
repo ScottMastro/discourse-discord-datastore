@@ -36,6 +36,8 @@ def get_ranks
 end
 
 def upsert_channels
+    bot.game=("Scanning channels...")
+
     existingchannels = DiscordDatastore::DiscordChannel.all
     #DiscordDatastore::DiscordChannel.delete_all
   
@@ -59,9 +61,12 @@ def upsert_channels
         }
         DiscordDatastore::DiscordChannel.upsert(discordchannel)
     end
+    bot.game=(SiteSetting.discord_bot_status)
 end
 
 def upsert_users
+    bot.game=("Scanning users...")
+
     existingusers = DiscordDatastore::DiscordUser.all
     #DiscordDatastore::DiscordUser.delete_all
 
@@ -89,6 +94,8 @@ def upsert_users
         }
         DiscordDatastore::DiscordUser.upsert(discorduser)
     end
+
+    bot.game=(SiteSetting.discord_bot_status)
 end
 
 def upsert_user(user)
@@ -186,8 +193,15 @@ def browse_history
         next if channel.type != 0
 
         begin
+            STDERR.puts '(-------------------------)'
+            STDERR.puts channel.name
+            STDERR.puts '(-------------------------)'
             last_id = get_oldest_message_id channel
+
         rescue
+
+            STDERR.puts 'failed'
+
             next # cannot access channel
         end
 
@@ -214,9 +228,6 @@ def browse_history
         
         loop do
             messages = channel.history(HISTORY_CHUNK_LIMIT, before_id=nil, after_id=last_id)
-            messages.each do |message|
-                STDERR.puts message.timestamp
-            end
             if messages.length() == 0
                 break
             end
