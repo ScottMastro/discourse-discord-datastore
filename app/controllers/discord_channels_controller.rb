@@ -14,7 +14,7 @@ module DiscordDatastore
         if discord_account.nil?
           return -1
         end
-        if discord_account.id.to_s == params[:discord_id]
+        if discord_account.provider_uid.to_s == params[:discord_id]
           return params[:discord_id].to_i
         end
 
@@ -33,7 +33,7 @@ module DiscordDatastore
         if discord_account.nil?
           return -1
         end
-          return discord_account.id.to_i
+          return discord_account.provider_uid.to_i
       end
     end
 
