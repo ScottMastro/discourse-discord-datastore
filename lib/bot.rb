@@ -1,5 +1,5 @@
 
-#https://discord.com/api/oauth2/authorize?client_id=975850832195112991&permissions=17448381440&scope=bot
+#https://discord.com/api/oauth2/authorize?client_id=______&permissions=17448381440&scope=bot
 
 require 'discordrb'
 MESSAGES_BEFORE_RESYNC = SiteSetting.discord_messages_before_resync

@@ -1,6 +1,5 @@
 HISTORY_CHUNK_LIMIT = 100
 HISTORY_WAIT_SECONDS = 3
-#todo: get message attachments??
 
 def get_server
     DiscordDatastore::BotInstance.bot.servers.each do |s|

@@ -113,14 +113,6 @@ class DiscordDatastore::DiscordRanksController < ::ApplicationController
 
     ranks = get_rank_info(user_id, discord_id)
 
-    STDERR.puts '------------------------------------------------------------'
-    STDERR.puts '------------------------------------------------------------'
-    STDERR.puts ranks
-    STDERR.puts user_id
-    STDERR.puts discord_id
-    STDERR.puts '------------------------------------------------------------'
-
-
     render json: { discord_ranks: ranks }
   end
 
