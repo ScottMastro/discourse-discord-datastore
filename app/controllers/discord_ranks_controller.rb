@@ -140,7 +140,7 @@ class DiscordDatastore::DiscordRanksController < ::ApplicationController
 
       discord_account = UserAssociatedAccount.find_by(provider_name: "discord", user_id: user_id)
       unless discord_account.nil? then
-        discord_id = discord_account.user_id
+        discord_id = discord_account.provider_uid
       end
   
       if discord_id.nil?
