@@ -8,147 +8,93 @@ export default Ember.Controller.extend({
     this._super();
     let discord_icon = iconNode('fab-discord');
 
-    this.set('messages', []);
-    this.set('channels', []);
-    this.set('stats', []);
-    this.set('ranks', []);
-    this.set('discord_id', "366068461027459073");
-
-    this.fetchMessages();
-    this.fetchChannels();
     this.set('current_page', 1);
-    this.set('filter_channel', "0");
+    this.set('filter_channel', "");
 
-    this.parseRankSettings();
+    this.fetchRanks();
+    this.fetchChannels();
+    this.fetchMessages();
   },
-
-  fetchMessages() {
-    ajax("/discord_messages.json")
+  
+  fetchRanks() {
+    ajax("/discord/ranks.json?user_id=me")
       .then((result) => {
-
-        this.discord_id = result.discord_id
-
-        if (result.discord_id != 0){
-          for (const message of result.discord_messages) {
-            this.messages.pushObject(message);
-          }
-          this.stats = result.stats;
-          for (let i = 0; i < this.ranks.length; i++) {
-            var missing = this.stats["total"] < this.ranks[i]["count_values"] ? "missing-rank" : "";
-            this.ranks[i]["missing"] = missing;
-          }
+        for (let i = 0; i < result.discord_ranks.length; i++) {
+          result.discord_ranks[i]["requirement_string"] = this.format_number(result.discord_ranks[i]["requirement"]);
         }
+        this.set('ranks', result.discord_ranks);
       }).catch(popupAjaxError);
   },
 
   fetchChannels() {
-    ajax("/discord_channels.json")
+    ajax("/discord/channels.json?user_id=me")
       .then((result) => {
-        for (const channel of result.discord_channels) {
-          this.channels.pushObject(channel);
-        }
+        this.set('channels', result.discord_channels);
       }).catch(popupAjaxError);
   },
 
-  parseRankSettings() {
-    var ids = this.siteSettings.discord_rank_name.split("|");
-    var imgs = this.siteSettings.discord_rank_image.split("|");
-    var counts = this.siteSettings.discord_rank_count.split("|");
-    var count_values = this.siteSettings.discord_rank_count.split("|");
-    var badges = this.siteSettings.discord_rank_badge.split("|");
-
-    for (let i = 0; i < counts.length; i++) {
-      if(counts[i].endsWith("000")){
-        counts[i] = counts[i].slice(0, -3);
-        counts[i] = counts[i] + "k"
-      }
-      if(counts[i].endsWith("000k")){
-        counts[i] = counts[i].slice(0, -4);
-        counts[i] = counts[i] + "M"
-      }
-      if(counts[i].endsWith("000M")){
-        counts[i] = counts[i].slice(0, -4);
-        counts[i] = counts[i] + "B"
-      }
+  fetchMessages() {
+    var params = "&page=" + (this.current_page-1).toString()
+    if (this.filter_channel.length > 0){
+      params = params + "&channel=" + this.filter_channel
     }
-
-    var n = Math.min(ids.length, imgs.length, counts.length)
     
-    for (let i = 0; i < n; i++) {
-      var rank = {"id": ids[i], "img": imgs[i], "count": counts[i], "count_values":count_values[i], "badge": 0, "collected":0}
-      this.ranks.pushObject(rank)
-    }
-
-    ajax("/discord/badge_check.json")
+    ajax("/discord/messages.json?user_id=me" + params)
       .then((result) => {
-
-        for (let i = 0; i < badges.length; i++) {
-          this.ranks[i]["badge"] = result.badges[i];
-          this.ranks[i]["collected"] = result.have[i];
-        }
-    
+        var discord_id = result.discord_id
+        if (discord_id == -1) {discord_id = null}
+        this.set('discord_id', discord_id);
+        
+        this.set('messages', result.discord_messages);
+        this.set('stats', result.stats);
       }).catch(popupAjaxError);
-
   },
 
+  format_number(number){
+    number = number.toString()
+    if(number.endsWith("000")){
+      number = number.slice(0, -3);
+      number = number + "k"
+    }
+    if(number.endsWith("000k")){
+      number = number.slice(0, -4);
+      number = number + "M"
+    }
+    if(number.endsWith("000M")){
+      number = number.slice(0, -4);
+      number = number + "B"
+    }
+    return number
+  },
+  
   actions: {
-
     filterChannel(channel_id) {
       this.set('current_page', 1);
-      this.set('messages', []);
       this.set('filter_channel', channel_id);
-      console.log('/discord_messages.json?channel='+channel_id)
-      ajax('/discord_messages.json?channel='+channel_id)
-      .then((result) => {
-        for (const message of result.discord_messages) {
-          this.messages.pushObject(message);
-        }
-      }).catch(popupAjaxError);
+      this.fetchMessages()
     },
 
-    nextMessagePage(){
+    nextMessagePage() {
       this.set('current_page', this.current_page+1);
-
-      this.set('messages', []);
-      ajax('/discord_messages.json?channel='+this.filter_channel + '&page=' + (this.current_page-1).toString())
-      .then((result) => {
-        for (const message of result.discord_messages) {
-          this.messages.pushObject(message);
-        }
-      }).catch(popupAjaxError);
+      this.fetchMessages()
     },
 
-    prevMessagePage(){
-      if (this.current_page == 1){
-        return
-      }
-      this.set('current_page', this.current_page-1);
-      this.set('messages', []);
-      ajax('/discord_messages.json?channel='+this.filter_channel + '&page=' + (this.current_page-1).toString())
-      .then((result) => {
-        for (const message of result.discord_messages) {
-          this.messages.pushObject(message);
-        }
-      }).catch(popupAjaxError);
-
+    prevMessagePage() {
+      this.set('current_page', Math.max(this.current_page-1, 1));
+      this.fetchMessages()
     },
 
     collectRank(badge_id){
-
-      ajax('/discord/badge.json?badge='+badge_id.toString())
+      ajax('/discord/badge_collect.json?badge='+badge_id.toString())
       .then((result) => {
-
         if (result.result == "success"){
           for (let i = 0; i < this.ranks.length; i++) {  
             if (this.ranks[i]["badge"] == badge_id){
-              Ember.set(this.get('ranks').objectAt(i), 'collected', 1);
+              Ember.set(this.get('ranks').objectAt(i), 'have', true);
             }
           }
         }
-
       }).catch(popupAjaxError);
-
-
     }
   }
 });

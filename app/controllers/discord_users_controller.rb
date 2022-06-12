@@ -3,39 +3,53 @@ module DiscordDatastore
 
     requires_login
 
-    def index
-      Rails.logger.info 'Called DiscordUsersController#index'
-
-      discord_id = nil
-      discord_account = UserAssociatedAccount.find_by(provider_name: "discord", user_id: current_user.id)
-      unless discord_account.nil? then
-        discord_id = discord_account.user_id
-      end
-
-      if current_user.staff? || ! discord_account.nil?
-
-        users = DiscordDatastore::DiscordUser.order(created_at: :desc)
-        if params[:user_id]
-          user_id=params[:user_id]
-          discord_account = UserAssociatedAccount.find_by(provider_name: "discord", user_id: user_id)
-
-          if discord_account.nil?
-            users = []
-          else
-            discord_id = discord_account.user_id
-            users = users.where(id: discord_id)
-          end
+    def get_discord_id(params)
+      
+      if params[:discord_id]
+        if current_user.staff?
+          return params[:discord_id].to_i
         end
 
-        users = users.map { |u| u.as_json.merge({
-          #avoid javascript rounding issues
-          :id => u.id.to_s
-        })}  
+        discord_account = UserAssociatedAccount.find_by(provider_name: "discord", user_id: current_user.id)
+        if discord_account.nil?
+          return -1
+        end
+        if discord_account.id.to_s == params[:discord_id]
+          return params[:discord_id].to_i
+        end
 
-        render json: { discord_users: users }
-      else
-        render json: { discord_users: [] }
+        return -1
       end
+
+      if params[:user_id]
+        if params[:user_id] == "me"
+          params[:user_id] = current_user.id
+
+        elsif ! current_user.staff? && current_user.id != params[:user_id].to_i
+          return -1
+        end
+
+        discord_account = UserAssociatedAccount.find_by(provider_name: "discord", user_id: params[:user_id].to_i)
+        if discord_account.nil?
+          return -1
+        end
+          return discord_account.id.to_i
+      end
+    end
+   
+    def users
+      
+      discord_id = get_discord_id params
+    
+      users = DiscordDatastore::DiscordUser.order(created_at: :desc)
+      if ! discord_id.nil?
+        users = users.where(id: discord_id)
+      end
+
+      #avoid javascript rounding
+      users = users.map { |u| u.as_json.merge({ :id => u.id.to_s })}  
+
+      render json: { discord_users: users }
     end
   end
 end

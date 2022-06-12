@@ -36,7 +36,7 @@ plugins:
     default: ""
     type: list
     client: true
-  discord_rank_badge:
+  discord_rank_badge_id:
     default: ""
     type: list
     client: true

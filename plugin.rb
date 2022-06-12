@@ -2,7 +2,7 @@
 
 # name: discord-datastore
 # about: Datastore for discord messages
-# version: 1.0.0
+# version: 1.0.1
 # authors: ScottMastro
 # url: discord
 # required_version: 2.7.0
@@ -26,11 +26,12 @@ gem 'discordrb', '3.3.0'
 
 enabled_site_setting :discord_datastore_enabled
 
-register_asset 'stylesheets/common/discord.scss'
+register_asset 'stylesheets/common/common.scss'
+register_asset 'stylesheets/mobile/mobile.scss', :mobile
+
 register_svg_icon "fab-discord" if respond_to?(:register_svg_icon)
 
 after_initialize do
-
 
   module ::DiscordDatastore
     PLUGIN_NAME = "discord-datastore"
@@ -44,6 +45,7 @@ after_initialize do
   require_relative 'app/controllers/discord_messages_controller.rb'
   require_relative 'app/controllers/discord_channels_controller.rb'
   require_relative 'app/controllers/discord_users_controller.rb'
+  require_relative 'app/controllers/discord_ranks_controller.rb'
 
   require_relative 'app/controllers/admin_discord_controller.rb'
   require_relative 'app/controllers/discord_controller.rb'
@@ -57,22 +59,14 @@ after_initialize do
   require_relative 'lib/verifier.rb'
 
   DiscordDatastore::Engine.routes.draw do
-    get "/discord" => "discord#index", constraints: StaffConstraint.new
-
-    get '/discord/badge' => 'discord#badge'
-    get '/discord/badge_check' => 'discord#check'
-
-    get '/discord_messages' => 'discord_messages#index'
-
+    get "/discord" => "discord#index"
     get '/admin/discord' => 'admin_discord#index', constraints: StaffConstraint.new
-    get '/admin/discord_messages' => 'discord_messages#admin'
-    get '/admin/discord_channels' => 'discord_channels#admin'
 
-    get '/discord_channels' => 'discord_channels#index'
-    put '/discord_channels/:channel_id' => 'discord_channels#create'
-
-    get '/discord_users' => 'discord_users#index'
-
+    get '/discord/messages' => 'discord_messages#messages'
+    get '/discord/channels' => 'discord_channels#channels'
+    get '/discord/users' => 'discord_users#users'
+    get '/discord/ranks' => 'discord_ranks#ranks'
+    get '/discord/badge_collect' => 'discord_ranks#collect'
   end
   
   Discourse::Application.routes.append do
@@ -90,5 +84,4 @@ after_initialize do
   DiscourseEvent.on(:after_auth) do |authenticator, auth_result|
     if authenticator.name == "discord" && auth_result.user.id > 0 then DiscordDatastore::Verifier.verify_user(auth_result.user) end
   end
-
 end

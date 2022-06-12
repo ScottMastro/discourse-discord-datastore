@@ -6,19 +6,12 @@
   width: fit-content;
 }
 
-textarea {
-  display: block;
-  min-width: 500px;
-  resize: vertical;
-  margin-left: 5px;
-}
-
 .discord-data-rank-header{
   margin-left: 30px;
   margin-bottom: 15px;
 }
 
-.missing-rank{
+.discord-rank-have-false{
   color: #96979d;
   background: #2f3036 !important;
 
@@ -31,8 +24,8 @@ textarea {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  row-gap: 10px;
   text-align: center;
-
   .discord-rank{
     padding: 10px;
     background: #40434b ;
@@ -99,6 +92,7 @@ textarea {
 
 .discord-data-channels-header{
   padding:9px;
+  display: flex;
 }
 
 .discord-channel-list{

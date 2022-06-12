@@ -1,0 +1,19 @@
+.discord-data-stats{
+    display: block;
+    margin: 0;
+}
+
+.discord-data-columns{
+    display: block;   
+}
+
+.discord-channel-list{
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;
+
+    .discord-channel-list-element{
+        flex-grow: 1;
+    }
+
+}

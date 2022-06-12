@@ -16,6 +16,7 @@
         excludeCurrentUser=false
       )
     }}
+    <br>
     {{ i18n "discord_datastore.selected_user" }}:
     {{#if searched_username}}
       {{ searched_username }}{{" | "}}
@@ -24,9 +25,6 @@
       {{else}}
         ❌ {{ i18n "discord_datastore.selected_user_not_found" }}
       {{/if}}
-
-
-      
     {{/if}}
   </div>
   
@@ -48,9 +46,9 @@
   <div class="discord-data-rank">
     {{#each ranks as |rank|}}
       <div class="discord-rank">
-        <img class="discord-rank-img" src="{{ rank.img }}" alt="" />
-        <div class="discord-rank-label">{{ rank.id }}</div>
-        <div class="discord-rank-count">{{ rank.count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+        <img class="discord-rank-img" src="{{ rank.image }}" alt="" />
+        <div class="discord-rank-label">{{ rank.name }}</div>
+        <div class="discord-rank-count">{{ rank.requirement_string }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
       </div>
     {{/each}}
   </div>
@@ -67,7 +65,7 @@
         <div class="discord-channel-list" >
           {{#each channels as |channel|}}
             <div><button {{action "filterChannel" channel.id }} type='submit' class="discord-channel-list-element">
-              <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.length }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
+              <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.total }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
             </button></div>
           {{/each}}
         </div>

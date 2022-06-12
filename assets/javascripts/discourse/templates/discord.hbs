@@ -24,23 +24,22 @@
     <div class="discord-data-rank">
       {{#each ranks as |rank|}}
         
-        <div class="discord-rank {{ rank.missing }}">
-          <img class="discord-rank-img" src="{{ rank.img }}" alt="" />
-          <div class="discord-rank-label">{{ rank.id }}</div>
-          <div class="discord-rank-count">{{ rank.count }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
+        <div class="discord-rank discord-rank-have-{{ rank.have }}">
+          <img class="discord-rank-img" src="{{ rank.image }}" alt="" />
+          <div class="discord-rank-label">{{ rank.name }}</div>
+          <div class="discord-rank-count">{{ rank.requirement_string }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
 
           {{#if rank.badge }}
 
-            {{#if rank.missing }}
-              <div class="discord-locked-button">{{ i18n "discord_datastore.locked_rank" }}</div>
+            {{#if rank.have }}
+              <div class="discord-collected-button">{{ i18n "discord_datastore.collected_rank" }}</div>
             {{else}}
-              {{#if rank.collected }}
-                <div class="discord-collected-button">{{ i18n "discord_datastore.collected_rank" }}</div>
-              {{else}}
+              {{#if rank.can_collect }}
                 <button {{action "collectRank" rank.badge }} class="discord-collect-button">{{ i18n "discord_datastore.collect_rank" }}</button>
+              {{else}}
+                <div class="discord-locked-button">{{ i18n "discord_datastore.locked_rank" }}</div>
               {{/if}}
             {{/if}}
-            
           {{/if}}
 
         </div>
@@ -53,19 +52,15 @@
     <div class="discord-data-columns">
 
       <div class="discord-data-channels">
+        <div class="discord-data-channels-header">
+          <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.channel_title" }}</h3>
+        </div>
         {{#if channels}}
-          <div class="discord-data-channels-header">
-            <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.channel_title" }}</h3>
-          </div>
           <div class="discord-channel-list" >
             {{#each channels as |channel|}}
-
-              {{#if channel.length}}
-                <div><button {{action "filterChannel" channel.id }} type='submit' class='discord-channel-list-element'>
-                  <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.length }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
-                </button></div>
-              {{/if}}
-
+              <div><button {{action "filterChannel" channel.id }} type='submit' class='discord-channel-list-element'>
+                <h3>{{ "#" }}{{ channel.name }}</h3>{{ channel.total }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
+              </button></div>
             {{/each}}
           </div>
         {{else}}

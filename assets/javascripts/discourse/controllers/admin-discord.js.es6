@@ -8,173 +8,112 @@ export default Ember.Controller.extend({
     this._super();
     let discord_icon = iconNode('fab-discord');
 
-    this.set('messages', []);
-    this.set('channels', []);
-    this.set('ranks', []);
-
-    this.fetchMessages();
-    this.fetchChannels();
     this.set('current_page', 1);
-    this.set('filter_channel', "0");
-
-    this.set("searched_discord_id", "");
-
-    this.parseRankSettings();
+    this.set('filter_channel', "");
+    this.set('searched_user_id', "");
+    this.set('searched_username', "");
+    
+    this.fetchRanks();
+    this.fetchChannels();
+    this.fetchMessages();
   },
 
-  fetchMessages() {
-    ajax("/admin/discord_messages.json")
+  fetchRanks() {
+    ajax("/discord/ranks.json")
       .then((result) => {
-        for (const message of result.discord_messages) {
-          this.messages.pushObject(message);
+        for (let i = 0; i < result.discord_ranks.length; i++) {
+          result.discord_ranks[i]["requirement_string"] = this.format_number(result.discord_ranks[i]["requirement"]);
         }
-        this.set('stats', result.stats);
+        this.set('ranks', result.discord_ranks);
       }).catch(popupAjaxError);
   },
 
   fetchChannels() {
-    ajax("/admin/discord_channels.json")
+    var params = ""
+    if (this.searched_user_id.length > 0){
+      params = params + "?user_id=" + this.searched_user_id
+    }
+
+    ajax("/discord/channels.json" + params)
       .then((result) => {
-        for (const channel of result.discord_channels) {
-          this.channels.pushObject(channel);
-        }
+        this.set('channels', result.discord_channels);
       }).catch(popupAjaxError);
   },
 
-  parseRankSettings() {
-    var ids = this.siteSettings.discord_rank_name.split("|");
-    var imgs = this.siteSettings.discord_rank_image.split("|");
-    var counts = this.siteSettings.discord_rank_count.split("|");
-
-    for (let i = 0; i < counts.length; i++) {
-      if(counts[i].endsWith("000")){
-        counts[i] = counts[i].slice(0, -3);
-        counts[i] = counts[i] + "k"
-      }
-      if(counts[i].endsWith("000k")){
-        counts[i] = counts[i].slice(0, -4);
-        counts[i] = counts[i] + "M"
-      }
-      if(counts[i].endsWith("000M")){
-        counts[i] = counts[i].slice(0, -4);
-        counts[i] = counts[i] + "B"
-      }
+  fetchMessages() {
+    var params = "page=" + (this.current_page-1).toString()
+    if (this.filter_channel.length > 0){
+      params = params + "&channel=" + this.filter_channel
+    }
+    if (this.searched_user_id.length > 0){
+      params = params + "&user_id=" + this.searched_user_id
     }
 
-    var n = Math.min(ids.length, imgs.length, counts.length)
+    ajax("/discord/messages.json?" + params)
+      .then((result) => {
+        this.set('messages', result.discord_messages);
+        this.set('stats', result.stats);
+      }).catch(popupAjaxError);
+  },
 
-    for (let i = 0; i < n; i++) {
-      var rank = {"id": ids[i], "img": imgs[i], "count": counts[i]}
-      this.ranks.pushObject(rank)
+  format_number(number){
+    number = number.toString()
+    if(number.endsWith("000")){
+      number = number.slice(0, -3);
+      number = number + "k"
     }
+    if(number.endsWith("000k")){
+      number = number.slice(0, -4);
+      number = number + "M"
+    }
+    if(number.endsWith("000M")){
+      number = number.slice(0, -4);
+      number = number + "B"
+    }
+    return number
   },
 
   actions: {
-
     filterChannel(channel_id) {
       this.set('current_page', 1);
-      this.set('messages', []);
       this.set('filter_channel', channel_id);
-      var discord_id_param = this.searched_discord_id.length ? "&discord_id="+this.searched_discord_id : ""
-      console.log(discord_id_param)
-      ajax('/admin/discord_messages.json?channel='+channel_id + discord_id_param)
-      .then((result) => {
-        for (const message of result.discord_messages) {
-          this.messages.pushObject(message);
-        }
-      }).catch(popupAjaxError);
+      this.fetchMessages()
     },
 
-    createDiscordMessage(content) {
-      if (!content) {
-        return;
-      }
-
-      const discordMessage = this.store.createRecord('discordMessage', {
-        id: Date.now(),
-        content: content
-      });
-
-      discordMessage.save()
-        .then(console.log)
-        .catch(console.error);
-    },
-
-    nextMessagePage(){
+    nextMessagePage() {
       this.set('current_page', this.current_page+1);
-
-      this.set('messages', []);
-      var discord_id_param = this.searched_discord_id.length ? "&discord_id="+this.searched_discord_id : ""
-      ajax('/admin/discord_messages.json?channel='+this.filter_channel + '&page=' + (this.current_page-1).toString() + discord_id_param)
-      .then((result) => {
-        for (const message of result.discord_messages) {
-          this.messages.pushObject(message);
-        }
-      }).catch(popupAjaxError);
+      this.fetchMessages()
     },
 
-    prevMessagePage(){
-      if (this.current_page == 1){
-        return
-      }
-      this.set('current_page', this.current_page-1);
-      this.set('messages', []);
-      var discord_id_param = this.searched_discord_id.length ? "&discord_id="+this.searched_discord_id : ""
-      ajax('/admin/discord_messages.json?channel='+this.filter_channel + '&page=' + (this.current_page-1).toString() + discord_id_param)
-      .then((result) => {
-        for (const message of result.discord_messages) {
-          this.messages.pushObject(message);
-        }
-      }).catch(popupAjaxError);
-
+    prevMessagePage() {
+      this.set('current_page', Math.max(this.current_page-1, 1));
+      this.fetchMessages()
     },
 
     onChangeSearchTermForUsername(username){
       this.set("searched_username", username.length ? username : null);
 
-      var user_id=-1
       ajax("/u/"+username+".json")
       .then((result) => {
-        var user_id = result.user.id
 
-        ajax("/discord_users.json?user_id="+user_id.to_s)
+        this.set('searched_user_id', result.user.id.toString());
+
+        ajax("/discord/users.json?user_id="+this.searched_user_id)
         .then((result) => {
           
           if(result.discord_users.length ==0){
             this.set("searched_discord_username", "");
           }
           else{
-            this.set("searched_discord_username", "@"+result.discord_users[0].tag);
-            this.set("searched_discord_id", result.discord_users[0].id);
-
-            this.set('messages', []);
-            this.set('channels', []);
-            
-            ajax("/admin/discord_messages.json?discord_id="+result.discord_users[0].id)
-            .then((result) => {
-              for (const message of result.discord_messages) {
-                this.messages.pushObject(message);
-              }
-              this.set('stats', result.stats);
-            }).catch(popupAjaxError);
-
-            ajax("/admin/discord_channels.json?discord_id="+result.discord_users[0].id)
-            .then((result) => {
-              for (const channel of result.discord_channels) {
-                this.channels.pushObject(channel);
-              }
-            }).catch(popupAjaxError);
-      
+            this.set("searched_discord_username", "@"+result.discord_users[0].tag);      
           }
 
+          this.fetchMessages()
+          this.fetchChannels()
+
         }).catch(popupAjaxError);
-
-
       }).catch(popupAjaxError);
 
-
-
     }
-
   }
 });
