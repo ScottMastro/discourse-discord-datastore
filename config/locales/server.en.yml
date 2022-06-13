@@ -4,6 +4,7 @@ en:
     discord_bot_token: 'Discord bot token'
     discord_server_id: 'Discord server ID'
     discord_bot_channel_id: 'Discord bot channel ID'
+    discord_ignore_bot_channel: 'Should bot channel history be ignored?'
     discord_bot_command_prefix: "Prefix for Discord bot commands"
     discord_bot_status: 'Bot status when idle'
     discord_header_image: 'Image to show on top of /discord page instead of title'

@@ -27,6 +27,9 @@ module DiscordDatastore::BotInstance
   def self.bot
     @@bot
   end
+  def self.counter
+    @@message_count
+  end
 
   def self.add_message
     @@message_count = @@message_count+1
@@ -36,6 +39,11 @@ module DiscordDatastore::BotInstance
     end
     return false
   end
+
+  def self.send(content)
+    @@bot.send_message(SiteSetting.discord_bot_channel_id, content)
+  end
+
 
 end
 
@@ -49,15 +57,26 @@ class DiscordDatastore::Bot
       upsert_users
       browse_history
       #update_ranks
+      bot.game=(SiteSetting.discord_bot_status)
 
       bot.command(:ping, channels: [SiteSetting.discord_bot_channel_id]) do |event|
         event.respond 'pong!'
+      end
+
+      bot.command(:counter, channels: [SiteSetting.discord_bot_channel_id]) do |event|
+        event.respond DiscordDatastore::BotInstance.counter.to_s
+      end
+
+      bot.command(:count) do |event|
+        total = DiscordDatastore::DiscordMessage.where(discord_user_id: event.user.id).count
+        event.respond event.user.username + ": " + total.to_s + " messages!"
       end
 
       bot.command(:sync) do |event|
         upsert_channels
         upsert_users
         browse_history
+        bot.game=(SiteSetting.discord_bot_status)
       end
 
       bot.channel_create do

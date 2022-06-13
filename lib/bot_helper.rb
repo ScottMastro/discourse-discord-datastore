@@ -1,5 +1,7 @@
 HISTORY_CHUNK_LIMIT = 100
 HISTORY_WAIT_SECONDS = 3
+USER_SCAN_UPDATE = 100
+MESSAGE_SCAN_UPDATE = 100
 
 def get_server
     DiscordDatastore::BotInstance.bot.servers.each do |s|
@@ -69,10 +71,20 @@ def upsert_users
     bot = DiscordDatastore::BotInstance.bot
     bot.game=("Scanning users...")
 
+    status_string = "Scanning users"
+    status_message = DiscordDatastore::BotInstance.send(status_string)
+
     existingusers = DiscordDatastore::DiscordUser.all
     #DiscordDatastore::DiscordUser.delete_all
 
+    i=0
     get_users.each do |user|
+
+        i+=1
+        if i % USER_SCAN_UPDATE == 0
+            status_message.edit(status_string + " -- " + i.to_s + " users")
+        end
+
         create_time = Time.now
         is_verified = false
         discourse_id = -1
@@ -97,6 +109,7 @@ def upsert_users
         DiscordDatastore::DiscordUser.upsert(discorduser)
     end
 
+    status_message.edit(status_string + " -- " + i.to_s + " users (done)")
     bot.game=(SiteSetting.discord_bot_status)
 end
 
@@ -194,14 +207,29 @@ def browse_history
     get_channels.each do |channel|
         next if channel.type != 0
 
+        status_string = "Scanning #"+channel.name
+        status_message = DiscordDatastore::BotInstance.send(status_string)
+
+        if channel.id == SiteSetting.discord_bot_channel_id.to_i && SiteSetting.discord_ignore_bot_channel
+            status_message.edit(status_string + " -- skipped")
+            next # ignore bot channel
+        end
+
         begin
-            last_id = get_oldest_message_id channel
-        rescue
+            channel.history(1)
+        rescue Discordrb::Errors::NoPermission
+            status_message.edit(status_string + " -- skipped")
             next # cannot access channel
         end
 
-        next if last_id == -1
-        
+        last_id = get_oldest_message_id channel
+
+        if last_id == -1
+            status_message.edit(status_string + " -- skipped")
+            next # no messages in channel
+        end
+
+        i=0 ; temp=0    
         loop do
             messages = channel.history(HISTORY_CHUNK_LIMIT, before_id=last_id)
             if messages.length() == 0
@@ -211,8 +239,12 @@ def browse_history
             discordmessages = parse_discord_messages messages
             DiscordDatastore::DiscordMessage.upsert_all(discordmessages)
             
-            STDERR.puts "Grabbed " + discordmessages.length().to_s + " Discord messages from #" + channel.name
-            STDERR.puts '------------------------------------------------------------'
+            i+=discordmessages.length
+            temp+=discordmessages.length
+            if temp > MESSAGE_SCAN_UPDATE
+                status_message.edit(status_string + " -- " + i.to_s + " messages")
+                temp=0
+            end
             last_id = messages[-1].id
 
             sleep HISTORY_WAIT_SECONDS
@@ -228,14 +260,20 @@ def browse_history
             end
 
             discordmessages = parse_discord_messages messages
-            DiscordDatastore::DiscordMessage.upsert_all(discordmessages)
+            DiscordDatastore::DiscordMessage.upsert_all(discordmessages)    
             
-            STDERR.puts "Grabbed " + discordmessages.length().to_s + " Discord messages from #" + channel.name
-            STDERR.puts '------------------------------------------------------------'
+            i+=discordmessages.length
+            temp+=discordmessages.length
+            if temp > MESSAGE_SCAN_UPDATE
+                status_message.edit(status_string + " -- " + i.to_s + " messages")
+                temp=0
+            end 
             last_id = messages[0].id
 
             sleep HISTORY_WAIT_SECONDS
         end
+
+        status_message.edit(status_string + + " -- " + i.to_s + " messages (done)")
     end
 
     bot.game=(SiteSetting.discord_bot_status)

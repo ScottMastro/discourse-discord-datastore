@@ -9,6 +9,8 @@ plugins:
     client: true
   discord_bot_channel_id:
     default: ""
+  discord_ignore_bot_channel:
+    default: true
   discord_bot_command_prefix:
     default: "!"
   discord_bot_status:
