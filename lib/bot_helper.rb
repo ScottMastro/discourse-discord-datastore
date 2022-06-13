@@ -39,7 +39,6 @@ end
 
 def upsert_channels
     bot = DiscordDatastore::BotInstance.bot
-    bot.game=("Scanning channels...")
 
     existingchannels = DiscordDatastore::DiscordChannel.all
     #DiscordDatastore::DiscordChannel.delete_all
@@ -64,18 +63,16 @@ def upsert_channels
         }
         DiscordDatastore::DiscordChannel.upsert(discordchannel)
     end
-    bot.game=(SiteSetting.discord_bot_status)
 end
 
 def upsert_users
     bot = DiscordDatastore::BotInstance.bot
-    bot.game=("Scanning users...")
+    #DiscordDatastore::DiscordUser.delete_all
 
     status_string = "Scanning users"
     status_message = DiscordDatastore::BotInstance.send(status_string)
 
     existingusers = DiscordDatastore::DiscordUser.all
-    #DiscordDatastore::DiscordUser.delete_all
 
     i=0
     get_users.each do |user|
@@ -108,9 +105,7 @@ def upsert_users
         }
         DiscordDatastore::DiscordUser.upsert(discorduser)
     end
-
     status_message.edit(status_string + " -- " + i.to_s + " users (done)")
-    bot.game=(SiteSetting.discord_bot_status)
 end
 
 def upsert_user(user)
@@ -200,8 +195,6 @@ end
 
 def browse_history
     bot = DiscordDatastore::BotInstance.bot
-    bot.game=("Scanning history...")
-
     #DiscordDatastore::DiscordMessage.delete_all
 
     get_channels.each do |channel|
@@ -275,8 +268,6 @@ def browse_history
 
         status_message.edit(status_string + + " -- " + i.to_s + " messages (done)")
     end
-
-    bot.game=(SiteSetting.discord_bot_status)
 end
 
 def update_ranks
@@ -331,5 +322,4 @@ def update_ranks
         user.set_roles user_ranks
     end
 
-    bot.game=(SiteSetting.discord_bot_status)
 end

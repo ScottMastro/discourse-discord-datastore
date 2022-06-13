@@ -1,12 +1,24 @@
 import { ajax } from 'discourse/lib/ajax';
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { iconNode } from "discourse-common/lib/icon-library";
+import { withPluginApi } from 'discourse/lib/plugin-api';
 
 export default Ember.Controller.extend({
 
   init() {
     this._super();
     let discord_icon = iconNode('fab-discord');
+
+    this.set('is_staff', false);
+
+    withPluginApi('0.8.13', api => {
+      var user = api.getCurrentUser();
+      for (var i = 0; i < user.groups.length; i++) {
+        if (user.groups[i].name == "staff"){
+          this.set('is_staff', true);
+        }
+      }
+    });
 
     this.set('current_page', 1);
     this.set('filter_channel', "");

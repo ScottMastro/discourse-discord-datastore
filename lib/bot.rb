@@ -6,6 +6,7 @@ MESSAGES_BEFORE_RESYNC = SiteSetting.discord_messages_before_resync
 
 module DiscordDatastore::BotInstance
   @@bot = nil
+  @@sync_thread = nil
   @@message_count = 0
 
   def self.init
@@ -19,6 +20,7 @@ module DiscordDatastore::BotInstance
     @@bot.ready do |event|
       puts "Logged in as #{@@bot.profile.username} (ID:#{@@bot.profile.id}) | #{@@bot.servers.size} servers"
       @@bot.send_message(SiteSetting.discord_bot_channel_id, "Datastore is alive!")
+      bot.game=(SiteSetting.discord_bot_status)
 
     end
     @@bot
@@ -44,7 +46,29 @@ module DiscordDatastore::BotInstance
     @@bot.send_message(SiteSetting.discord_bot_channel_id, content)
   end
 
+  def self.sync(history_only=false)
 
+    if @@sync_thread.nil? || ! @@sync_thread.alive?
+
+      @@sync_thread = Thread.new do
+        begin
+
+          if !history_only
+            upsert_channels
+            upsert_users
+          end
+
+          browse_history
+          #update_ranks
+
+        rescue Exception => ex
+          Rails.logger.error("DiscordDatastore Bot: Syncing thread failed: #{ex}")
+        end
+      end
+      return true
+    end
+    return false
+  end
 end
 
 class DiscordDatastore::Bot
@@ -53,12 +77,8 @@ class DiscordDatastore::Bot
     bot = DiscordDatastore::BotInstance::init
     bot.ready do |event|
 
-      upsert_channels
-      upsert_users
-      browse_history
-      #update_ranks
-      bot.game=(SiteSetting.discord_bot_status)
-
+      DiscordDatastore::BotInstance.sync
+      
       bot.command(:ping, channels: [SiteSetting.discord_bot_channel_id]) do |event|
         event.respond 'pong!'
       end
@@ -73,10 +93,7 @@ class DiscordDatastore::Bot
       end
 
       bot.command(:sync) do |event|
-        upsert_channels
-        upsert_users
-        browse_history
-        bot.game=(SiteSetting.discord_bot_status)
+        DiscordDatastore::BotInstance.sync
       end
 
       bot.channel_create do
@@ -96,8 +113,7 @@ class DiscordDatastore::Bot
 
       bot.message do
         if DiscordDatastore::BotInstance::add_message
-          browse_history
-          #update_ranks
+          DiscordDatastore::BotInstance.sync true
         end
       end
     end

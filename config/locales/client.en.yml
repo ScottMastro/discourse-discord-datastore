@@ -2,6 +2,9 @@ en:
   js:
     discord_datastore:
 
+      hamburger_menu_label: "Discord"
+      view_admin_url_text: "View Admin Panel"
+
       user_title: "Discord Stats"
       admin_title: "Discord Datastore"
 

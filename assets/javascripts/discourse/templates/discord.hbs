@@ -4,6 +4,10 @@
   <h1>{{d-icon 'fab-discord'}}{{" "}}{{ i18n 'discord_datastore.user_title' }}</h1>
 {{/if}}
 
+{{#if is_staff }}
+<a class="discord-admin-url" href="/admin/discord">{{ i18n 'discord_datastore.view_admin_url_text' }}{{" ➚"}}</a>
+{{/if}}
+
 {{#if discord_id }}
 
   <div class="discord-data">
