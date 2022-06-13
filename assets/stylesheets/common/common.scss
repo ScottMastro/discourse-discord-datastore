@@ -61,9 +61,11 @@
   margin: auto;
   padding: 10px;
   display: flex;
+  width: 100%;
+  justify-content: space-evenly;
 
   .discord-stat{
-    display: flex;
+    display: block;
     align-items: baseline;
     padding: 10px;
   }  
