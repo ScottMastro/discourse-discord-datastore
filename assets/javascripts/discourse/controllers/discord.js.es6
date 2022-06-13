@@ -23,9 +23,20 @@ export default Ember.Controller.extend({
     this.set('current_page', 1);
     this.set('filter_channel', "");
 
+    this.fetchID();
     this.fetchRanks();
     this.fetchChannels();
     this.fetchMessages();
+  },
+
+  fetchID() {
+    this.set('discord_id', "");
+    ajax("/discord/users.json?user_id=me")
+      .then((result) => {
+        if (result.discord_users.length > 0){
+          this.set('discord_id', result.discord_users[0].id);
+        }
+      }).catch(popupAjaxError);
   },
   
   fetchRanks() {
@@ -52,11 +63,7 @@ export default Ember.Controller.extend({
     }
     
     ajax("/discord/messages.json?user_id=me" + params)
-      .then((result) => {
-        var discord_id = result.discord_id
-        if (discord_id == -1) {discord_id = null}
-        this.set('discord_id', discord_id);
-        
+      .then((result) => {        
         this.set('messages', result.discord_messages);
         this.set('stats', result.stats);
       }).catch(popupAjaxError);
