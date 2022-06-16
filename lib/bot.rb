@@ -16,15 +16,6 @@ module DiscordDatastore::BotInstance
     @@bot.ready do |event|
 
       STDERR.puts '------------------------------------------------------------'
-      STDERR.puts '------------------------------------------------------------'
-      STDERR.puts '------------------------------------------------------------'
-      STDERR.puts '------------------------------------------------------------'
-      STDERR.puts '------------------------------------------------------------'
-      STDERR.puts '------------------------------------------------------------'
-      STDERR.puts event
-  
-
-      STDERR.puts '------------------------------------------------------------'
       STDERR.puts 'Discord Datastore should be spawned, say ' + SiteSetting.discord_bot_command_prefix + 'ping" on Discord!'
       STDERR.puts '------------------------------------------------------------'
       STDERR.puts '(------------       If not check logs         -------------)'  

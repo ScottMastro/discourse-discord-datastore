@@ -30,12 +30,16 @@ export default Ember.Controller.extend({
   },
 
   fetchID() {
+    this.set('id_loaded', false);
+
     this.set('discord_id', "");
     ajax("/discord/users.json?user_id=me")
       .then((result) => {
         if (result.discord_users.length > 0){
           this.set('discord_id', result.discord_users[0].id);
         }
+        this.set('id_loaded', true);
+
       }).catch(popupAjaxError);
   },
   

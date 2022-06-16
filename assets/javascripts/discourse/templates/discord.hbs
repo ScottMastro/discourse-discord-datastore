@@ -150,14 +150,20 @@
   </div>
 
 {{else}}
-  <div class="discord-join-info">
-    {{ i18n "discord_datastore.warning_no_account_found" }}
-    <br><br>
-    {{#if siteSettings.discord_invite_url }}
-      <h2>{{'1. '}}<a href={{siteSettings.discord_invite_url}}>{{i18n 'discord_datastore.join_discord_message' }}</a></h2>
-    {{else}}
-      <h2>{{'1. '}}{{i18n 'discord_datastore.join_discord_message' }}</h2>
-    {{/if}}
-    <h2>{{'2. '}}<a href={{'/my/preferences/account'}}>{{i18n 'discord_datastore.connect_discord_message' }}</a></h2>
-  </div>
+
+  {{#if id_loaded}}
+
+    <div class="discord-join-info">
+      {{ i18n "discord_datastore.warning_no_account_found" }}
+      <br><br>
+      {{#if siteSettings.discord_invite_url }}
+        <h2>{{'1. '}}<a href={{siteSettings.discord_invite_url}}>{{i18n 'discord_datastore.join_discord_message' }}</a></h2>
+      {{else}}
+        <h2>{{'1. '}}{{i18n 'discord_datastore.join_discord_message' }}</h2>
+      {{/if}}
+      <h2>{{'2. '}}<a href={{'/my/preferences/account'}}>{{i18n 'discord_datastore.connect_discord_message' }}</a></h2>
+    </div>
+
+  {{/if}}
+
 {{/if}}
