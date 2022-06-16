@@ -12,12 +12,23 @@ module DiscordDatastore::BotInstance
   def self.init
     @@message_count = 0
     @@bot = Discordrb::Commands::CommandBot.new token: SiteSetting.discord_bot_token, prefix: SiteSetting.discord_bot_command_prefix
-    STDERR.puts '------------------------------------------------------------'
-    STDERR.puts 'Discord Datastore should be spawned, say ' + SiteSetting.discord_bot_command_prefix + 'ping" on Discord!'
-    STDERR.puts '------------------------------------------------------------'
-    STDERR.puts '(------------       If not check logs         -------------)'
 
     @@bot.ready do |event|
+
+      STDERR.puts '------------------------------------------------------------'
+      STDERR.puts '------------------------------------------------------------'
+      STDERR.puts '------------------------------------------------------------'
+      STDERR.puts '------------------------------------------------------------'
+      STDERR.puts '------------------------------------------------------------'
+      STDERR.puts '------------------------------------------------------------'
+      STDERR.puts event
+  
+
+      STDERR.puts '------------------------------------------------------------'
+      STDERR.puts 'Discord Datastore should be spawned, say ' + SiteSetting.discord_bot_command_prefix + 'ping" on Discord!'
+      STDERR.puts '------------------------------------------------------------'
+      STDERR.puts '(------------       If not check logs         -------------)'  
+
       puts "Logged in as #{@@bot.profile.username} (ID:#{@@bot.profile.id}) | #{@@bot.servers.size} servers"
       @@bot.send_message(SiteSetting.discord_bot_channel_id, "Datastore is alive!")
       bot.game=(SiteSetting.discord_bot_status)
