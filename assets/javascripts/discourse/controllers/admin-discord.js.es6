@@ -34,9 +34,12 @@ export default Ember.Controller.extend({
       params = params + "?user_id=" + this.searched_user_id
     }
 
+    this.set('channels_loaded', false);
+
     ajax("/discord/channels.json" + params)
       .then((result) => {
         this.set('channels', result.discord_channels);
+        this.set('channels_loaded', true);
       }).catch(popupAjaxError);
   },
 
@@ -48,11 +51,13 @@ export default Ember.Controller.extend({
     if (this.searched_user_id.length > 0){
       params = params + "&user_id=" + this.searched_user_id
     }
+    this.set('messages_loaded', false);
 
     ajax("/discord/messages.json?" + params)
       .then((result) => {
         this.set('messages', result.discord_messages);
         this.set('stats', result.stats);
+        this.set('messages_loaded', true);
       }).catch(popupAjaxError);
   },
 

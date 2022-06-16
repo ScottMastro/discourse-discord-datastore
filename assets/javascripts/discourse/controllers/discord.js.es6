@@ -50,9 +50,12 @@ export default Ember.Controller.extend({
   },
 
   fetchChannels() {
+    this.set('channels_loaded', false);
+
     ajax("/discord/channels.json?user_id=me")
       .then((result) => {
         this.set('channels', result.discord_channels);
+        this.set('channels_loaded', true);
       }).catch(popupAjaxError);
   },
 
@@ -62,10 +65,13 @@ export default Ember.Controller.extend({
       params = params + "&channel=" + this.filter_channel
     }
     
+    this.set('messages_loaded', false);
+
     ajax("/discord/messages.json?user_id=me" + params)
       .then((result) => {        
         this.set('messages', result.discord_messages);
         this.set('stats', result.stats);
+        this.set('messages_loaded', true);
       }).catch(popupAjaxError);
   },
 
