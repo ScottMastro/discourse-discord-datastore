@@ -1,7 +1,7 @@
 HISTORY_CHUNK_LIMIT = 100
 HISTORY_WAIT_SECONDS = 3
-USER_SCAN_UPDATE = 100
-MESSAGE_SCAN_UPDATE = 100
+USER_SCAN_UPDATE = 200
+MESSAGE_SCAN_UPDATE = 300
 
 def get_server
     DiscordDatastore::BotInstance.bot.servers.each do |s|
