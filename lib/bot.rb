@@ -113,9 +113,11 @@ class DiscordDatastore::Bot
         upsert_user event.user
       end
 
-      bot.message do
-        if DiscordDatastore::BotInstance::add_message
-          DiscordDatastore::BotInstance.sync true
+      bot.message do |event|
+        if ! event.author.bot_account
+          if DiscordDatastore::BotInstance::add_message
+            DiscordDatastore::BotInstance.sync true
+          end
         end
       end
     end
