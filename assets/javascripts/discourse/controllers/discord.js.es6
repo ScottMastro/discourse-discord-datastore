@@ -9,6 +9,9 @@ export default Ember.Controller.extend({
     this._super();
     let discord_icon = iconNode('fab-discord');
 
+    
+
+
     this.set('is_staff', false);
 
     withPluginApi('0.8.13', api => {
@@ -39,16 +42,12 @@ export default Ember.Controller.extend({
           this.set('discord_id', result.discord_users[0].id);
         }
         this.set('id_loaded', true);
-
       }).catch(popupAjaxError);
   },
   
   fetchRanks() {
     ajax("/discord/ranks.json?user_id=me")
       .then((result) => {
-        for (let i = 0; i < result.discord_ranks.length; i++) {
-          result.discord_ranks[i]["requirement_string"] = this.format_number(result.discord_ranks[i]["requirement"]);
-        }
         this.set('ranks', result.discord_ranks);
       }).catch(popupAjaxError);
   },
@@ -79,23 +78,6 @@ export default Ember.Controller.extend({
       }).catch(popupAjaxError);
   },
 
-  format_number(number){
-    number = number.toString()
-    if(number.endsWith("000")){
-      number = number.slice(0, -3);
-      number = number + "k"
-    }
-    if(number.endsWith("000k")){
-      number = number.slice(0, -4);
-      number = number + "M"
-    }
-    if(number.endsWith("000M")){
-      number = number.slice(0, -4);
-      number = number + "B"
-    }
-    return number
-  },
-  
   actions: {
     filterChannel(channel_id) {
       this.set('current_page', 1);

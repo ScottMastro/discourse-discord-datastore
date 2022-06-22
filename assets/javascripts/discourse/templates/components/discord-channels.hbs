@@ -1,0 +1,20 @@
+<div class="discord-data-channels-header">
+  <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.channel_title" }}</h3>
+</div>
+
+{{#if channels_loaded}}
+  {{#if channels}}
+    <div class="discord-channel-list" >
+      {{#each channels as |channel|}}
+        <div><button {{action "filterChannel" channel.id }} type='submit' class="discord-channel-list-element">
+          <h3>{{ "#" }}{{ channel.name }}</h3>{{ number channel.total }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
+        </button></div>
+      {{/each}}
+    </div>
+  {{else}}
+    {{ i18n "discord_datastore.no_channels" }}
+  {{/if}}  
+
+{{else}}
+  <div class='spinner'></div> 
+{{/if}}

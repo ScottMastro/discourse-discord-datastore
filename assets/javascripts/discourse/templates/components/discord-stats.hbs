@@ -1,0 +1,21 @@
+<div class="discord-data-stats">
+  <div class="discord-stat">
+    {{#if messages_loaded}} <div class="discord-stat-value">{{ number stats.total }}</div> {{else}} <div class='spinner'></div> {{/if}}
+    <div class="discord-stat-label">{{i18n 'discord_datastore.stat_total_message'}}</div>
+  </div>
+  
+  <div class="discord-stat">
+    {{#if messages_loaded}} <div class="discord-stat-value">{{ number stats.total_monthly }}</div> {{else}} <div class='spinner'></div> {{/if}}
+    <div class="discord-stat-label">{{i18n 'discord_datastore.stat_monthly_message'}}</div>
+  </div>
+  
+  <div class="discord-stat">
+    {{#if messages_loaded}} <div class="discord-stat-value">{{ number stats.total_weekly }}</div> {{else}} <div class='spinner'></div> {{/if}}
+    <div class="discord-stat-label">{{i18n 'discord_datastore.stat_weekly_message'}}</div>
+  </div>
+  
+  <div class="discord-stat">
+    {{#if messages_loaded}} <div class="discord-stat-value">{{ stats.first_message }}</div> {{else}} <div class='spinner'></div> {{/if}}
+    <div class="discord-stat-label">{{i18n 'discord_datastore.stat_first_message'}}</div>
+  </div>
+</div>

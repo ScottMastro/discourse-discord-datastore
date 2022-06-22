@@ -1,9 +1,16 @@
 .discord-join-info{
-  background: #2f3036;
   color: #dcddde;
-  border: 5px solid #ED4245;
   padding: 20px;
   width: fit-content;
+
+  .discord-join-box{
+    border: 3px solid #ED4245;
+    padding: 10px;
+  }
+
+  a{
+    color: #5865F2;
+  }
 }
 
 .discord-admin-url{

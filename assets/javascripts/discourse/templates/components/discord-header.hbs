@@ -1,0 +1,5 @@
+{{#if siteSettings.discord_header_image }}
+  <img src="{{ siteSettings.discord_header_image }}" alt="header_image">
+{{else}}
+  <h1>{{d-icon 'fab-discord'}}{{" "}}{{ i18n 'discord_datastore.user_title' }}</h1>
+{{/if}}

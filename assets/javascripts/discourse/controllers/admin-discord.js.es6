@@ -22,7 +22,9 @@ export default Ember.Controller.extend({
     ajax("/discord/ranks.json")
       .then((result) => {
         for (let i = 0; i < result.discord_ranks.length; i++) {
-          result.discord_ranks[i]["requirement_string"] = this.format_number(result.discord_ranks[i]["requirement"]);
+
+          result.discord_ranks[i]["have"] = true;
+
         }
         this.set('ranks', result.discord_ranks);
       }).catch(popupAjaxError);
@@ -59,23 +61,6 @@ export default Ember.Controller.extend({
         this.set('stats', result.stats);
         this.set('messages_loaded', true);
       }).catch(popupAjaxError);
-  },
-
-  format_number(number){
-    number = number.toString()
-    if(number.endsWith("000")){
-      number = number.slice(0, -3);
-      number = number + "k"
-    }
-    if(number.endsWith("000k")){
-      number = number.slice(0, -4);
-      number = number + "M"
-    }
-    if(number.endsWith("000M")){
-      number = number.slice(0, -4);
-      number = number + "B"
-    }
-    return number
   },
 
   actions: {
