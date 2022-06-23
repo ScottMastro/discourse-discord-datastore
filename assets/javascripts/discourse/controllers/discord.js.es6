@@ -8,10 +8,6 @@ export default Ember.Controller.extend({
   init() {
     this._super();
     let discord_icon = iconNode('fab-discord');
-
-    
-
-
     this.set('is_staff', false);
 
     withPluginApi('0.8.13', api => {

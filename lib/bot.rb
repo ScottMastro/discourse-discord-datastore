@@ -10,6 +10,11 @@ module DiscordDatastore::BotInstance
   @@message_count = 0
 
   def self.init
+    
+    if ! @@bot.nil?
+      return @@bot
+    end
+
     @@message_count = 0
     @@bot = Discordrb::Commands::CommandBot.new token: SiteSetting.discord_bot_token, prefix: SiteSetting.discord_bot_command_prefix
 
@@ -76,55 +81,59 @@ end
 class DiscordDatastore::Bot
 
   def self.run_bot
-    bot = DiscordDatastore::BotInstance::init
-    bot.ready do |event|
 
-      DiscordDatastore::BotInstance.sync
-      
-      bot.command(:ping, channels: [SiteSetting.discord_bot_channel_id]) do |event|
-        event.respond 'pong!'
-      end
+    if DiscordDatastore::BotInstance::bot.nil?
 
-      bot.command(:counter, channels: [SiteSetting.discord_bot_channel_id]) do |event|
-        event.respond DiscordDatastore::BotInstance.counter.to_s
-      end
+      bot = DiscordDatastore::BotInstance::init
+      bot.ready do |event|
 
-      bot.command(:count) do |event|
-        total = DiscordDatastore::DiscordMessage.where(discord_user_id: event.user.id).count
-        event.respond event.user.username + ": " + total.to_s + " messages!"
-      end
-
-      bot.command(:sync) do |event|
         DiscordDatastore::BotInstance.sync
-      end
+        
+        bot.command(:ping, channels: [SiteSetting.discord_bot_channel_id]) do |event|
+          event.respond 'pong!'
+        end
 
-      bot.channel_create do
-        upsert_channels
-      end
-      bot.channel_update do
-        upsert_channels
-      end
+        bot.command(:counter, channels: [SiteSetting.discord_bot_channel_id]) do |event|
+          event.respond DiscordDatastore::BotInstance.counter.to_s
+        end
 
-      bot.member_join do |event|
-        upsert_user event.user
-        DiscordDatastore::Verifier.verify_from_discord(event.user.id)
-      end
-      bot.member_update do |event|
-        upsert_user event.user
-      end
+        bot.command(:count) do |event|
+          total = DiscordDatastore::DiscordMessage.where(discord_user_id: event.user.id).count
+          event.respond event.user.username + ": " + total.to_s + " messages!"
+        end
 
-      bot.message do |event|
-        if ! event.author.bot_account
+        bot.command(:sync) do |event|
+          DiscordDatastore::BotInstance.sync
+        end
 
-          #event.respond event.content
+        bot.channel_create do
+          upsert_channels
+        end
+        bot.channel_update do
+          upsert_channels
+        end
 
-          if DiscordDatastore::BotInstance::add_message
-            DiscordDatastore::BotInstance.sync true
+        bot.member_join do |event|
+          upsert_user event.user
+          DiscordDatastore::Verifier.verify_from_discord(event.user.id)
+        end
+        bot.member_update do |event|
+          upsert_user event.user
+        end
+
+        bot.message do |event|
+          if ! event.author.bot_account
+
+            #event.respond event.content
+
+            if DiscordDatastore::BotInstance::add_message
+              DiscordDatastore::BotInstance.sync true
+            end
           end
         end
       end
-    end
 
-    bot.run
+      bot.run
+    end
   end
 end
