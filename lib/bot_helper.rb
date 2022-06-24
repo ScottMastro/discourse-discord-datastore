@@ -321,7 +321,7 @@ def update_ranks
             end
         end
 
-        #user.set_roles user_ranks
+        user.set_roles user_ranks
     end
 
 end
