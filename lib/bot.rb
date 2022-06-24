@@ -126,7 +126,7 @@ class DiscordDatastore::Bot
         bot.message do |event|
           if ! event.author.bot_account
 
-            DiscordDatastore::BotInstance::send event.content
+            #DiscordDatastore::BotInstance::send event.content
 
             if DiscordDatastore::BotInstance::add_message
               DiscordDatastore::BotInstance.sync true
