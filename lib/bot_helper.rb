@@ -327,5 +327,4 @@ def update_ranks
             user.set_roles user_ranks
         end
     end
-
 end
