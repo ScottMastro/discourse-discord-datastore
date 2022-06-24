@@ -66,7 +66,7 @@ module DiscordDatastore::BotInstance
           end
 
           browse_history
-          #update_ranks
+          update_ranks
 
         rescue Exception => ex
           Rails.logger.error("DiscordDatastore Bot: Syncing thread failed: #{ex}")

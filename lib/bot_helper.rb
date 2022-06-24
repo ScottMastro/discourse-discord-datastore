@@ -272,7 +272,6 @@ end
 
 def update_ranks
     bot = DiscordDatastore::BotInstance.bot
-    bot.game=("Updating ranks...")
 
     rank_names = SiteSetting.discord_rank_name.split("|")
     requirements = SiteSetting.discord_rank_count.split("|")
@@ -294,6 +293,8 @@ def update_ranks
     users.each do |user|
         next if user.bot_account
 
+        DiscordDatastore::BotInstance.send("---------------doing user " + user.name)
+
         count = counts[user.id]
         target_rank_id = -1
         i=0
@@ -311,15 +312,20 @@ def update_ranks
             if user.role? rank
                 if rank.id != target_rank_id
                     user_ranks.delete(rank)
+                    DiscordDatastore::BotInstance.send("removing rank " + rank.name)
+                else
+                    DiscordDatastore::BotInstance.send("has rank " + rank.name)
                 end
             else
                 if rank.id == target_rank_id
                     user_ranks.push(rank)
+                    DiscordDatastore::BotInstance.send("adding rank " + rank.name)
                 end
             end
+
         end
 
-        user.set_roles user_ranks
+        #user.set_roles user_ranks
     end
 
 end
