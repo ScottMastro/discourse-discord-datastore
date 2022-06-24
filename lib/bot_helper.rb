@@ -295,10 +295,12 @@ def update_ranks
 
         count = counts[user.id] || 0
 
-        target_rank = -1
+        target_rank_id = -1
+        target_rank = nil
         i=0
         requirements.each do |requirement|
             if count >= requirement.to_i
+                target_rank_id = ranks[i].id
                 target_rank = ranks[i]
             end
             i+=1
@@ -310,12 +312,12 @@ def update_ranks
         ranks.each do |rank|
 
             if user.role? rank
-                if rank.id != target_rank.id
+                if rank.id != target_rank_id
                     user_ranks.delete(rank)
                     rank_changed = true
                 end
             else
-                if rank.id == target_rank.id
+                if rank.id == target_rank_id
                     user_ranks.push(rank)
                     rank_changed = true
                 end
@@ -323,7 +325,11 @@ def update_ranks
         end
 
         if rank_changed
-            DiscordDatastore::BotInstance.send("USER: " + user.name + " | UPDATED RANK: " + target_rank.name)
+            if target_rank.nil?
+                DiscordDatastore::BotInstance.send("USER: " + user.name + " | UPDATED RANK: (none)" )
+            else
+                DiscordDatastore::BotInstance.send("USER: " + user.name + " | UPDATED RANK: " + target_rank.name)
+            end
             user.set_roles user_ranks
         end
     end
