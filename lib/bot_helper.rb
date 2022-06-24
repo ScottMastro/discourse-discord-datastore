@@ -295,7 +295,8 @@ def update_ranks
 
         DiscordDatastore::BotInstance.send("---------------doing user " + user.name)
 
-        count = counts[user.id]
+        count = counts[user.id] || 0
+        
         target_rank_id = -1
         i=0
         requirements.each do |requirement|
