@@ -16,7 +16,7 @@ module DiscordDatastore::BotInstance
     end
 
     @@message_count = 0
-    @@bot = Discordrb::Commands::CommandBot.new token: SiteSetting.discord_bot_token, prefix: SiteSetting.discord_bot_command_prefix
+    @@bot = Discordrb::Commands::CommandBot.new token: SiteSetting.discord_bot_token, prefix: SiteSetting.discord_bot_command_prefix, name: "bot"+rand(1..9999).to_s
 
     @@bot.ready do |event|
 
@@ -50,7 +50,7 @@ module DiscordDatastore::BotInstance
   end
 
   def self.send(content)
-    @@bot.send_message(SiteSetting.discord_bot_channel_id, content)
+    @@bot.send_message(SiteSetting.discord_bot_channel_id, bot.name + ": " + content)
   end
 
   def self.sync(history_only=false)
@@ -72,9 +72,9 @@ module DiscordDatastore::BotInstance
           Rails.logger.error("DiscordDatastore Bot: Syncing thread failed: #{ex}")
         end
       end
-      return true
+      return send("Syncing data...")
     end
-    return false
+    return send("Currenly syncing, try again later.")
   end
 end
 
@@ -86,6 +86,8 @@ class DiscordDatastore::Bot
 
       bot = DiscordDatastore::BotInstance::init
       bot.ready do |event|
+
+        bot.send_message(SiteSetting.discord_bot_channel_id, bot.name + ": hello")
 
         DiscordDatastore::BotInstance.sync
         
