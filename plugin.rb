@@ -74,6 +74,7 @@ after_initialize do
   end
   
   bot_thread = Thread.new do
+    begin
       DiscordDatastore::Bot.run_bot
     rescue Exception => ex
       Rails.logger.error("DiscordDatastore Bot: There was a problem: #{ex}")
