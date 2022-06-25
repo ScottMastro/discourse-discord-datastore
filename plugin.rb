@@ -73,8 +73,12 @@ after_initialize do
     mount DiscordDatastore::Engine, at: "/"
   end
   
-  DiscordDatastore::Bot.run_bot
-
+  bot_thread = Thread.new do
+      DiscordDatastore::Bot.run_bot
+    rescue Exception => ex
+      Rails.logger.error("DiscordDatastore Bot: There was a problem: #{ex}")
+    end
+  end
 
   DiscourseEvent.on(:after_auth) do |authenticator, auth_result|
     #if authenticator.name == "discord" && auth_result.user.id > 0 then DiscordDatastore::Verifier.verify_user(auth_result.user) end
