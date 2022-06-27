@@ -57,7 +57,7 @@ module DiscordDatastore
           messages = messages.where(discord_channel_id: params[:channel].to_i)
         end
         if ! discord_id.nil?
-          messages = DiscordDatastore::DiscordMessage.where(discord_user_id: discord_id)
+          messages = messages.where(discord_user_id: discord_id)
         end
           
         total_messages = messages.size
@@ -66,7 +66,7 @@ module DiscordDatastore
 
         first = "-"
         if total_messages > 0
-          first = messages.order(:date).limit(1)
+          first = DiscordDatastore::DiscordMessage.order(:date).limit(1)
           first = first[0].date.strftime('%d %b %Y')
         end
 
