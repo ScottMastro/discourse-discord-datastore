@@ -51,13 +51,13 @@ module DiscordDatastore
           page = params[:page].to_i
         end
 
-        messages = DiscordDatastore::DiscordMessage.all
+        messages = DiscordDatastore::DiscordMessage.order(date: :desc)
 
-        if ! discord_id.nil?
-          messages = DiscordDatastore::DiscordMessage.where(discord_user_id: discord_id)
-        end
         if params[:channel]
           messages = messages.where(discord_channel_id: params[:channel].to_i)
+        end
+        if ! discord_id.nil?
+          messages = DiscordDatastore::DiscordMessage.where(discord_user_id: discord_id)
         end
           
         total_messages = messages.size
@@ -70,8 +70,8 @@ module DiscordDatastore
           first = first[0].date.strftime('%d %b %Y')
         end
 
-        messages = messages.order(date: :desc).offset(page * PAGE_SIZE).limit(PAGE_SIZE)
-        messages = messages.includes(:discord_user).includes(:discord_channel)
+        messages = messages.offset(page * PAGE_SIZE).limit(PAGE_SIZE)
+        messages = messages.includes(:discord_channel).includes(:discord_user)
   
         messages = messages.map { |msg| 
           json=msg.as_json

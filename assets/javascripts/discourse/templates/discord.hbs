@@ -11,11 +11,12 @@
 
       {{discord-stats messages_loaded=messages_loaded stats=stats}} 
       <hr>   
-      {{discord-ranks ranks=ranks collectible=1}}
+      {{discord-ranks ranks=ranks collectible=1 collectRank=(action "collectRank")}}
       <hr>
       <div class="discord-data-columns">
-        <div class="discord-data-channels"> {{discord-channels channels_loaded=channels_loaded channels=channels}} </div>
-        <div class="discord-data-messages"> {{discord-messages messages_loaded=messages_loaded messages=messages}} </div>
+        <div class="discord-data-channels"> {{discord-channels channels_loaded=channels_loaded channels=channels filterChannel=(action "filterChannel")}} </div>
+        <div class="discord-data-messages"> {{discord-messages messages_loaded=messages_loaded messages=messages
+                                              prevMessagePage=(action "prevMessagePage") nextMessagePage=(action "nextMessagePage")}} </div>
       </div>
 
   {{else}}

@@ -15,7 +15,7 @@
               <div class="discord-collected-button">{{ i18n "discord_datastore.collected_rank" }}</div>
             {{else}}
               {{#if rank.can_collect }}
-                <button {{action "collectRank" rank.badge }} class="discord-collect-button">{{ i18n "discord_datastore.collect_rank" }}</button>
+                <button {{action collectRank rank.badge }} class="discord-collect-button">{{ i18n "discord_datastore.collect_rank" }}</button>
               {{else}}
                 <div class="discord-locked-button">{{ i18n "discord_datastore.locked_rank" }}</div>
               {{/if}}

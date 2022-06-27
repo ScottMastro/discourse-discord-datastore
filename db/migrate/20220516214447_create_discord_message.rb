@@ -13,6 +13,6 @@ class CreateDiscordMessage < ActiveRecord::Migration[6.0]
     end
 
     add_index :discord_messages, :discord_user_id
-    add_index :discord_messages, :discord_channel_id   
+    add_index :discord_messages, :discord_channel_id
   end
 end

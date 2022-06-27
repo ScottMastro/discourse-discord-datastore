@@ -2,11 +2,11 @@
   <div class ="discord-data-messages-header">
     <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.message_history_title" }}</h3>
     <div class="message-paginate-buttons">
-      <button {{ action "prevMessagePage" }} type='submit' class='discord-button'>
+      <button {{ action prevMessagePage }} type='submit' class='discord-button'>
         {{ i18n "discord_datastore.message_pagination_previous" }}
       </button>
       <b>{{ current_page }}</b>
-      <button {{ action "nextMessagePage" }} type='submit' class='discord-button' >
+      <button {{ action nextMessagePage }} type='submit' class='discord-button' >
         {{ i18n "discord_datastore.message_pagination_next" }}
       </button>
     </div>
