@@ -21,6 +21,7 @@ export default Ember.Controller.extend({
 
     this.set('current_page', 1);
     this.set('filter_channel', "");
+    this.set("discord_username", "");
 
     this.fetchID();
     this.fetchRanks();
@@ -36,6 +37,7 @@ export default Ember.Controller.extend({
       .then((result) => {
         if (result.discord_users.length > 0){
           this.set('discord_id', result.discord_users[0].id);
+          this.set("discord_username", "@"+result.discord_users[0].tag);
         }
         this.set('id_loaded', true);
       }).catch(popupAjaxError);

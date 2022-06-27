@@ -12,6 +12,8 @@ en:
       join_discord_message: "Join our Discord server"
       connect_discord_message: "Connect your Discord account"
 
+      verified_username: "Verified"
+
       selected_user: "Selected user"
       selected_user_not_found: "No associated Discord account found."
 

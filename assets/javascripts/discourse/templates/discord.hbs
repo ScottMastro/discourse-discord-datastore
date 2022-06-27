@@ -8,7 +8,8 @@
 <div class="discord-data">
 
   {{#if discord_id }}
-
+      <h3><div class="discord-username-header">{{ i18n "discord_datastore.verified_username" }}: ✅ {{ discord_username }}</div></h3>
+      <hr>
       {{discord-stats messages_loaded=messages_loaded stats=stats}} 
       <hr>   
       {{discord-ranks ranks=ranks collectible=1 collectRank=(action "collectRank")}}
