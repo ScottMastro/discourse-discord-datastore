@@ -22,9 +22,7 @@ export default Ember.Controller.extend({
     ajax("/discord/ranks.json")
       .then((result) => {
         for (let i = 0; i < result.discord_ranks.length; i++) {
-
           result.discord_ranks[i]["have"] = true;
-
         }
         this.set('ranks', result.discord_ranks);
       }).catch(popupAjaxError);
