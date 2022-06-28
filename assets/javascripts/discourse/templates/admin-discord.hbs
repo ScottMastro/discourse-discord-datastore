@@ -12,15 +12,18 @@
         excludeCurrentUser=false
       )
     }}
-    {{ i18n "discord_datastore.selected_user" }}:
-    {{#if searched_username}}
-      {{ searched_username }}{{" | "}}
-      {{#if searched_discord_username}}
-        ✅ {{ searched_discord_username }}
-      {{else}}
-        ❌ {{ i18n "discord_datastore.selected_user_not_found" }}
+    <div class="discord-data-user-text">{{ i18n "discord_datastore.selected_user" }}:
+      {{#if searched_username}}
+        {{ searched_username }}
+        <div>
+          {{#if searched_discord_username}}
+            ✅ {{ searched_discord_username }}
+          {{else}}
+            ❌ {{ i18n "discord_datastore.selected_user_not_found" }}
+          {{/if}}
+        </div>
       {{/if}}
-    {{/if}}
+    </div>
   </div>
   <hr>
 
@@ -32,7 +35,7 @@
   <div class="discord-data-columns">
 
     <div class="discord-data-channels"> {{discord-channels channels_loaded=channels_loaded channels=channels filterChannel=(action "filterChannel")}} </div>
-    <div class="discord-data-messages"> {{discord-messages messages_loaded=messages_loaded messages=messages 
+    <div class="discord-data-messages"> {{discord-messages messages_loaded=messages_loaded messages=messages current_page=current_page 
                                           prevMessagePage=(action "prevMessagePage") nextMessagePage=(action "nextMessagePage")}} </div>
 
   </div>

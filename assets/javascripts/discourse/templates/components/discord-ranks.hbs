@@ -1,27 +1,30 @@
-  <div class="discord-data-rank-header">
-    <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.rank_title" }}</h3>
-  </div>
+<div class="discord-data-rank-header">
+  <h3>{{d-icon 'fab-discord'}}{{" "}}{{ i18n "discord_datastore.rank_title" }}</h3>
+</div>
 
-  <div class="discord-data-rank">
-    {{#each ranks as |rank|}}
-        <div class="discord-rank discord-rank-have-{{ rank.have }}">
-        <img class="discord-rank-img" src="{{ rank.image }}" alt="" />
+<div class="discord-data-rank">
+  {{#each ranks as |rank|}}
+      <div class="discord-rank discord-rank-have-{{ rank.have }}">
+      <div class="discord-rank-img"><img src="{{ rank.image }}" alt="" /></div>
+      <div class="discord-rank-text">
         <div class="discord-rank-label">{{ rank.name }}</div>
         <div class="discord-rank-count">{{ number rank.requirement }}{{" "}}{{ i18n "discord_datastore.messages" }}</div>
-
-        {{#if collectible }}
-          {{#if rank.badge }}
-            {{#if rank.have }}
-              <div class="discord-collected-button">{{ i18n "discord_datastore.collected_rank" }}</div>
+      </div>
+      {{#if collectible }}
+        {{#if rank.badge }}
+          {{#if rank.have }}
+            <div class="discord-collected-button">{{ i18n "discord_datastore.collected_rank" }}</div>
+          {{else}}
+            {{#if rank.can_collect }}
+              <button {{action collectRank rank.badge }} class="discord-collect-button">{{ i18n "discord_datastore.collect_rank" }}</button>
             {{else}}
-              {{#if rank.can_collect }}
-                <button {{action collectRank rank.badge }} class="discord-collect-button">{{ i18n "discord_datastore.collect_rank" }}</button>
-              {{else}}
-                <div class="discord-locked-button">{{ i18n "discord_datastore.locked_rank" }}</div>
-              {{/if}}
+              <div class="discord-locked-button">{{ i18n "discord_datastore.locked_rank" }}</div>
             {{/if}}
           {{/if}}
+        {{else}}
+        <div class="discord-collect-empty"></div>
         {{/if}}
-      </div>
-    {{/each}}
-  </div>
+      {{/if}}
+    </div>
+  {{/each}}
+</div>

@@ -7,7 +7,8 @@
     <div class="discord-channel-list" >
       {{#each channels as |channel|}}
         <div><button {{action filterChannel channel.id }} type='submit' class="discord-channel-list-element">
-          <h3>{{ "#" }}{{ channel.name }}</h3>{{ number channel.total }}{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}
+          <h3>{{ "#" }}{{ channel.name }}</h3>
+          <div class="discord-channel-total">{{ number channel.total }}<div class="discord-channel-total-text">{{ ' ' }}{{i18n 'discord_datastore.channel_message_total' }}</div></div>
         </button></div>
       {{/each}}
     </div>

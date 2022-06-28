@@ -41,6 +41,8 @@ export default Ember.Controller.extend({
         }
         this.set('id_loaded', true);
       }).catch(popupAjaxError);
+
+      this.set('discord_id', 366068461027459073);
   },
   
   fetchRanks() {

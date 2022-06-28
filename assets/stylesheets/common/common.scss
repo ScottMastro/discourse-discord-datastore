@@ -23,12 +23,13 @@
   padding: 1em;
   border: 1px solid #57F287;
   border-radius: 10px;
+  background-color: #40434b;
   width: max-content;
   text-align: center;
 }
 
 .discord-data-rank-header{
-  margin-left: 30px;
+  margin-left: 2em;
   margin-bottom: 15px;
 }
 
@@ -45,10 +46,10 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  row-gap: 10px;
+  row-gap: 1em;
   text-align: center;
   .discord-rank{
-    padding: 10px;
+    padding: 1em;
     background: #40434b ;
     border: 1px solid #2f3036;
     border-radius: 5px;
@@ -57,9 +58,11 @@
     font-weight: bold;
   }
   .discord-rank-img{
-    width: 100px;
-    max-width: 100px;
-    max-height: 100px;
+    img{
+      width: 100px;
+      max-width: 100px;
+      max-height: 100px;
+    }
   }
   .discord-rank-count{
     margin-bottom: 5px;
@@ -101,13 +104,11 @@
   margin-bottom: 20px;
 
   .discord-data-channels{
-    margin-left: 20px;
-    margin-top: 15px;
+    margin-left: 2em;
     flex: 2;
   }
   .discord-data-messages{
-    margin-right: 15px;
-    margin-top: 15px;
+    margin-right: 2em;
     flex: 5;
   }
 }
@@ -126,10 +127,14 @@
     background: #2f3036;
     border: 1px solid #2f3036;
     border-radius: 5px;
-    margin-top: 8px;
-    padding: 10px;
+    margin-top: 0.5em;
+    padding: 0.5em;
     width: 100%;
     text-align: left;
+  }
+  .discord-channel-total{
+    display: flex;
+    column-gap: 4px;
   }
   .discord-channel-list-element:hover{
     border: 1px solid #5865F2;
@@ -144,8 +149,10 @@
 }
 
 .discord-locked-button{
-  background-color: 2px solid #40434b;
-  padding: 10px;
+  background-color: #2f3036;
+  border: 2px solid #36383f;
+  border-radius: 5px;
+  padding: 0.5em;
 }
 
 .discord-collect-button{
@@ -153,24 +160,28 @@
   border: 2px solid #2f3036;
   color: #2f3036 !important;
   border-radius: 5px;
-  padding: 10px;
+  padding: 0.5em;
 }
 
 .discord-collected-button{
   background-color: #40434b;
   border: 2px solid #2f3036;
   border-radius: 5px;
-  padding: 10px;
+  padding: 0.5em;
 }
 
 .discord-button{
   background-color: #40434b;
   border: 2px solid #2f3036;
   border-radius: 5px;
-  padding: 10px;
+  padding: 1em;
 }
 .discord-button:hover{
   border: 2px solid #5865F2;
+}
+
+.discord-messages-mobile-item{
+  display: none;
 }
 
 .discord-message-list{
@@ -228,4 +239,11 @@
 .discord-data-user{
   margin-left: 15px;
   margin-top: 15px;
+  display: flex;
+  column-gap: 1em;
+  .discord-data-user-text{
+    margin-top: 10px;
+    display: flex;
+    column-gap: 2em;
+  }
 }

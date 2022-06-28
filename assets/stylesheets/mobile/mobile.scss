@@ -1,19 +1,103 @@
 .discord-data-stats{
     display: block;
-    margin: 0;
+    .discord-stat{
+        display: flex;
+        column-gap: 1em;
+        margin-left: 2em;
+    }
 }
 
 .discord-data-columns{
     display: block;   
 }
 
+.discord-data-rank{
+  display: flex;
+  flex-direction: row;
+  row-gap: 0em;
+  
+  .discord-rank{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .discord-rank-text{
+    flex: 2;
+  }
+
+  .discord-rank-img{
+    flex: 1;
+    img{
+        width: 4em;
+        max-width: 4em;
+        max-height: 4em;
+    }
+  }
+
+  .discord-locked-button{
+    flex: 1;
+  }
+  .discord-collect-button{
+    flex: 1;  
+  }
+  .discord-collected-button{
+    flex: 1;
+  }
+  .discord-collect-empty{
+    flex: 1;
+  }
+}
+
+.discord-data-channels{
+    margin: 0 !important;
+}
+.discord-data-channels-header{
+    margin-left: 2em;
+}
+
 .discord-channel-list{
     display: flex;
     flex-wrap: wrap;
-    column-gap: 10px;
+    column-gap: 0.5em;
+    row-gap: 0.5em;
+    font-size: small;
+    justify-content: center;
 
     .discord-channel-list-element{
-        flex-grow: 1;
+        display: flex;
+        column-gap: 0.5em;
+        align-items: baseline;
+        margin-top: 0em;
+        padding: 0.3em;
+        h3{ margin-bottom: 0; }
     }
 
+    .discord-channel-total-text{
+        display:none;
+    }
 }
+
+.discord-messages-mobile-item{
+    display: inline;
+}
+.discord-message-paginate-buttons{
+    .discord-button{
+        width: 40%;
+        padding: 0.5em;
+    }
+}
+
+.discord-data-messages-header{
+    display: block;
+}
+
+.discord-data-user{
+    display: block !important;
+
+    .discord-data-user-text{
+      margin-top: 1em;
+      display: block !important;
+    }
+  }
