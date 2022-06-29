@@ -104,7 +104,6 @@ def upsert_users
             'updated_at'=> Time.now
         }
         DiscordDatastore::DiscordUser.upsert(discorduser)
-        DiscordDatastore::Verifier.verify_from_discord(user.id)
     end
     status_message.edit(status_string + " -- " + i.to_s + " users (done)")
 end
@@ -273,6 +272,8 @@ def browse_history
 end
 
 def update_ranks
+    status_message = DiscordDatastore::BotInstance.send("Updating ranks...")
+
     bot = DiscordDatastore::BotInstance.bot
 
     rank_names = SiteSetting.discord_rank_name.split("|")
@@ -334,5 +335,7 @@ def update_ranks
             end
             user.set_roles user_ranks
         end
+
+        DiscordDatastore::Verifier.verify_from_discord(user.id)
     end
 end

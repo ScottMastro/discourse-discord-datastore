@@ -63,11 +63,11 @@ module DiscordDatastore::BotInstance
           if !history_only
             upsert_channels
             upsert_users
-            update_verified_ranks
           end
 
           browse_history
           update_ranks
+          status_message = DiscordDatastore::BotInstance.send("Syncing complete.")
 
         rescue Exception => ex
           Rails.logger.error("DiscordDatastore Bot: Syncing thread failed: #{ex}")
@@ -87,8 +87,6 @@ class DiscordDatastore::Bot
 
       bot = DiscordDatastore::BotInstance::init
       bot.ready do |event|
-
-        bot.send_message(SiteSetting.discord_bot_channel_id, bot.name + ": hello")
 
         DiscordDatastore::BotInstance.sync
         
