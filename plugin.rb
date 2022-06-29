@@ -82,6 +82,6 @@ after_initialize do
   end
 
   DiscourseEvent.on(:after_auth) do |authenticator, auth_result|
-    #if authenticator.name == "discord" && auth_result.user.id > 0 then DiscordDatastore::Verifier.verify_user(auth_result.user) end
+    if authenticator.name == "discord" && auth_result.user.id > 0 then DiscordDatastore::Verifier.verify_user(auth_result.user) end
   end
 end
