@@ -14,7 +14,7 @@ class DiscordDatastore::Verifier
         builder = DB.build("select u.* from user_associated_accounts uaa, users u /*where*/ limit 1")
         builder.where("provider_name = :provider_name", provider_name: "discord")
         builder.where("uaa.user_id = u.id")
-        builder.where("uaa.provider_uid = :discord_id", discord_id: discord_id)
+        builder.where("uaa.provider_uid = :discord_id", discord_id: discord_id.to_s)
     
         result = builder.query
     
