@@ -63,6 +63,7 @@ module DiscordDatastore::BotInstance
           if !history_only
             upsert_channels
             upsert_users
+            update_verified_ranks
           end
 
           browse_history

@@ -104,9 +104,11 @@ def upsert_users
             'updated_at'=> Time.now
         }
         DiscordDatastore::DiscordUser.upsert(discorduser)
+        DiscordDatastore::Verifier.verify_from_discord(user.id)
     end
     status_message.edit(status_string + " -- " + i.to_s + " users (done)")
 end
+
 
 def upsert_user(user)
 
