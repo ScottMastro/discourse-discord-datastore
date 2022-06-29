@@ -75,7 +75,21 @@ after_initialize do
   
   bot_thread = Thread.new do
     begin
-      DiscordDatastore::Bot.run_bot
+      STDERR.puts "------------------------"
+      STDERR.puts "------------------------"
+      STDERR.puts "------------------------"
+      STDERR.puts "------------------------"
+      STDERR.puts "------------------------"
+      STDERR.puts "------------------------"
+      STDERR.puts "The bot is on in a new thread - lmnopxyz"
+      STDERR.puts DiscordDatastore::BotInstance.bot
+
+      if DiscordDatastore::BotInstance.bot.nil?
+        DiscordDatastore::Bot.run_bot
+      end
+      
+      DiscordDatastore::BotInstance.send("The bot done on this new thread - xyzlmnop")
+
     rescue Exception => ex
       Rails.logger.error("DiscordDatastore Bot: There was a problem: #{ex}")
     end
