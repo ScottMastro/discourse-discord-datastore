@@ -73,27 +73,27 @@ after_initialize do
     mount DiscordDatastore::Engine, at: "/"
   end
   
-  bot_thread = Thread.new do
-    begin
-      STDERR.puts "------------------------"
-      STDERR.puts "------------------------"
-      STDERR.puts "------------------------"
-      STDERR.puts "------------------------"
-      STDERR.puts "------------------------"
-      STDERR.puts "------------------------"
-      STDERR.puts "The bot is on in a new thread - lmnopxyz"
-      STDERR.puts DiscordDatastore::BotInstance.bot
+  #bot_thread = Thread.new do
+  #  begin
+  STDERR.puts "------------------------"
+  STDERR.puts "------------------------"
+  STDERR.puts "------------------------"
+  STDERR.puts "------------------------"
+  STDERR.puts "------------------------"
+  STDERR.puts "------------------------"
+  STDERR.puts "The bot is on in a new thread - lmnopxyz"
+  STDERR.puts DiscordDatastore::BotInstance.bot
 
-      if DiscordDatastore::BotInstance.bot.nil?
-        DiscordDatastore::Bot.run_bot
-      end
-      
-      DiscordDatastore::BotInstance.send("The bot done on this new thread - xyzlmnop")
-
-    rescue Exception => ex
-      Rails.logger.error("DiscordDatastore Bot: There was a problem: #{ex}")
-    end
+  if DiscordDatastore::BotInstance.bot.nil?
+    DiscordDatastore::Bot.run_bot
   end
+      
+  DiscordDatastore::BotInstance.send("The bot is running? - xyzlmnop")
+
+  #  rescue Exception => ex
+  #    Rails.logger.error("DiscordDatastore Bot: There was a problem: #{ex}")
+  #  end
+  #end
 
   DiscourseEvent.on(:after_auth) do |authenticator, auth_result|
     if authenticator.name == "discord" && auth_result.user.id > 0 then DiscordDatastore::Verifier.verify_user(auth_result.user) end
