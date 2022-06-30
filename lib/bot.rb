@@ -134,7 +134,7 @@ class DiscordDatastore::Bot
         end
       end
 
-      bot.run
+      bot.run true
     end
   end
 end
