@@ -1,6 +1,4 @@
-# **Plugin Name** Plugin
+# ** discourse-discord-datastore**
 
 **Plugin Summary**
-
 Under construction
-https://kleinfreund.de/how-to-create-a-discourse-plugin/
