@@ -42,3 +42,7 @@ plugins:
     default: ""
     type: list
     client: true
+  discord_kick_id:
+    default: ""
+    type: list
+    client: true
