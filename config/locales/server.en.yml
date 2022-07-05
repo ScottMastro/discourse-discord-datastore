@@ -15,4 +15,4 @@ en:
     discord_rank_count: 'Discord message count threshold to award ranks'
     discord_rank_image: 'Image URLs for awarded ranks (used for /discord page)'
     discord_rank_badge_id: 'Badge to assign on Discourse when rank awarded (leave empty if no badge is to be assigned)'
-
+    discord_kick_id: 'IDs of users to kick from the server upon joining'
