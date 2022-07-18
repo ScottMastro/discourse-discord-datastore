@@ -262,6 +262,7 @@ def browse_history
             
             i+=discordmessages.length
             temp+=discordmessages.length
+            total_messages+=discordmessages.length
             if temp > MESSAGE_SCAN_UPDATE
                 status_message.edit(status_string + " -- " + i.to_s + " messages")
                 temp=0
