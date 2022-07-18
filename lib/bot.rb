@@ -105,7 +105,7 @@ class DiscordDatastore::Bot
 
       bot = DiscordDatastore::BotInstance::init
       bot.ready do |event|
-        
+
         DiscordDatastore::BotInstance.sync
         
         bot.command(:admin, channels: [SiteSetting.discord_bot_channel_id], help_available: false) do |event|
@@ -144,8 +144,9 @@ class DiscordDatastore::Bot
         bot.member_join do |event|
 
           server = DiscordDatastore::BotInstance::server
+          banned_ids = SiteSetting.discord_ban_id.split("|")
 
-          if SiteSetting.discord_ban_id.include? event.user.id.to_s
+          if banned_ids.include? event.user.id.to_s
             begin
               server.ban(event.user.id)
             rescue

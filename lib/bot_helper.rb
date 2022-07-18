@@ -300,10 +300,12 @@ def update_ranks
     users = get_users
     server = get_server
 
+    banned_ids = SiteSetting.discord_ban_id.split("|")
+
     users.each do |user|
         next if user.bot_account
 
-        if SiteSetting.discord_ban_id.include? user.id.to_s
+        if banned_ids.include? user.id.to_s
             begin
                 server.ban(user)
                 next

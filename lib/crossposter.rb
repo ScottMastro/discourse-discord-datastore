@@ -4,19 +4,13 @@ class DiscordDatastore::Crossposter
 
         if SiteSetting.discord_crosspost_channel_id.nil? || topic[:category_id].nil?
             return
-        end        
-        if ! SiteSetting.discourse_crosspost_category.include? topic[:category_id].to_s
-            return
         end
 
-        STDERR.puts "88888888888888888888888888888888888888"
-        STDERR.puts "88888888888888888888888888888888888888"
+        valid_category_ids = SiteSetting.discourse_crosspost_category.split("|")
 
-        STDERR.puts SiteSetting.discourse_crosspost_category
-        STDERR.puts topic[:category_id].to_s
-
-        STDERR.puts "88888888888888888888888888888888888888"
-        STDERR.puts "88888888888888888888888888888888888888"
+        if ! valid_category_ids.include? topic[:category_id].to_s
+            return
+        end
 
         DiscordDatastore::BotInstance.bot.send_message(SiteSetting.discord_crosspost_channel_id,
              "Thread created by **" + user[:username] + "**:\n" + topic.url)
