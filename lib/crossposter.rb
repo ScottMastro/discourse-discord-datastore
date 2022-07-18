@@ -9,6 +9,15 @@ class DiscordDatastore::Crossposter
             return
         end
 
+        STDERR.puts "88888888888888888888888888888888888888"
+        STDERR.puts "88888888888888888888888888888888888888"
+
+        STDERR.puts SiteSetting.discourse_crosspost_category
+        STDERR.puts topic[:category_id].to_s
+
+        STDERR.puts "88888888888888888888888888888888888888"
+        STDERR.puts "88888888888888888888888888888888888888"
+
         DiscordDatastore::BotInstance.bot.send_message(SiteSetting.discord_crosspost_channel_id,
              "Thread created by **" + user[:username] + "**:\n" + topic.url)
 
