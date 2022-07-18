@@ -24,6 +24,8 @@ plugins:
     client: true
   discord_messages_before_resync:
     default: 200
+  discord_minutes_before_resync:
+    default: 20
   discord_verified_rank:
     default: ""
   discord_rank_name:
@@ -42,7 +44,12 @@ plugins:
     default: ""
     type: list
     client: true
-  discord_kick_id:
+  discord_ban_id:
     default: ""
     type: list
     client: true
+  discourse_crosspost_category:
+    type: category_list
+    default: ""
+  discord_crosspost_channel_id:
+    default: ""

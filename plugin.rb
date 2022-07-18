@@ -2,7 +2,7 @@
 
 # name: discord-datastore
 # about: Datastore for discord messages
-# version: 1.0.4
+# version: 1.1.0
 # authors: ScottMastro
 # url: discord
 # required_version: 2.7.0
@@ -56,6 +56,7 @@ after_initialize do
 
   require_relative 'lib/bot_helper.rb'
   require_relative 'lib/bot.rb'
+  require_relative 'lib/crossposter.rb'
   require_relative 'lib/verifier.rb'
 
   DiscordDatastore::Engine.routes.draw do
@@ -73,30 +74,17 @@ after_initialize do
     mount DiscordDatastore::Engine, at: "/"
   end
   
-  #bot_thread = Thread.new do
-  #  begin
-  STDERR.puts "------------------------"
-  STDERR.puts "------------------------"
-  STDERR.puts "------------------------"
-  STDERR.puts "------------------------"
-  STDERR.puts "------------------------"
-  STDERR.puts "------------------------"
-  STDERR.puts "The bot is on in a new thread - lmnopxyz"
-  STDERR.puts DiscordDatastore::BotInstance.bot
-
   if DiscordDatastore::BotInstance.bot.nil?
     DiscordDatastore::Bot.run_bot
   end
-      
-  DiscordDatastore::BotInstance.send("The bot is running? - xyzlmnop")
-
-  #  rescue Exception => ex
-  #    Rails.logger.error("DiscordDatastore Bot: There was a problem: #{ex}")
-  #  end
-  #end
 
   DiscourseEvent.on(:after_auth) do |authenticator, auth_result|
     if authenticator.name == "discord" && auth_result.user.id > 0 then DiscordDatastore::Verifier.verify_user(auth_result.user) end
   end
+
+  DiscourseEvent.on(:topic_created) do |topic, metadata, user|    
+    DiscordDatastore::Crossposter::crosspost(topic, user)
+  end
+
 
 end

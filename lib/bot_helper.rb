@@ -198,11 +198,14 @@ def browse_history
     bot = DiscordDatastore::BotInstance.bot
     #DiscordDatastore::DiscordMessage.delete_all
 
+    status_message = DiscordDatastore::BotInstance.send("Scanning started.")
+    total_messages = 0
+
     get_channels.each do |channel|
         next if channel.type != 0
 
         status_string = "Scanning #"+channel.name
-        status_message = DiscordDatastore::BotInstance.send(status_string)
+        status_message.edit(status_string)
 
         if channel.id == SiteSetting.discord_bot_channel_id.to_i && SiteSetting.discord_ignore_bot_channel
             status_message.edit(status_string + " -- skipped")
@@ -235,6 +238,7 @@ def browse_history
             
             i+=discordmessages.length
             temp+=discordmessages.length
+            total_messages+=discordmessages.length
             if temp > MESSAGE_SCAN_UPDATE
                 status_message.edit(status_string + " -- " + i.to_s + " messages")
                 temp=0
@@ -269,6 +273,8 @@ def browse_history
 
         status_message.edit(status_string + + " -- " + i.to_s + " messages (done)")
     end
+    status_message.edit("Message history -- " + total_messages.to_s + " new messages (done)")
+
 end
 
 def update_ranks
@@ -292,9 +298,19 @@ def update_ranks
 
     counts = DiscordDatastore::DiscordMessage.group(:discord_user_id).count
     users = get_users
+    server = get_server
 
     users.each do |user|
         next if user.bot_account
+
+        if SiteSetting.discord_ban_id.include? user.id.to_s
+            begin
+                server.ban(user)
+                next
+            rescue
+                STDERR.puts "DISCORD ERROR -----> Failed to ban user with id="+user.id.to_s+". Check permissions?"
+            end
+        end
 
         count = counts[user.id] || 0
 
@@ -338,4 +354,6 @@ def update_ranks
 
         DiscordDatastore::Verifier.verify_from_discord(user.id)
     end
+
+    status_message.edit("Updating ranks -- (done)")
 end

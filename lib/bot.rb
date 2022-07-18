@@ -2,12 +2,12 @@
 #https://discord.com/api/oauth2/authorize?client_id=______&permissions=17448381440&scope=bot
 
 require 'discordrb'
-MESSAGES_BEFORE_RESYNC = SiteSetting.discord_messages_before_resync
+MINUTES_BEFORE_RESYNC = SiteSetting.discord_minutes_before_resync
 
 module DiscordDatastore::BotInstance
   @@bot = nil
   @@sync_thread = nil
-  @@message_count = 0
+  @@last_sync_time = Time.now
 
   def self.init
     
@@ -27,7 +27,8 @@ module DiscordDatastore::BotInstance
 
       puts "Logged in as #{@@bot.profile.username} (ID:#{@@bot.profile.id}) | #{@@bot.servers.size} servers"
       @@bot.send_message(SiteSetting.discord_bot_channel_id, "Datastore is alive!")
-      bot.game=(SiteSetting.discord_bot_status)
+      @@bot.game=(SiteSetting.discord_bot_status)
+      @@last_sync_time = Time.now
 
     end
     @@bot
@@ -39,11 +40,27 @@ module DiscordDatastore::BotInstance
   def self.counter
     @@message_count
   end
+  def self.timer
 
-  def self.add_message
-    @@message_count = @@message_count+1
-    if @@message_count > MESSAGES_BEFORE_RESYNC
-      @@message_count = 0
+    sec = Time.now - @@last_sync_time
+    timestr = "%02d:%02d:%02d" % [sec / 3600, sec / 60 % 60, sec % 60]    
+    send "Time since last sync: " + timestr
+
+  end
+
+  def self.server
+    @@bot.servers.each do |s|
+      server_id = s[0]
+      if server_id.to_s == SiteSetting.discord_server_id
+        return @@bot.servers[server_id]     
+      end
+    end
+    return nil
+  end
+
+  def self.should_sync
+    if (Time.now - @@last_sync_time)/60 > MINUTES_BEFORE_RESYNC
+      @@last_sync_time = Time.now
       return true
     end
     return false
@@ -74,6 +91,7 @@ module DiscordDatastore::BotInstance
         end
       end
       return send("Syncing data...")
+      @@last_sync_time = Time.now
     end
     return send("Currenly syncing, try again later.")
   end
@@ -87,23 +105,32 @@ class DiscordDatastore::Bot
 
       bot = DiscordDatastore::BotInstance::init
       bot.ready do |event|
-
+        
         DiscordDatastore::BotInstance.sync
         
-        bot.command(:ping, channels: [SiteSetting.discord_bot_channel_id]) do |event|
+        bot.command(:admin, channels: [SiteSetting.discord_bot_channel_id], help_available: false) do |event|
+          commands = "**List of admin commands**\n"
+          commands = commands + "**`ping`**: Pings the bot.\n"
+          commands = commands + "**`sync`**: Triggers a sync job.\n"
+          commands = commands + "**`time`**: Displays time since last sync."
+    
+          bot.send_message(SiteSetting.discord_bot_channel_id, commands)
+        end
+
+        bot.command(:ping, channels: [SiteSetting.discord_bot_channel_id], help_available: false) do |event|
           event.respond 'pong!'
         end
 
-        bot.command(:counter, channels: [SiteSetting.discord_bot_channel_id]) do |event|
-          event.respond DiscordDatastore::BotInstance.counter.to_s
+        bot.command(:time, channels: [SiteSetting.discord_bot_channel_id], help_available: false) do |event|
+          event.respond DiscordDatastore::BotInstance.timer
         end
 
-        bot.command(:count) do |event|
+        bot.command(:count, description: "Get total Discord post count.") do |event|
           total = DiscordDatastore::DiscordMessage.where(discord_user_id: event.user.id).count
           event.respond event.user.username + ": " + total.to_s + " messages!"
         end
 
-        bot.command(:sync) do |event|
+        bot.command(:sync, help_available: false) do |event|
           DiscordDatastore::BotInstance.sync
         end
 
@@ -115,8 +142,20 @@ class DiscordDatastore::Bot
         end
 
         bot.member_join do |event|
+
+          server = DiscordDatastore::BotInstance::server
+
+          if SiteSetting.discord_ban_id.include? event.user.id.to_s
+            begin
+              server.ban(event.user.id)
+            rescue
+                STDERR.puts "DISCORD ERROR -----> Failed to ban user with id="+event.user.id.to_s+". Check permissions?"
+            end
+          end
+
           upsert_user event.user
           DiscordDatastore::Verifier.verify_from_discord(event.user.id)
+
         end
         bot.member_update do |event|
           upsert_user event.user
@@ -124,10 +163,7 @@ class DiscordDatastore::Bot
 
         bot.message do |event|
           if ! event.author.bot_account
-
-            #DiscordDatastore::BotInstance::send event.content
-
-            if DiscordDatastore::BotInstance::add_message
+            if DiscordDatastore::BotInstance::should_sync
               DiscordDatastore::BotInstance.sync true
             end
           end
