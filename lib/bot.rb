@@ -67,7 +67,7 @@ module DiscordDatastore::BotInstance
   end
 
   def self.send(content)
-    @@bot.send_message(SiteSetting.discord_bot_channel_id, bot.name + ": " + content)
+    @@bot.send_message(SiteSetting.discord_bot_channel_id, content)
   end
 
   def self.sync(history_only=false)
