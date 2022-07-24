@@ -8,3 +8,4 @@ Features:
 - Discord "Verified" role assigned when user connects account to Discourse 
 - Discord roles auto-assigned with minimum Discord message requirement
 - Discourse badges based on Discord roles
+- New topics from Discourse are linked to on Discord
