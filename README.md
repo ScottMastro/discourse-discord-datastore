@@ -3,6 +3,8 @@
 **Plugin Summary**
 Storage of Discord messages on a Discourse instance 
 
+---
+
 Features:
 - /discord page with user stats and message history 
 - Discord "Verified" role assigned when user connects account to Discourse 
