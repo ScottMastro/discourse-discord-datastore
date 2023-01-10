@@ -74,17 +74,22 @@ after_initialize do
     mount DiscordDatastore::Engine, at: "/"
   end
   
-  if DiscordDatastore::BotInstance.bot.nil?
+  if SiteSetting.discord_datastore_enabled & DiscordDatastore::BotInstance.bot.nil?
     DiscordDatastore::Bot.run_bot
   end
 
   DiscourseEvent.on(:after_auth) do |authenticator, auth_result|
-    if authenticator.name == "discord" && auth_result.user.id > 0 then DiscordDatastore::Verifier.verify_user(auth_result.user) end
+    if SiteSetting.discord_datastore_enabled 
+      if authenticator.name == "discord" && auth_result.user.id > 0 then DiscordDatastore::Verifier.verify_user(auth_result.user) end
+    end
   end
 
   DiscourseEvent.on(:topic_created) do |topic, metadata, user|    
-    DiscordDatastore::Crossposter::crosspost(topic, user)
+    if SiteSetting.discord_datastore_enabled 
+      DiscordDatastore::Crossposter::crosspost(topic, user)
+    end
   end
+
 
 
 end
