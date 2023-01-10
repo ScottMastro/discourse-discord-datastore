@@ -1,7 +1,6 @@
 
 #https://discord.com/api/oauth2/authorize?client_id=______&permissions=17448381440&scope=bot
 
-require 'discordrb'
 MINUTES_BEFORE_RESYNC = SiteSetting.discord_minutes_before_resync
 
 module DiscordDatastore::BotInstance
@@ -95,6 +94,19 @@ module DiscordDatastore::BotInstance
     end
     return send("Currenly syncing, try again later.")
   end
+
+  def self.info()
+    
+    if @@sync_thread.nil?
+      return send("sync_thread is nil")
+    end
+    send(@@sync_thread.to_s)
+    send("nil? " + @@sync_thread.nil?.to_s)
+    send("alive? " + @@sync_thread.alive?.to_s)
+
+  end
+
+
 end
 
 class DiscordDatastore::Bot
@@ -132,6 +144,10 @@ class DiscordDatastore::Bot
 
         bot.command(:sync, help_available: false) do |event|
           DiscordDatastore::BotInstance.sync
+        end
+
+        bot.command(:info, help_available: false) do |event|
+          DiscordDatastore::BotInstance.info
         end
 
         bot.channel_create do

@@ -22,7 +22,7 @@ gem 'http-accept', '1.7.0', { require: false }
 gem 'rest-client', '2.1.0.rc1'
 
 gem 'discordrb-webhooks', '3.3.0', {require: false}
-gem 'discordrb', '3.3.0'
+gem 'discordrb', '3.4.0'
 
 enabled_site_setting :discord_datastore_enabled
 
@@ -62,7 +62,6 @@ after_initialize do
   DiscordDatastore::Engine.routes.draw do
     get "/discord" => "discord#index"
     get '/admin/discord' => 'admin_discord#index', constraints: StaffConstraint.new
-
     get '/discord/messages' => 'discord_messages#messages'
     get '/discord/channels' => 'discord_channels#channels'
     get '/discord/users' => 'discord_users#users'
@@ -85,7 +84,7 @@ after_initialize do
   end
 
   DiscourseEvent.on(:topic_created) do |topic, metadata, user|    
-    if SiteSetting.discord_datastore_enabled 
+    if SiteSetting.discord_datastore_enabled
       DiscordDatastore::Crossposter::crosspost(topic, user)
     end
   end
