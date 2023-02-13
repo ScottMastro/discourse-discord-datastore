@@ -8,7 +8,6 @@
 # required_version: 2.7.0
 # transpile_js: true
 
-gem 'rbnacl', '7.1.1'
 gem 'event_emitter', '0.2.6'
 gem 'websocket', '1.2.8'
 gem 'websocket-client-simple', '0.3.0'
