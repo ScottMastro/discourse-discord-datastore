@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# name: discord-datastore
+# name: discourse-discord-datastore
 # about: Datastore for discord messages
 # version: 1.1.0
 # authors: ScottMastro
