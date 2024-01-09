@@ -2,26 +2,25 @@
 
 # name: discourse-discord-datastore
 # about: Datastore for discord messages
-# version: 1.1.0
+# version: 1.1.1
 # authors: ScottMastro
-# url: discord
+# url: https://github.com/ScottMastro/discourse-discord-datastore
 # required_version: 2.7.0
 # transpile_js: true
 
 gem 'event_emitter', '0.2.6'
-gem 'websocket', '1.2.8'
-gem 'websocket-client-simple', '0.3.0'
+gem 'websocket-client-simple', '0.8.0'
 gem 'opus-ruby', '1.0.1', { require: false }
 gem 'netrc', '0.11.0'
-gem 'mime-types-data', '3.2019.1009'
-gem 'mime-types', '3.3.1'
-gem 'domain_name', '0.5.20180417'
+gem 'mime-types-data', '3.2023.1205'
+gem 'mime-types', '3.5.2'
+gem 'domain_name', '0.6.20240107'
 gem 'http-cookie','1.0.3'
 gem 'http-accept', '1.7.0', { require: false }
 gem 'rest-client', '2.1.0.rc1'
 
-gem 'discordrb-webhooks', '3.3.0', {require: false}
-gem 'discordrb', '3.4.0'
+gem 'discordrb-webhooks', '3.5.0', {require: false}
+gem 'discordrb', '3.5.0'
 
 enabled_site_setting :discord_datastore_enabled
 
@@ -87,7 +86,5 @@ after_initialize do
       DiscordDatastore::Crossposter::crosspost(topic, user)
     end
   end
-
-
 
 end
