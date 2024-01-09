@@ -8,6 +8,7 @@
 # required_version: 2.7.0
 # transpile_js: true
 
+gem 'websocket', '1.2.10'
 gem 'event_emitter', '0.2.6'
 gem 'websocket-client-simple', '0.8.0'
 gem 'opus-ruby', '1.0.1', { require: false }
