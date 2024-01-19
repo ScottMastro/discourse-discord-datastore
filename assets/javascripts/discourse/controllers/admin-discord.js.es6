@@ -1,8 +1,9 @@
 import { ajax } from 'discourse/lib/ajax';
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { iconNode } from "discourse-common/lib/icon-library";
+import Controller from '@ember/controller';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
 
   init() {
     this._super();

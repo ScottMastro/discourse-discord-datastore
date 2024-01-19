@@ -2,8 +2,9 @@ import { ajax } from 'discourse/lib/ajax';
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { iconNode } from "discourse-common/lib/icon-library";
 import { withPluginApi } from 'discourse/lib/plugin-api';
+import Controller from '@ember/controller';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
 
   init() {
     this._super();
@@ -99,7 +100,7 @@ export default Ember.Controller.extend({
         if (result.result == "success"){
           for (let i = 0; i < this.ranks.length; i++) {  
             if (this.ranks[i]["badge"] == badge_id){
-              Ember.set(this.get('ranks').objectAt(i), 'have', true);
+              this.ranks[i].have = true;
             }
           }
         }
