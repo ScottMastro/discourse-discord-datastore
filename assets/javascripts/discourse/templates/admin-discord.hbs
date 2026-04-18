@@ -26,27 +26,30 @@
   </div>
   <hr />
 
-  {{discord-stats messages_loaded=this.messages_loaded stats=this.stats}}
+  <DiscordStats
+    @messages_loaded={{this.messages_loaded}}
+    @stats={{this.stats}}
+  />
   <hr />
-  {{discord-ranks ranks=this.ranks}}
+  <DiscordRanks @ranks={{this.ranks}} />
   <hr />
 
   <div class="discord-data-columns">
     <div class="discord-data-channels">
-      {{discord-channels
-        channels_loaded=this.channels_loaded
-        channels=this.channels
-        filterChannel=this.filterChannel
-      }}
+      <DiscordChannels
+        @channels_loaded={{this.channels_loaded}}
+        @channels={{this.channels}}
+        @filterChannel={{this.filterChannel}}
+      />
     </div>
     <div class="discord-data-messages">
-      {{discord-messages
-        messages_loaded=this.messages_loaded
-        messages=this.messages
-        current_page=this.current_page
-        prevMessagePage=this.prevMessagePage
-        nextMessagePage=this.nextMessagePage
-      }}
+      <DiscordMessages
+        @messages_loaded={{this.messages_loaded}}
+        @messages={{this.messages}}
+        @current_page={{this.current_page}}
+        @prevMessagePage={{this.prevMessagePage}}
+        @nextMessagePage={{this.nextMessagePage}}
+      />
     </div>
   </div>
 </div>

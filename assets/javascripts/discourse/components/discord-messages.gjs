@@ -1,0 +1,76 @@
+import { on } from "@ember/modifier";
+import icon from "discourse/helpers/d-icon";
+import { i18n } from "discourse-i18n";
+
+const DiscordMessages = <template>
+  <div class="discord-messages-mobile-item"><hr /></div>
+
+  <div class="discord-data-messages-header">
+    <h3>
+      {{icon "fab-discord"}}
+      {{i18n "discord_datastore.message_history_title"}}
+    </h3>
+    <div class="discord-message-paginate-buttons">
+      <button
+        type="button"
+        class="discord-button"
+        {{on "click" @prevMessagePage}}
+      >
+        {{i18n "discord_datastore.message_pagination_previous"}}
+      </button>
+      <b>{{@current_page}}</b>
+      <button
+        type="button"
+        class="discord-button"
+        {{on "click" @nextMessagePage}}
+      >
+        {{i18n "discord_datastore.message_pagination_next"}}
+      </button>
+    </div>
+  </div>
+
+  {{#if @messages_loaded}}
+    {{#if @messages}}
+      <div class="discord-message-list">
+        <ul>
+          {{#each @messages as |message|}}
+            <li>
+              <div class="discord-message">
+                <div class="discord-avatar">
+                  <img src={{message.user_avatar}} alt="" />
+                </div>
+                <div class="discord-message-content">
+                  {{i18n
+                    "discord_datastore.message_meta"
+                    nickname=message.user_nickname
+                    channel=message.channel_name
+                    date=message.date
+                  }}<br />
+                  {{#if message.attachments}}
+                    <div class="discord-attachments">
+                      {{i18n "discord_datastore.attachments_label"}}
+                      {{#each message.attachments as |attachment|}}
+                        <a
+                          class="discord-attachment"
+                          href={{attachment}}
+                          rel="noopener noreferrer nofollow"
+                        >📎</a>
+                      {{/each}}
+                    </div>
+                  {{/if}}
+                  {{message.content}}
+                </div>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      </div>
+    {{else}}
+      <div class="no-messages">{{i18n "discord_datastore.no_messages"}}</div>
+    {{/if}}
+  {{else}}
+    <div class="spinner"></div>
+  {{/if}}
+</template>;
+
+export default DiscordMessages;
