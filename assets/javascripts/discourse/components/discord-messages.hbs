@@ -7,26 +7,26 @@
     <button
       type="button"
       class="discord-button"
-      {{on "click" this.prevMessagePage}}
+      {{on "click" @prevMessagePage}}
     >
       {{i18n "discord_datastore.message_pagination_previous"}}
     </button>
-    <b>{{this.current_page}}</b>
+    <b>{{@current_page}}</b>
     <button
       type="button"
       class="discord-button"
-      {{on "click" this.nextMessagePage}}
+      {{on "click" @nextMessagePage}}
     >
       {{i18n "discord_datastore.message_pagination_next"}}
     </button>
   </div>
 </div>
 
-{{#if this.messages_loaded}}
-  {{#if this.messages}}
+{{#if @messages_loaded}}
+  {{#if @messages}}
     <div class="discord-message-list">
       <ul>
-        {{#each this.messages as |message|}}
+        {{#each @messages as |message|}}
           <li>
             <div class="discord-message">
               <div class="discord-avatar"><img
@@ -62,7 +62,6 @@
   {{else}}
     <div class="no-messages">{{i18n "discord_datastore.no_messages"}}</div>
   {{/if}}
-
 {{else}}
   <div class="spinner"></div>
 {{/if}}

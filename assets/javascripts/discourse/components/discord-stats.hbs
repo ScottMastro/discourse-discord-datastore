@@ -1,7 +1,7 @@
 <div class="discord-data-stats">
   <div class="discord-stat">
-    {{#if this.messages_loaded}}
-      <div class="discord-stat-value">{{number this.stats.total}}</div>
+    {{#if @messages_loaded}}
+      <div class="discord-stat-value">{{number @stats.total}}</div>
     {{else}}
       <div class="spinner"></div>
     {{/if}}
@@ -11,8 +11,8 @@
   </div>
 
   <div class="discord-stat">
-    {{#if this.messages_loaded}}
-      <div class="discord-stat-value">{{number this.stats.total_monthly}}</div>
+    {{#if @messages_loaded}}
+      <div class="discord-stat-value">{{number @stats.total_monthly}}</div>
     {{else}}
       <div class="spinner"></div>
     {{/if}}
@@ -22,8 +22,8 @@
   </div>
 
   <div class="discord-stat">
-    {{#if this.messages_loaded}}
-      <div class="discord-stat-value">{{number this.stats.total_weekly}}</div>
+    {{#if @messages_loaded}}
+      <div class="discord-stat-value">{{number @stats.total_weekly}}</div>
     {{else}}
       <div class="spinner"></div>
     {{/if}}
@@ -33,8 +33,8 @@
   </div>
 
   <div class="discord-stat">
-    {{#if this.messages_loaded}}
-      <div class="discord-stat-value">{{this.stats.first_message}}</div>
+    {{#if @messages_loaded}}
+      <div class="discord-stat-value">{{@stats.first_message}}</div>
     {{else}}
       <div class="spinner"></div>
     {{/if}}

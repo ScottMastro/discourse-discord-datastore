@@ -2,15 +2,15 @@
   <h3>{{d-icon "fab-discord"}} {{i18n "discord_datastore.channel_title"}}</h3>
 </div>
 
-{{#if this.channels_loaded}}
-  {{#if this.channels}}
+{{#if @channels_loaded}}
+  {{#if @channels}}
     <div class="discord-channel-list">
-      {{#each this.channels as |channel|}}
+      {{#each @channels as |channel|}}
         <div>
           <button
             type="button"
             class="discord-channel-list-element"
-            {{on "click" (fn this.filterChannel channel.id)}}
+            {{on "click" (fn @filterChannel channel.id)}}
           >
             <h3>#{{channel.name}}</h3>
             <div class="discord-channel-total">

@@ -3,17 +3,16 @@
 </div>
 
 <div class="discord-data-rank">
-  {{#each this.ranks as |rank|}}
+  {{#each @ranks as |rank|}}
     <div class="discord-rank discord-rank-have-{{rank.have}}">
       <div class="discord-rank-img"><img src={{rank.image}} alt="" /></div>
       <div class="discord-rank-text">
         <div class="discord-rank-label">{{rank.name}}</div>
         <div class="discord-rank-count">
-          {{number rank.requirement}}
-          {{i18n "discord_datastore.messages"}}
+          {{number rank.requirement}} {{i18n "discord_datastore.messages"}}
         </div>
       </div>
-      {{#if this.collectible}}
+      {{#if @collectible}}
         {{#if rank.badge}}
           {{#if rank.have}}
             <div class="discord-collected-button">
@@ -24,7 +23,7 @@
               <button
                 type="button"
                 class="discord-collect-button"
-                {{on "click" (fn this.collectRank rank.badge)}}
+                {{on "click" (fn @collectRank rank.badge)}}
               >
                 {{i18n "discord_datastore.collect_rank"}}
               </button>
