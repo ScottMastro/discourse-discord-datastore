@@ -82,8 +82,8 @@ module DiscordDatastore::BotInstance
             Rails.logger.error("DiscordDatastore Bot: Syncing thread failed: #{ex}")
           end
         end
-      return send_to_channel("Syncing data...")
       @@last_sync_time = Time.now
+      return send_to_channel("Syncing data...")
     end
     send_to_channel("Currenly syncing, try again later.")
   end
@@ -100,7 +100,7 @@ class DiscordDatastore::Bot
   def self.run_bot
     if DiscordDatastore::BotInstance.bot.nil?
       bot = DiscordDatastore::BotInstance.init
-      bot.ready do |event|
+      bot.ready do |_ready_event|
         DiscordDatastore::BotInstance.sync
 
         bot.command(
