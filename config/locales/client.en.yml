@@ -44,3 +44,5 @@ en:
       message_pagination_next: "next→"
 
       no_messages: "No messages found"
+      message_meta: "%{nickname} in #%{channel} on %{date}:"
+      attachments_label: "attachments:"

@@ -5,17 +5,17 @@
     {{i18n "discord_datastore.message_history_title"}}</h3>
   <div class="discord-message-paginate-buttons">
     <button
-      {{action this.prevMessagePage}}
-      type="submit"
+      type="button"
       class="discord-button"
+      {{on "click" this.prevMessagePage}}
     >
       {{i18n "discord_datastore.message_pagination_previous"}}
     </button>
     <b>{{this.current_page}}</b>
     <button
-      {{action this.nextMessagePage}}
-      type="submit"
+      type="button"
       class="discord-button"
+      {{on "click" this.nextMessagePage}}
     >
       {{i18n "discord_datastore.message_pagination_next"}}
     </button>
@@ -34,13 +34,15 @@
                   alt=""
                 /></div>
               <div class="discord-message-content">
-                {{message.user_nickname}}
-                in
-                <b>#{{message.channel_name}}</b>
-                on
-                {{message.date}}:<br />
+                {{i18n
+                  "discord_datastore.message_meta"
+                  nickname=message.user_nickname
+                  channel=message.channel_name
+                  date=message.date
+                }}<br />
                 {{#if message.attachments}}
-                  <div class="discord-attachments">attachments:
+                  <div class="discord-attachments">
+                    {{i18n "discord_datastore.attachments_label"}}
                     {{#each message.attachments as |attachment|}}
                       <a
                         class="discord-attachment"
