@@ -1,4 +1,9 @@
 en:
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          discord_datastore: "Discord Datastore"
   js:
     discord_datastore:
 
