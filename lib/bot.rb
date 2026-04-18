@@ -133,6 +133,20 @@ class DiscordDatastore::Bot
           event.respond event.user.username + ": " + total.to_s + " messages!"
         end
 
+        bot.command(:quote, description: "Get a random quote from your Discord history.") do |event|
+          scope = DiscordDatastore::DiscordMessage.where(discord_user_id: event.user.id)
+          scope = scope.where.not(content: [nil, ""])
+          total = scope.count
+
+          if total.zero?
+            event.respond "#{event.user.username}: no messages on file yet."
+          else
+            message = scope.offset(rand(total)).first
+            date = message.date.strftime("%d %b %Y")
+            event.respond "> #{message.content}\n— #{event.user.username}, #{date}"
+          end
+        end
+
         bot.command(:sync, help_available: false) { |event| DiscordDatastore::BotInstance.sync }
 
         bot.command(:info, help_available: false) { |event| DiscordDatastore::BotInstance.info }
