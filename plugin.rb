@@ -8,17 +8,19 @@
 # required_version: 2.7.0
 # transpile_js: true
 
-gem "websocket", "1.2.10"
+gem "mutex_m", "0.3.0"
+gem "websocket", "1.2.11"
 gem "event_emitter", "0.2.6"
-gem "websocket-client-simple", "0.8.0"
+gem "websocket-client-simple", "0.9.0"
 gem "opus-ruby", "1.0.1", { require: false }
 gem "netrc", "0.11.0"
 gem "domain_name", "0.6.20240107"
-gem "http-cookie", "1.0.3"
+gem "http-cookie", "1.1.4"
 gem "http-accept", "1.7.0", { require: false }
+gem "rest-client", "2.1.0"
 
-gem "discordrb-webhooks", "3.5.0", { require: false }
-gem "discordrb", "3.5.0"
+gem "discordrb-webhooks", "3.7.2", { require: false }
+gem "discordrb", "3.7.2"
 
 enabled_site_setting :discord_datastore_enabled
 
@@ -70,11 +72,14 @@ after_initialize do
 
   Discourse::Application.routes.append { mount DiscordDatastore::Engine, at: "/" }
 
-  # Only run the long-lived Discord websocket in the sidekiq process so it
-  # isn't spawned in every puma worker, rails console, rake task, or test run.
-  if defined?(Sidekiq) && Sidekiq.server? && SiteSetting.discord_datastore_enabled &&
-       DiscordDatastore::BotInstance.bot.nil?
-    DiscordDatastore::Bot.run_bot
+  # Boot the long-lived Discord websocket only in the forked sidekiq child.
+  # after_initialize runs once in the preloaded unicorn parent, so we can't
+  # gate there; sidekiq_fork_started fires in each sidekiq process right
+  # after fork, which is exactly where we want a single long-lived bot.
+  on(:sidekiq_fork_started) do
+    if SiteSetting.discord_datastore_enabled && DiscordDatastore::BotInstance.bot.nil?
+      DiscordDatastore::Bot.run_bot
+    end
   end
 
   on(:after_auth) do |authenticator, auth_result|
