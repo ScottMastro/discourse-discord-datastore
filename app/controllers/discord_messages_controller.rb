@@ -69,7 +69,7 @@ module DiscordDatastore
 
         messages =
           messages.map do |msg|
-            json = msg.as_json
+            json = msg.as_json(only: msg.attribute_names)
             if msg.discord_user.nil? == false
               json =
                 json.merge(
