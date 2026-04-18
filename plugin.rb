@@ -38,6 +38,7 @@ after_initialize do
     isolate_namespace DiscordDatastore
   end
 
+  require_relative "app/controllers/concerns/discord_id_resolvable.rb"
   require_relative "app/controllers/discord_messages_controller.rb"
   require_relative "app/controllers/discord_channels_controller.rb"
   require_relative "app/controllers/discord_users_controller.rb"
@@ -52,7 +53,6 @@ after_initialize do
 
   require_relative "lib/bot_helper.rb"
   require_relative "lib/bot.rb"
-  require_relative "lib/crossposter.rb"
   require_relative "lib/verifier.rb"
 
   DiscordDatastore::Engine.routes.draw do
@@ -74,15 +74,9 @@ after_initialize do
     DiscordDatastore::Bot.run_bot
   end
 
-  DiscourseEvent.on(:after_auth) do |authenticator, auth_result|
-    if SiteSetting.discord_datastore_enabled
-      if authenticator.name == "discord" && auth_result.user.id > 0
-        DiscordDatastore::Verifier.verify_user(auth_result.user)
-      end
+  on(:after_auth) do |authenticator, auth_result|
+    if authenticator.name == "discord" && auth_result.user.id > 0
+      DiscordDatastore::Verifier.verify_user(auth_result.user)
     end
-  end
-
-  DiscourseEvent.on(:topic_created) do |topic, metadata, user|
-    DiscordDatastore::Crossposter.crosspost(topic, user) if SiteSetting.discord_datastore_enabled
   end
 end

@@ -48,8 +48,3 @@ plugins:
     default: ""
     type: list
     client: true
-  discourse_crosspost_category:
-    type: category_list
-    default: ""
-  discord_crosspost_channel_id:
-    default: ""

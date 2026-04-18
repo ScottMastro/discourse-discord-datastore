@@ -16,5 +16,3 @@ en:
     discord_rank_image: 'Image URLs for awarded ranks (used for /discord page)'
     discord_rank_badge_id: 'Badge to assign on Discourse when rank awarded (leave empty if no badge is to be assigned)'
     discord_ban_id: 'IDs of users to ban from the server upon joining'
-    discourse_crosspost_category: '*WARNING: BE MINDFUL* Topics in these categories will be crossposted to Discord'
-    discord_crosspost_channel_id: 'Discord channel to crosspost Discourse content to'
