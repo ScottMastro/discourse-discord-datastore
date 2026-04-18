@@ -1,42 +1,52 @@
 {{discord-header}}
 
 <div class="discord-data">
-  
   <div class="discord-data-user">
     {{user-chooser
       id="search-posted-by"
-      value=searchedTerms.username
-      onChange=(action "onChangeSearchTermForUsername")
-        options=(hash
-        maximum=1
-        excludeCurrentUser=false
-      )
+      value=this.searchedTerms.username
+      onChange=this.onChangeSearchTermForUsername
+      options=(hash maximum=1 excludeCurrentUser=false)
     }}
-    <div class="discord-data-user-text">{{ i18n "discord_datastore.selected_user" }}:
-      {{#if searched_username}}
-        {{ searched_username }}
+    <div class="discord-data-user-text">
+      {{i18n "discord_datastore.selected_user"}}:
+      {{#if this.searched_username}}
+        {{this.searched_username}}
         <div>
-          {{#if searched_discord_username}}
-            ✅ {{ searched_discord_username }}
+          {{#if this.searched_discord_username}}
+            ✅
+            {{this.searched_discord_username}}
           {{else}}
-            ❌ {{ i18n "discord_datastore.selected_user_not_found" }}
+            ❌
+            {{i18n "discord_datastore.selected_user_not_found"}}
           {{/if}}
         </div>
       {{/if}}
     </div>
   </div>
-  <hr>
+  <hr />
 
-  {{discord-stats messages_loaded=messages_loaded stats=stats}}
-  <hr>
-  {{discord-ranks ranks=ranks}}
-  <hr>
+  {{discord-stats messages_loaded=this.messages_loaded stats=this.stats}}
+  <hr />
+  {{discord-ranks ranks=this.ranks}}
+  <hr />
 
   <div class="discord-data-columns">
-
-    <div class="discord-data-channels"> {{discord-channels channels_loaded=channels_loaded channels=channels filterChannel=(action "filterChannel")}} </div>
-    <div class="discord-data-messages"> {{discord-messages messages_loaded=messages_loaded messages=messages current_page=current_page 
-                                          prevMessagePage=(action "prevMessagePage") nextMessagePage=(action "nextMessagePage")}} </div>
-
+    <div class="discord-data-channels">
+      {{discord-channels
+        channels_loaded=this.channels_loaded
+        channels=this.channels
+        filterChannel=this.filterChannel
+      }}
+    </div>
+    <div class="discord-data-messages">
+      {{discord-messages
+        messages_loaded=this.messages_loaded
+        messages=this.messages
+        current_page=this.current_page
+        prevMessagePage=this.prevMessagePage
+        nextMessagePage=this.nextMessagePage
+      }}
+    </div>
   </div>
 </div>
