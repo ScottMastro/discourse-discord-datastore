@@ -67,7 +67,10 @@ after_initialize do
 
   Discourse::Application.routes.append { mount DiscordDatastore::Engine, at: "/" }
 
-  if SiteSetting.discord_datastore_enabled & DiscordDatastore::BotInstance.bot.nil?
+  # Only run the long-lived Discord websocket in the sidekiq process so it
+  # isn't spawned in every puma worker, rails console, rake task, or test run.
+  if defined?(Sidekiq) && Sidekiq.server? && SiteSetting.discord_datastore_enabled &&
+       DiscordDatastore::BotInstance.bot.nil?
     DiscordDatastore::Bot.run_bot
   end
 

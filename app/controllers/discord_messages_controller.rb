@@ -60,8 +60,8 @@ module DiscordDatastore
 
         first = "-"
         if total_messages > 0
-          first = DiscordDatastore::DiscordMessage.order(:date).limit(1)
-          first = first[0].date.strftime("%d %b %Y")
+          first_message = messages.reorder(date: :asc).limit(1).first
+          first = first_message.date.strftime("%d %b %Y") if first_message
         end
 
         messages = messages.offset(page * PAGE_SIZE).limit(PAGE_SIZE)

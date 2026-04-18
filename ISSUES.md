@@ -2,6 +2,8 @@
 
 Review snapshot: 2026-04-18. Organized by severity. File paths are relative to the plugin root unless noted.
 
+**Resolved so far:** #1 CSRF/auth on badge_collect, #2 ranks IDOR, #3 template URL XSS, #4 admin controller guard, #5 `&` typo, #6 `send` shadowing, #7 `+ +` typo, #8 `find` raise in `member_join`, #9 boot-time SiteSetting capture, #10 bot thread in every process (gated to `Sidekiq.server?`), #11 first-message scope bug.
+
 ## Critical
 
 ### 1. CSRF + missing auth on badge-grant endpoint
