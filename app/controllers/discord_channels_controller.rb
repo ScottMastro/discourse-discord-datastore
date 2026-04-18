@@ -9,42 +9,16 @@ module DiscordDatastore
     def channels
       discord_id = resolve_discord_id
 
-      channels = DiscordDatastore::DiscordChannel.order(:position)
+      channels =
+        ActiveModel::ArraySerializer.new(
+          DiscordDatastore::DiscordChannel.order(:position),
+          each_serializer: DiscordChannelSerializer,
+          discord_id: discord_id,
+        ).as_json
 
-      if discord_id.nil?
-        channels =
-          channels.map do |ch|
-            ch.as_json(only: ch.attribute_names).merge(
-              {
-                total: DiscordDatastore::DiscordMessage.where(discord_channel_id: ch.id).size,
-                id: ch.id.to_s,
-              },
-            )
-          end
-      else
-        channels =
-          channels.map do |ch|
-            ch.as_json(only: ch.attribute_names).merge(
-              {
-                total:
-                  DiscordDatastore::DiscordMessage.where(
-                    discord_channel_id: ch.id,
-                    discord_user_id: discord_id,
-                  ).size,
-                id: ch.id.to_s,
-              },
-            )
-          end
-      end
+      channels = channels.select { |ch| ch["total"] > 0 } unless current_user.staff?
 
-      filtered_channels = []
-      channels.each { |channel| filtered_channels.push(channel) if channel[:total] > 0 }
-
-      if current_user.staff?
-        render json: { discord_channels: channels }
-      else
-        render json: { discord_channels: filtered_channels }
-      end
+      render json: { discord_channels: channels }
     end
   end
 end

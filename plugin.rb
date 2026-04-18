@@ -51,6 +51,10 @@ after_initialize do
   require_relative "app/models/discord_channel.rb"
   require_relative "app/models/discord_user.rb"
 
+  require_relative "app/serializers/discord_message_serializer.rb"
+  require_relative "app/serializers/discord_channel_serializer.rb"
+  require_relative "app/serializers/discord_user_serializer.rb"
+
   require_relative "lib/bot_helper.rb"
   require_relative "lib/bot.rb"
   require_relative "lib/verifier.rb"

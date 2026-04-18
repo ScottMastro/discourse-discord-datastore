@@ -12,10 +12,13 @@ module DiscordDatastore
       users = DiscordDatastore::DiscordUser.order(created_at: :desc)
       users = users.where(id: discord_id) if !discord_id.nil?
 
-      #avoid javascript rounding
-      users = users.map { |u| u.as_json(only: u.attribute_names).merge({ id: u.id.to_s }) }
-
-      render json: { discord_users: users }
+      render json: {
+               discord_users:
+                 ActiveModel::ArraySerializer.new(
+                   users,
+                   each_serializer: DiscordUserSerializer,
+                 ).as_json,
+             }
     end
   end
 end
