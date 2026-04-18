@@ -95,7 +95,7 @@ export default Controller.extend({
     },
 
     collectRank(badge_id){
-      ajax('/discord/badge_collect.json?badge='+badge_id.toString())
+      ajax('/discord/badge_collect.json', { type: 'POST', data: { badge: badge_id } })
       .then((result) => {
         if (result.result == "success"){
           for (let i = 0; i < this.ranks.length; i++) {  
