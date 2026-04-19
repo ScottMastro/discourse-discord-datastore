@@ -17,6 +17,8 @@ gem "netrc", "0.11.0"
 gem "domain_name", "0.6.20240107"
 gem "http-cookie", "1.1.4"
 gem "http-accept", "1.7.0", { require: false }
+gem "mime-types-data", "3.2026.0407"
+gem "mime-types", "3.7.0"
 gem "rest-client", "2.1.0"
 
 gem "discordrb-webhooks", "3.7.2", { require: false }
