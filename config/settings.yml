@@ -1,4 +1,4 @@
-plugins:
+discord_datastore:
   discord_datastore_enabled:
     default: false
     client: true

@@ -2,7 +2,7 @@
 
 # name: discourse-discord-datastore
 # about: Datastore for discord messages
-# version: 1.1.1
+# version: 1.3
 # authors: ScottMastro
 # url: https://github.com/ScottMastro/discourse-discord-datastore
 # required_version: 2.7.0
