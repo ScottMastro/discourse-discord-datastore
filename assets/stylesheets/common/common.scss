@@ -1,4 +1,4 @@
-.discord-header-image{
+.discord-header-image {
   display: block;
   max-width: 600px;
   width: 100%;
@@ -6,103 +6,106 @@
   margin: 0 auto 1em;
 }
 
-.discord-join-info{
+.discord-join-info {
   color: #dcddde;
   padding: 20px;
   width: fit-content;
 
-  .discord-join-box{
-    border: 3px solid #ED4245;
+  .discord-join-box {
+    border: 3px solid #ed4245;
     padding: 10px;
   }
 
-  a{
-    color: #5865F2;
+  a {
+    color: #5865f2;
   }
 }
 
-.discord-admin-url{
+.discord-admin-url {
   padding: 10px;
 }
 
-.discord-username-header{
+.discord-username-header {
   margin: auto;
   margin-top: 1em;
   padding: 1em;
-  border: 1px solid #57F287;
+  border: 1px solid #57f287;
   border-radius: 10px;
   background-color: #40434b;
   width: max-content;
   text-align: center;
 }
 
-.discord-data-rank-header{
+.discord-data-rank-header {
   margin-left: 2em;
   margin-bottom: 15px;
 }
 
-.discord-rank-have-false{
+.discord-rank-have-false {
   color: #96979d;
   background: #2f3036 !important;
 
-  img{
+  img {
     filter: brightness(0.2) blur(2px);
   }
 }
 
-.discord-data-rank{
+.discord-data-rank {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
   row-gap: 1em;
   text-align: center;
-  .discord-rank{
+
+  .discord-rank {
     padding: 1em;
-    background: #40434b ;
+    background: #40434b;
     border: 1px solid #2f3036;
     border-radius: 5px;
   }
-  .discord-rank-label{
+
+  .discord-rank-label {
     font-weight: bold;
   }
-  .discord-rank-img{
-    img{
+
+  .discord-rank-img {
+    img {
       width: 100px;
       max-width: 100px;
       max-height: 100px;
     }
   }
-  .discord-rank-count{
+
+  .discord-rank-count {
     margin-bottom: 5px;
   }
 }
 
-.discord-data{
+.discord-data {
   background: #36383f;
   color: #dcddde;
   border-radius: 10px;
-  border: 1px solid #5865F2;
+  border: 1px solid #5865f2;
   display: flex;
   flex-direction: column;
 }
 
-
-.discord-anon{
+.discord-anon {
   padding: 1.5em 2em;
   align-items: flex-start;
 
-  .discord-anon-intro{
+  .discord-anon-intro {
     margin: 0 0 1em;
     font-size: 1.1em;
   }
 
-  .discord-anon-actions{
+  .discord-anon-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75em;
   }
 
-  .discord-anon-btn{
+  .discord-anon-btn {
     display: inline-block;
     padding: 0.6em 1.2em;
     border-radius: 6px;
@@ -111,68 +114,72 @@
     transition: filter 0.15s ease;
   }
 
-  .discord-anon-btn:hover{
+  .discord-anon-btn:hover {
     filter: brightness(1.15);
     text-decoration: none;
   }
 
-  .discord-anon-btn--invite{
-    background: #5865F2;
+  .discord-anon-btn--invite {
+    background: #5865f2;
     color: #fff;
   }
 
-  .discord-anon-btn--login{
+  .discord-anon-btn--login {
     background: #4f545c;
     color: #fff;
   }
 }
-.discord-data-stats{
+
+.discord-data-stats {
   margin: auto;
   padding: 10px;
   display: flex;
   justify-content: space-evenly;
 
-  .discord-stat{
+  .discord-stat {
     display: block;
     align-items: baseline;
     padding: 10px;
-  }  
-  .discord-stat-value{
+  }
+
+  .discord-stat-value {
     margin-right: 5px;
     font-size: large;
   }
-  .discord-stat-label{
+
+  .discord-stat-label {
     color: #96979d;
   }
 }
 
-.discord-data-columns{
+.discord-data-columns {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   margin-bottom: 20px;
 
-  .discord-data-channels{
+  .discord-data-channels {
     margin-left: 2em;
     flex: 2;
   }
-  .discord-data-messages{
+
+  .discord-data-messages {
     margin-right: 2em;
     flex: 5;
   }
 }
 
-.discord-data-channels-header{
-  padding:9px;
+.discord-data-channels-header {
+  padding: 9px;
   display: flex;
 }
 
-.discord-channel-list{
+.discord-channel-list {
   ul li {
     margin: 5px;
   }
-  
-  .discord-channel-list-element{
+
+  .discord-channel-list-element {
     background: #2f3036;
     border: 1px solid #2f3036;
     border-radius: 5px;
@@ -181,116 +188,120 @@
     width: 100%;
     text-align: left;
   }
-  .discord-channel-total{
+
+  .discord-channel-total {
     display: flex;
     column-gap: 4px;
   }
-  .discord-channel-list-element:hover{
-    border: 1px solid #5865F2;
+
+  .discord-channel-list-element:hover {
+    border: 1px solid #5865f2;
   }
 }
 
-.discord-data-messages-header{
+.discord-data-messages-header {
   margin-left: 30px;
   display: flex;
-  align-items: baseline ;
+  align-items: baseline;
   justify-content: space-between;
 }
 
-.discord-locked-button{
+.discord-locked-button {
   background-color: #2f3036;
   border: 2px solid #36383f;
   border-radius: 5px;
   padding: 0.5em;
 }
 
-.discord-collect-button{
-  background-color: #57F287;
+.discord-collect-button {
+  background-color: #57f287;
   border: 2px solid #2f3036;
   color: #2f3036 !important;
   border-radius: 5px;
   padding: 0.5em;
 }
 
-.discord-collected-button{
+.discord-collected-button {
   background-color: #40434b;
   border: 2px solid #2f3036;
   border-radius: 5px;
   padding: 0.5em;
 }
 
-.discord-button{
+.discord-button {
   background-color: #40434b;
   border: 2px solid #2f3036;
   border-radius: 5px;
   padding: 1em;
 }
-.discord-button:hover{
-  border: 2px solid #5865F2;
+
+.discord-button:hover {
+  border: 2px solid #5865f2;
 }
 
-.discord-messages-mobile-item{
+.discord-messages-mobile-item {
   display: none;
 }
 
-.discord-message-list{
+.discord-message-list {
   ul {
     list-style-type: none;
   }
+
   ul li {
     margin: 5px;
   }
 
-  .discord-avatar{
+  .discord-avatar {
     margin-bottom: auto;
 
     img {
       border-radius: 50%;
       width: 50px;
       height: 50px;
-    } 
+    }
   }
-  .discord-message{
+
+  .discord-message {
     background: #2f3036;
     padding: 10px;
     border-radius: 5px;
     display: flex;
     align-items: center;
 
-    .discord-message-content{
+    .discord-message-content {
       margin-left: 7px;
       overflow-wrap: break-word;
-      word-wrap: break-word;
-      word-break: break-all;
       word-break: break-word;
-      hyphens: auto;      
+      hyphens: auto;
     }
   }
 }
 
-.discord-attachments{
+.discord-attachments {
   background: #40434b;
   border-radius: 5px;
   padding: 5px;
   font-style: italic;
 
-  .discord-attachment{
+  .discord-attachment {
     background: #2f3036;
     border-radius: 5px;
     padding: 5px;
   }
 }
 
-.no-messages{
+.no-messages {
   text-align: center;
 }
 
-.discord-data-user{
+.discord-data-user {
   margin-left: 15px;
   margin-top: 15px;
   display: flex;
   column-gap: 1em;
-  .discord-data-user-text{
+
+  .discord-data-user-text {
     margin-top: 10px;
     display: flex;
     column-gap: 2em;

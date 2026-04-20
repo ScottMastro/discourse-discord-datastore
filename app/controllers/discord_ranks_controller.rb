@@ -33,7 +33,8 @@ class DiscordDatastore::DiscordRanksController < ::ApplicationController
       can_collect = false
       if !badge.nil?
         b = Badge.find(badge)
-        have = (!User.find(user_id).user_badges.where(badge_id: badge).blank?) if b && !user_id.nil?
+        have = (User.find(user_id).user_badges.where(badge_id: badge).present?) if b &&
+          !user_id.nil?
 
         if !have
           total_messages = DiscordDatastore::DiscordMessage.where(discord_user_id: discord_id).size

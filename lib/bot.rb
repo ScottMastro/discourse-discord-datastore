@@ -71,12 +71,12 @@ module DiscordDatastore::BotInstance
         Thread.new do
           begin
             if !history_only
-              upsert_channels
-              upsert_users
+              DiscordDatastore::BotHelper.upsert_channels
+              DiscordDatastore::BotHelper.upsert_users
             end
 
-            browse_history
-            update_ranks
+            DiscordDatastore::BotHelper.browse_history
+            DiscordDatastore::BotHelper.update_ranks
             status_message = DiscordDatastore::BotInstance.send_to_channel("Syncing complete.")
           rescue Exception => ex
             Rails.logger.error("DiscordDatastore Bot: Syncing thread failed: #{ex}")
@@ -151,8 +151,8 @@ class DiscordDatastore::Bot
 
         bot.command(:info, help_available: false) { |event| DiscordDatastore::BotInstance.info }
 
-        bot.channel_create { upsert_channels }
-        bot.channel_update { upsert_channels }
+        bot.channel_create { DiscordDatastore::BotHelper.upsert_channels }
+        bot.channel_update { DiscordDatastore::BotHelper.upsert_channels }
 
         bot.member_join do |event|
           server = DiscordDatastore::BotInstance.server
@@ -167,10 +167,10 @@ class DiscordDatastore::Bot
             end
           end
 
-          upsert_user event.user
+          DiscordDatastore::BotHelper.upsert_user(event.user)
           DiscordDatastore::Verifier.verify_from_discord(event.user.id)
         end
-        bot.member_update { |event| upsert_user event.user }
+        bot.member_update { |event| DiscordDatastore::BotHelper.upsert_user(event.user) }
 
         bot.message do |event|
           if !event.author.bot_account

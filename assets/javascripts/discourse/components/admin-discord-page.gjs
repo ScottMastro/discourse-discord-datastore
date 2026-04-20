@@ -1,9 +1,9 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { hash } from "@ember/helper";
-import UserChooser from "select-kit/components/user-chooser";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import UserChooser from "discourse/select-kit/components/user-chooser";
 import { i18n } from "discourse-i18n";
 import DiscordChannels from "./discord-channels";
 import DiscordHeader from "./discord-header";
@@ -23,6 +23,45 @@ export default class AdminDiscordPage extends Component {
   @tracked channels = null;
   @tracked messages = null;
   @tracked stats = null;
+
+  filterChannel = (channel_id) => {
+    this.current_page = 1;
+    this.filter_channel = channel_id;
+    this.fetchMessages();
+  };
+
+  nextMessagePage = () => {
+    this.current_page = this.current_page + 1;
+    this.fetchMessages();
+  };
+
+  prevMessagePage = () => {
+    this.current_page = Math.max(this.current_page - 1, 1);
+    this.fetchMessages();
+  };
+
+  onChangeSearchTermForUsername = (username) => {
+    this.searched_username = username.length ? username : null;
+
+    ajax("/u/" + username + ".json")
+      .then((userResult) => {
+        this.searched_user_id = userResult.user.id.toString();
+
+        ajax("/discord/users.json?user_id=" + this.searched_user_id)
+          .then((result) => {
+            if (result.discord_users.length === 0) {
+              this.searched_discord_username = "";
+            } else {
+              this.searched_discord_username =
+                "@" + result.discord_users[0].tag;
+            }
+            this.fetchMessages();
+            this.fetchChannels();
+          })
+          .catch(popupAjaxError);
+      })
+      .catch(popupAjaxError);
+  };
 
   constructor() {
     super(...arguments);
@@ -76,45 +115,6 @@ export default class AdminDiscordPage extends Component {
       .catch(popupAjaxError);
   }
 
-  filterChannel = (channel_id) => {
-    this.current_page = 1;
-    this.filter_channel = channel_id;
-    this.fetchMessages();
-  };
-
-  nextMessagePage = () => {
-    this.current_page = this.current_page + 1;
-    this.fetchMessages();
-  };
-
-  prevMessagePage = () => {
-    this.current_page = Math.max(this.current_page - 1, 1);
-    this.fetchMessages();
-  };
-
-  onChangeSearchTermForUsername = (username) => {
-    this.searched_username = username.length ? username : null;
-
-    ajax("/u/" + username + ".json")
-      .then((userResult) => {
-        this.searched_user_id = userResult.user.id.toString();
-
-        ajax("/discord/users.json?user_id=" + this.searched_user_id)
-          .then((result) => {
-            if (result.discord_users.length === 0) {
-              this.searched_discord_username = "";
-            } else {
-              this.searched_discord_username =
-                "@" + result.discord_users[0].tag;
-            }
-            this.fetchMessages();
-            this.fetchChannels();
-          })
-          .catch(popupAjaxError);
-      })
-      .catch(popupAjaxError);
-  };
-
   <template>
     <div class="discord-data">
       <DiscordHeader />
@@ -131,9 +131,11 @@ export default class AdminDiscordPage extends Component {
             {{this.searched_username}}
             <div>
               {{#if this.searched_discord_username}}
-                ✅ {{this.searched_discord_username}}
+                ✅
+                {{this.searched_discord_username}}
               {{else}}
-                ❌ {{i18n "discord_datastore.selected_user_not_found"}}
+                ❌
+                {{i18n "discord_datastore.selected_user_not_found"}}
               {{/if}}
             </div>
           {{/if}}

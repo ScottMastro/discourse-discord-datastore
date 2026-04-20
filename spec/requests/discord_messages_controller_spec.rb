@@ -2,8 +2,8 @@
 
 RSpec.describe DiscordDatastore::DiscordMessagesController do
   fab!(:user)
-  fab!(:other_user) { Fabricate(:user) }
-  fab!(:staff) { Fabricate(:admin) }
+  fab!(:other_user, :user)
+  fab!(:staff, :admin)
 
   before { SiteSetting.discord_datastore_enabled = true }
 
@@ -60,10 +60,10 @@ RSpec.describe DiscordDatastore::DiscordMessagesController do
         discord_channel_id: 2,
         content: "",
         date: Time.current,
-        attachments: [
-          "https://cdn.discordapp.com/attachments/ok.png",
-          "javascript:alert(1)",
-          "data:text/html,<script>alert(1)</script>",
+        attachments: %w[
+          https://cdn.discordapp.com/attachments/ok.png
+          javascript:alert(1)
+          data:text/html,<script>alert(1)</script>
         ],
       )
 
@@ -99,9 +99,7 @@ RSpec.describe DiscordDatastore::DiscordMessagesController do
       )
 
       get "/discord/messages.json", params: { user_id: "me" }
-      expect(response.parsed_body["stats"]["first_message"]).to eq(
-        recent_date.strftime("%d %b %Y"),
-      )
+      expect(response.parsed_body["stats"]["first_message"]).to eq(recent_date.strftime("%d %b %Y"))
     end
   end
 end

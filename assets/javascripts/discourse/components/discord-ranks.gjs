@@ -16,7 +16,8 @@ const DiscordRanks = <template>
         <div class="discord-rank-text">
           <div class="discord-rank-label">{{rank.name}}</div>
           <div class="discord-rank-count">
-            {{number rank.requirement}} {{i18n "discord_datastore.messages"}}
+            {{number rank.requirement}}
+            {{i18n "discord_datastore.messages"}}
           </div>
         </div>
         {{#if @collectible}}

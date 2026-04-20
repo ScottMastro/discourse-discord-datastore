@@ -19,7 +19,7 @@ const DiscordChannels = <template>
               class="discord-channel-list-element"
               {{on "click" (fn @filterChannel channel.id)}}
             >
-              <h3>#{{channel.name}}</h3>
+              <span class="discord-channel-name">#{{channel.name}}</span>
               <div class="discord-channel-total">
                 {{number channel.total}}
                 <div class="discord-channel-total-text">

@@ -2,7 +2,7 @@
 
 RSpec.describe DiscordDatastore::AdminDiscordController do
   fab!(:user)
-  fab!(:staff) { Fabricate(:admin) }
+  fab!(:staff, :admin)
 
   before { SiteSetting.discord_datastore_enabled = true }
 

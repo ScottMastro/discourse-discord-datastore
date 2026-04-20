@@ -2,8 +2,8 @@
 
 RSpec.describe DiscordDatastore::DiscordRanksController do
   fab!(:user)
-  fab!(:other_user) { Fabricate(:user) }
-  fab!(:staff) { Fabricate(:admin) }
+  fab!(:other_user, :user)
+  fab!(:staff, :admin)
 
   before { SiteSetting.discord_datastore_enabled = true }
 
