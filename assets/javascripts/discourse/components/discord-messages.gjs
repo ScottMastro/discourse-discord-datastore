@@ -18,7 +18,7 @@ const DiscordMessages = <template>
       >
         {{i18n "discord_datastore.message_pagination_previous"}}
       </button>
-      <b>{{@current_page}}</b>
+      <b>{{@currentPage}}</b>
       <button
         type="button"
         class="discord-button"
@@ -29,7 +29,7 @@ const DiscordMessages = <template>
     </div>
   </div>
 
-  {{#if @messages_loaded}}
+  {{#if @messagesLoaded}}
     {{#if @messages}}
       <div class="discord-message-list">
         <ul>

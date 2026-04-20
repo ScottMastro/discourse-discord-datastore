@@ -14,49 +14,50 @@ export default class DiscordPage extends Component {
   @service currentUser;
   @service siteSettings;
 
-  @tracked id_loaded = false;
-  @tracked channels_loaded = false;
-  @tracked messages_loaded = false;
-  @tracked discord_id = "";
-  @tracked discord_username = "";
-  @tracked current_page = 1;
-  @tracked filter_channel = "";
+  @tracked idLoaded = false;
+  @tracked channelsLoaded = false;
+  @tracked messagesLoaded = false;
+  @tracked discordId = "";
+  @tracked discordUsername = "";
+  @tracked currentPage = 1;
+  @tracked filterChannelId = "";
   @tracked ranks = null;
   @tracked channels = null;
   @tracked messages = null;
   @tracked stats = null;
 
-  filterChannel = (channel_id) => {
-    this.current_page = 1;
-    this.filter_channel = channel_id;
+  filterChannel = (channelId) => {
+    this.currentPage = 1;
+    this.filterChannelId = channelId;
     this.fetchMessages();
   };
 
   nextMessagePage = () => {
-    this.current_page = this.current_page + 1;
+    this.currentPage = this.currentPage + 1;
     this.fetchMessages();
   };
 
   prevMessagePage = () => {
-    this.current_page = Math.max(this.current_page - 1, 1);
+    this.currentPage = Math.max(this.currentPage - 1, 1);
     this.fetchMessages();
   };
 
-  collectRank = (badge_id) => {
-    ajax("/discord/badge_collect.json", {
-      type: "POST",
-      data: { badge: badge_id },
-    })
-      .then((result) => {
-        if (result.result === "success") {
-          for (let i = 0; i < this.ranks.length; i++) {
-            if (this.ranks[i].badge === badge_id) {
-              this.ranks[i].have = true;
-            }
+  collectRank = async (badgeId) => {
+    try {
+      const result = await ajax("/discord/badge_collect.json", {
+        type: "POST",
+        data: { badge: badgeId },
+      });
+      if (result.result === "success") {
+        for (let i = 0; i < this.ranks.length; i++) {
+          if (this.ranks[i].badge === badgeId) {
+            this.ranks[i].have = true;
           }
         }
-      })
-      .catch(popupAjaxError);
+      }
+    } catch (e) {
+      popupAjaxError(e);
+    }
   };
 
   constructor() {
@@ -70,59 +71,65 @@ export default class DiscordPage extends Component {
     this.fetchMessages();
   }
 
-  get is_staff() {
+  get isStaff() {
     return !!this.currentUser?.staff;
   }
 
-  fetchID() {
-    this.id_loaded = false;
-    this.discord_id = "";
-    ajax("/discord/users.json?user_id=me")
-      .then((result) => {
-        if (result.discord_users.length > 0) {
-          this.discord_id = result.discord_users[0].id;
-          this.discord_username = "@" + result.discord_users[0].tag;
-        }
-        this.id_loaded = true;
-      })
-      .catch(popupAjaxError);
+  async fetchID() {
+    this.idLoaded = false;
+    this.discordId = "";
+    try {
+      const result = await ajax("/discord/users.json?user_id=me");
+      if (result.discord_users.length > 0) {
+        this.discordId = result.discord_users[0].id;
+        this.discordUsername = "@" + result.discord_users[0].tag;
+      }
+      this.idLoaded = true;
+    } catch (e) {
+      popupAjaxError(e);
+    }
   }
 
-  fetchRanks() {
-    ajax("/discord/ranks.json?user_id=me")
-      .then((result) => (this.ranks = result.discord_ranks))
-      .catch(popupAjaxError);
+  async fetchRanks() {
+    try {
+      const result = await ajax("/discord/ranks.json?user_id=me");
+      this.ranks = result.discord_ranks;
+    } catch (e) {
+      popupAjaxError(e);
+    }
   }
 
-  fetchChannels() {
-    this.channels_loaded = false;
-    ajax("/discord/channels.json?user_id=me")
-      .then((result) => {
-        this.channels = result.discord_channels;
-        this.channels_loaded = true;
-      })
-      .catch(popupAjaxError);
+  async fetchChannels() {
+    this.channelsLoaded = false;
+    try {
+      const result = await ajax("/discord/channels.json?user_id=me");
+      this.channels = result.discord_channels;
+      this.channelsLoaded = true;
+    } catch (e) {
+      popupAjaxError(e);
+    }
   }
 
-  fetchMessages() {
-    let params = "&page=" + (this.current_page - 1).toString();
-    if (this.filter_channel.length > 0) {
-      params += "&channel=" + this.filter_channel;
+  async fetchMessages() {
+    let params = "&page=" + (this.currentPage - 1).toString();
+    if (this.filterChannelId.length > 0) {
+      params += "&channel=" + this.filterChannelId;
     }
 
-    this.messages_loaded = false;
-    ajax("/discord/messages.json?user_id=me" + params)
-      .then((result) => {
-        this.messages = result.discord_messages;
-        this.stats = result.stats;
-        this.messages_loaded = true;
-      })
-      .catch(popupAjaxError);
+    this.messagesLoaded = false;
+    try {
+      const result = await ajax("/discord/messages.json?user_id=me" + params);
+      this.messages = result.discord_messages;
+      this.stats = result.stats;
+      this.messagesLoaded = true;
+    } catch (e) {
+      popupAjaxError(e);
+    }
   }
 
   <template>
     {{#if this.currentUser}}
-      {{#if this.is_staff}}
+      {{#if this.isStaff}}
         <a class="discord-admin-url" href="/admin/discord">
           {{i18n "discord_datastore.view_admin_url_text"}}
           ➚
@@ -131,16 +138,16 @@ export default class DiscordPage extends Component {
 
       <div class="discord-data">
         <DiscordHeader />
-        {{#if this.discord_id}}
+        {{#if this.discordId}}
           <h3>
             <div class="discord-username-header">
               {{i18n "discord_datastore.verified_username"}}: ✅
-              {{this.discord_username}}
+              {{this.discordUsername}}
             </div>
           </h3>
           <hr />
           <DiscordStats
-            @messages_loaded={{this.messages_loaded}}
+            @messagesLoaded={{this.messagesLoaded}}
             @stats={{this.stats}}
           />
           <hr />
@@ -153,23 +160,23 @@ export default class DiscordPage extends Component {
           <div class="discord-data-columns">
             <div class="discord-data-channels">
               <DiscordChannels
-                @channels_loaded={{this.channels_loaded}}
+                @channelsLoaded={{this.channelsLoaded}}
                 @channels={{this.channels}}
                 @filterChannel={{this.filterChannel}}
               />
             </div>
             <div class="discord-data-messages">
               <DiscordMessages
-                @messages_loaded={{this.messages_loaded}}
+                @messagesLoaded={{this.messagesLoaded}}
                 @messages={{this.messages}}
-                @current_page={{this.current_page}}
+                @currentPage={{this.currentPage}}
                 @prevMessagePage={{this.prevMessagePage}}
                 @nextMessagePage={{this.nextMessagePage}}
               />
             </div>
           </div>
         {{else}}
-          {{#if this.id_loaded}}
+          {{#if this.idLoaded}}
             <div class="discord-join-info">
               <div class="discord-join-box">
                 {{i18n "discord_datastore.warning_no_account_found"}}

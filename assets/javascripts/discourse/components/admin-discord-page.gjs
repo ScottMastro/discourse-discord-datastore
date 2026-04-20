@@ -12,55 +12,54 @@ import DiscordRanks from "./discord-ranks";
 import DiscordStats from "./discord-stats";
 
 export default class AdminDiscordPage extends Component {
-  @tracked channels_loaded = false;
-  @tracked messages_loaded = false;
-  @tracked current_page = 1;
-  @tracked filter_channel = "";
-  @tracked searched_user_id = "";
-  @tracked searched_username = "";
-  @tracked searched_discord_username = "";
+  @tracked channelsLoaded = false;
+  @tracked messagesLoaded = false;
+  @tracked currentPage = 1;
+  @tracked filterChannelId = "";
+  @tracked searchedUserId = "";
+  @tracked searchedUsername = "";
+  @tracked searchedDiscordUsername = "";
   @tracked ranks = null;
   @tracked channels = null;
   @tracked messages = null;
   @tracked stats = null;
 
-  filterChannel = (channel_id) => {
-    this.current_page = 1;
-    this.filter_channel = channel_id;
+  filterChannel = (channelId) => {
+    this.currentPage = 1;
+    this.filterChannelId = channelId;
     this.fetchMessages();
   };
 
   nextMessagePage = () => {
-    this.current_page = this.current_page + 1;
+    this.currentPage = this.currentPage + 1;
     this.fetchMessages();
   };
 
   prevMessagePage = () => {
-    this.current_page = Math.max(this.current_page - 1, 1);
+    this.currentPage = Math.max(this.currentPage - 1, 1);
     this.fetchMessages();
   };
 
-  onChangeSearchTermForUsername = (username) => {
-    this.searched_username = username.length ? username : null;
+  onChangeSearchTermForUsername = async (username) => {
+    this.searchedUsername = username.length ? username : null;
 
-    ajax("/u/" + username + ".json")
-      .then((userResult) => {
-        this.searched_user_id = userResult.user.id.toString();
+    try {
+      const userResult = await ajax("/u/" + username + ".json");
+      this.searchedUserId = userResult.user.id.toString();
 
-        ajax("/discord/users.json?user_id=" + this.searched_user_id)
-          .then((result) => {
-            if (result.discord_users.length === 0) {
-              this.searched_discord_username = "";
-            } else {
-              this.searched_discord_username =
-                "@" + result.discord_users[0].tag;
-            }
-            this.fetchMessages();
-            this.fetchChannels();
-          })
-          .catch(popupAjaxError);
-      })
-      .catch(popupAjaxError);
+      const result = await ajax(
+        "/discord/users.json?user_id=" + this.searchedUserId
+      );
+      if (result.discord_users.length === 0) {
+        this.searchedDiscordUsername = "";
+      } else {
+        this.searchedDiscordUsername = "@" + result.discord_users[0].tag;
+      }
+      this.fetchMessages();
+      this.fetchChannels();
+    } catch (e) {
+      popupAjaxError(e);
+    }
   };
 
   constructor() {
@@ -70,49 +69,52 @@ export default class AdminDiscordPage extends Component {
     this.fetchMessages();
   }
 
-  fetchRanks() {
-    ajax("/discord/ranks.json")
-      .then((result) => {
-        for (let i = 0; i < result.discord_ranks.length; i++) {
-          result.discord_ranks[i].have = true;
-        }
-        this.ranks = result.discord_ranks;
-      })
-      .catch(popupAjaxError);
+  async fetchRanks() {
+    try {
+      const result = await ajax("/discord/ranks.json");
+      for (let i = 0; i < result.discord_ranks.length; i++) {
+        result.discord_ranks[i].have = true;
+      }
+      this.ranks = result.discord_ranks;
+    } catch (e) {
+      popupAjaxError(e);
+    }
   }
 
-  fetchChannels() {
+  async fetchChannels() {
     let params = "";
-    if (this.searched_user_id.length > 0) {
-      params += "?user_id=" + this.searched_user_id;
+    if (this.searchedUserId.length > 0) {
+      params += "?user_id=" + this.searchedUserId;
     }
 
-    this.channels_loaded = false;
-    ajax("/discord/channels.json" + params)
-      .then((result) => {
-        this.channels = result.discord_channels;
-        this.channels_loaded = true;
-      })
-      .catch(popupAjaxError);
+    this.channelsLoaded = false;
+    try {
+      const result = await ajax("/discord/channels.json" + params);
+      this.channels = result.discord_channels;
+      this.channelsLoaded = true;
+    } catch (e) {
+      popupAjaxError(e);
+    }
   }
 
-  fetchMessages() {
-    let params = "page=" + (this.current_page - 1).toString();
-    if (this.filter_channel.length > 0) {
-      params += "&channel=" + this.filter_channel;
+  async fetchMessages() {
+    let params = "page=" + (this.currentPage - 1).toString();
+    if (this.filterChannelId.length > 0) {
+      params += "&channel=" + this.filterChannelId;
     }
-    if (this.searched_user_id.length > 0) {
-      params += "&user_id=" + this.searched_user_id;
+    if (this.searchedUserId.length > 0) {
+      params += "&user_id=" + this.searchedUserId;
     }
 
-    this.messages_loaded = false;
-    ajax("/discord/messages.json?" + params)
-      .then((result) => {
-        this.messages = result.discord_messages;
-        this.stats = result.stats;
-        this.messages_loaded = true;
-      })
-      .catch(popupAjaxError);
+    this.messagesLoaded = false;
+    try {
+      const result = await ajax("/discord/messages.json?" + params);
+      this.messages = result.discord_messages;
+      this.stats = result.stats;
+      this.messagesLoaded = true;
+    } catch (e) {
+      popupAjaxError(e);
+    }
   }
 
   <template>
@@ -121,18 +123,18 @@ export default class AdminDiscordPage extends Component {
       <div class="discord-data-user">
         <UserChooser
           @id="search-posted-by"
-          @value={{this.searched_username}}
+          @value={{this.searchedUsername}}
           @onChange={{this.onChangeSearchTermForUsername}}
           @options={{hash maximum=1 excludeCurrentUser=false}}
         />
         <div class="discord-data-user-text">
           {{i18n "discord_datastore.selected_user"}}:
-          {{#if this.searched_username}}
-            {{this.searched_username}}
+          {{#if this.searchedUsername}}
+            {{this.searchedUsername}}
             <div>
-              {{#if this.searched_discord_username}}
+              {{#if this.searchedDiscordUsername}}
                 ✅
-                {{this.searched_discord_username}}
+                {{this.searchedDiscordUsername}}
               {{else}}
                 ❌
                 {{i18n "discord_datastore.selected_user_not_found"}}
@@ -144,7 +146,7 @@ export default class AdminDiscordPage extends Component {
       <hr />
 
       <DiscordStats
-        @messages_loaded={{this.messages_loaded}}
+        @messagesLoaded={{this.messagesLoaded}}
         @stats={{this.stats}}
       />
       <hr />
@@ -154,16 +156,16 @@ export default class AdminDiscordPage extends Component {
       <div class="discord-data-columns">
         <div class="discord-data-channels">
           <DiscordChannels
-            @channels_loaded={{this.channels_loaded}}
+            @channelsLoaded={{this.channelsLoaded}}
             @channels={{this.channels}}
             @filterChannel={{this.filterChannel}}
           />
         </div>
         <div class="discord-data-messages">
           <DiscordMessages
-            @messages_loaded={{this.messages_loaded}}
+            @messagesLoaded={{this.messagesLoaded}}
             @messages={{this.messages}}
-            @current_page={{this.current_page}}
+            @currentPage={{this.currentPage}}
             @prevMessagePage={{this.prevMessagePage}}
             @nextMessagePage={{this.nextMessagePage}}
           />

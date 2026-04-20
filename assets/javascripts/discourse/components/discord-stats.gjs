@@ -4,7 +4,7 @@ import { i18n } from "discourse-i18n";
 const DiscordStats = <template>
   <div class="discord-data-stats">
     <div class="discord-stat">
-      {{#if @messages_loaded}}
+      {{#if @messagesLoaded}}
         <div class="discord-stat-value">{{number @stats.total}}</div>
       {{else}}
         <div class="spinner"></div>
@@ -15,7 +15,7 @@ const DiscordStats = <template>
     </div>
 
     <div class="discord-stat">
-      {{#if @messages_loaded}}
+      {{#if @messagesLoaded}}
         <div class="discord-stat-value">{{number @stats.total_monthly}}</div>
       {{else}}
         <div class="spinner"></div>
@@ -26,7 +26,7 @@ const DiscordStats = <template>
     </div>
 
     <div class="discord-stat">
-      {{#if @messages_loaded}}
+      {{#if @messagesLoaded}}
         <div class="discord-stat-value">{{number @stats.total_weekly}}</div>
       {{else}}
         <div class="spinner"></div>
@@ -37,7 +37,7 @@ const DiscordStats = <template>
     </div>
 
     <div class="discord-stat">
-      {{#if @messages_loaded}}
+      {{#if @messagesLoaded}}
         <div class="discord-stat-value">{{@stats.first_message}}</div>
       {{else}}
         <div class="spinner"></div>

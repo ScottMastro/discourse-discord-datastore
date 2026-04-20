@@ -9,7 +9,7 @@ const DiscordChannels = <template>
     <h3>{{icon "fab-discord"}} {{i18n "discord_datastore.channel_title"}}</h3>
   </div>
 
-  {{#if @channels_loaded}}
+  {{#if @channelsLoaded}}
     {{#if @channels}}
       <div class="discord-channel-list">
         {{#each @channels as |channel|}}

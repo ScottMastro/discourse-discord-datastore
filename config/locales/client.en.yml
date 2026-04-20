@@ -24,10 +24,10 @@ en:
       selected_user: "Selected user"
       selected_user_not_found: "No associated Discord account found."
 
-      stat_title: "STATS"
-      rank_title: "RANKS"
-      channel_title: "CHANNELS"
-      message_history_title: "MESSAGE HISTORY"
+      stat_title: "Stats"
+      rank_title: "Ranks"
+      channel_title: "Channels"
+      message_history_title: "Message history"
 
       messages: "messages"
 

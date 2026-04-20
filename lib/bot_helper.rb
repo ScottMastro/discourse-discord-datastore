@@ -271,8 +271,9 @@ module DiscordDatastore::BotHelper
           server.ban(user)
           next
         rescue StandardError
-          STDERR.puts "DISCORD ERROR -----> Failed to ban user with id=" + user.id.to_s +
-                        ". Check permissions?"
+          Rails.logger.error(
+            "DiscordDatastore Bot: failed to ban user id=#{user.id} — check permissions",
+          )
         end
       end
 
