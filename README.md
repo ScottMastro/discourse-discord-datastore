@@ -1,4 +1,4 @@
-# discourse-discord-datastore
+# Discord Datastore Plugin for Discourse
 
 Mirrors a Discord server's message history into your Discourse database and
 surfaces it to users on a `/discord` page.
