@@ -26,8 +26,44 @@ export default class DiscordPage extends Component {
   @tracked messages = null;
   @tracked stats = null;
 
+  filterChannel = (channel_id) => {
+    this.current_page = 1;
+    this.filter_channel = channel_id;
+    this.fetchMessages();
+  };
+
+  nextMessagePage = () => {
+    this.current_page = this.current_page + 1;
+    this.fetchMessages();
+  };
+
+  prevMessagePage = () => {
+    this.current_page = Math.max(this.current_page - 1, 1);
+    this.fetchMessages();
+  };
+
+  collectRank = (badge_id) => {
+    ajax("/discord/badge_collect.json", {
+      type: "POST",
+      data: { badge: badge_id },
+    })
+      .then((result) => {
+        if (result.result === "success") {
+          for (let i = 0; i < this.ranks.length; i++) {
+            if (this.ranks[i].badge === badge_id) {
+              this.ranks[i].have = true;
+            }
+          }
+        }
+      })
+      .catch(popupAjaxError);
+  };
+
   constructor() {
     super(...arguments);
+    if (!this.currentUser) {
+      return;
+    }
     this.fetchID();
     this.fetchRanks();
     this.fetchChannels();
@@ -84,114 +120,101 @@ export default class DiscordPage extends Component {
       .catch(popupAjaxError);
   }
 
-  filterChannel = (channel_id) => {
-    this.current_page = 1;
-    this.filter_channel = channel_id;
-    this.fetchMessages();
-  };
-
-  nextMessagePage = () => {
-    this.current_page = this.current_page + 1;
-    this.fetchMessages();
-  };
-
-  prevMessagePage = () => {
-    this.current_page = Math.max(this.current_page - 1, 1);
-    this.fetchMessages();
-  };
-
-  collectRank = (badge_id) => {
-    ajax("/discord/badge_collect.json", {
-      type: "POST",
-      data: { badge: badge_id },
-    })
-      .then((result) => {
-        if (result.result === "success") {
-          for (let i = 0; i < this.ranks.length; i++) {
-            if (this.ranks[i].badge === badge_id) {
-              this.ranks[i].have = true;
-            }
-          }
-        }
-      })
-      .catch(popupAjaxError);
-  };
-
   <template>
-    <DiscordHeader />
+    {{#if this.currentUser}}
+      {{#if this.is_staff}}
+        <a class="discord-admin-url" href="/admin/discord">
+          {{i18n "discord_datastore.view_admin_url_text"}}
+          ➚
+        </a>
+      {{/if}}
 
-    {{#if this.is_staff}}
-      <br />
-      <a class="discord-admin-url" href="/admin/discord">
-        {{i18n "discord_datastore.view_admin_url_text"}}
-        ➚
-      </a>
-    {{/if}}
-
-    <div class="discord-data">
-      {{#if this.discord_id}}
-        <h3>
-          <div class="discord-username-header">
-            {{i18n "discord_datastore.verified_username"}}: ✅
-            {{this.discord_username}}
-          </div>
-        </h3>
-        <hr />
-        <DiscordStats
-          @messages_loaded={{this.messages_loaded}}
-          @stats={{this.stats}}
-        />
-        <hr />
-        <DiscordRanks
-          @ranks={{this.ranks}}
-          @collectible={{1}}
-          @collectRank={{this.collectRank}}
-        />
-        <hr />
-        <div class="discord-data-columns">
-          <div class="discord-data-channels">
-            <DiscordChannels
-              @channels_loaded={{this.channels_loaded}}
-              @channels={{this.channels}}
-              @filterChannel={{this.filterChannel}}
-            />
-          </div>
-          <div class="discord-data-messages">
-            <DiscordMessages
-              @messages_loaded={{this.messages_loaded}}
-              @messages={{this.messages}}
-              @current_page={{this.current_page}}
-              @prevMessagePage={{this.prevMessagePage}}
-              @nextMessagePage={{this.nextMessagePage}}
-            />
-          </div>
-        </div>
-      {{else}}
-        {{#if this.id_loaded}}
-          <div class="discord-join-info">
-            <div class="discord-join-box">
-              {{i18n "discord_datastore.warning_no_account_found"}}
+      <div class="discord-data">
+        <DiscordHeader />
+        {{#if this.discord_id}}
+          <h3>
+            <div class="discord-username-header">
+              {{i18n "discord_datastore.verified_username"}}: ✅
+              {{this.discord_username}}
             </div>
-            <br />
-            {{#if this.siteSettings.discord_invite_url}}
+          </h3>
+          <hr />
+          <DiscordStats
+            @messages_loaded={{this.messages_loaded}}
+            @stats={{this.stats}}
+          />
+          <hr />
+          <DiscordRanks
+            @ranks={{this.ranks}}
+            @collectible={{1}}
+            @collectRank={{this.collectRank}}
+          />
+          <hr />
+          <div class="discord-data-columns">
+            <div class="discord-data-channels">
+              <DiscordChannels
+                @channels_loaded={{this.channels_loaded}}
+                @channels={{this.channels}}
+                @filterChannel={{this.filterChannel}}
+              />
+            </div>
+            <div class="discord-data-messages">
+              <DiscordMessages
+                @messages_loaded={{this.messages_loaded}}
+                @messages={{this.messages}}
+                @current_page={{this.current_page}}
+                @prevMessagePage={{this.prevMessagePage}}
+                @nextMessagePage={{this.nextMessagePage}}
+              />
+            </div>
+          </div>
+        {{else}}
+          {{#if this.id_loaded}}
+            <div class="discord-join-info">
+              <div class="discord-join-box">
+                {{i18n "discord_datastore.warning_no_account_found"}}
+              </div>
+              <br />
+              {{#if this.siteSettings.discord_invite_url}}
+                <h2>
+                  1.
+                  <a href={{this.siteSettings.discord_invite_url}}>
+                    {{i18n "discord_datastore.join_discord_message"}}
+                  </a>
+                </h2>
+              {{else}}
+                <h2>1. {{i18n "discord_datastore.join_discord_message"}}</h2>
+              {{/if}}
               <h2>
-                1.
-                <a href={{this.siteSettings.discord_invite_url}}>
-                  {{i18n "discord_datastore.join_discord_message"}}
+                2.
+                <a href="/my/preferences/account">
+                  {{i18n "discord_datastore.connect_discord_message"}}
                 </a>
               </h2>
-            {{else}}
-              <h2>1. {{i18n "discord_datastore.join_discord_message"}}</h2>
-            {{/if}}
-            <h2>
-              2.
-              <a href="/my/preferences/account">
-                {{i18n "discord_datastore.connect_discord_message"}}
-              </a>
-            </h2>
-          </div>
+            </div>
+          {{/if}}
         {{/if}}
-      {{/if}}
-    </div>
+      </div>
+    {{else}}
+      <div class="discord-data discord-anon">
+        <DiscordHeader />
+        <p class="discord-anon-intro">
+          {{i18n "discord_datastore.anon_intro"}}
+        </p>
+        <div class="discord-anon-actions">
+          {{#if this.siteSettings.discord_invite_url}}
+            <a
+              class="discord-anon-btn discord-anon-btn--invite"
+              href={{this.siteSettings.discord_invite_url}}
+            >
+              {{i18n "discord_datastore.join_discord_message"}}
+            </a>
+          {{/if}}
+          <a class="discord-anon-btn discord-anon-btn--login" href="/login">
+            {{i18n "discord_datastore.anon_login_message"}}
+          </a>
+        </div>
+      </div>
+    {{/if}}
   </template>
 }

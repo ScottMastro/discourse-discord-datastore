@@ -116,9 +116,8 @@ export default class AdminDiscordPage extends Component {
   };
 
   <template>
-    <DiscordHeader />
-
     <div class="discord-data">
+      <DiscordHeader />
       <div class="discord-data-user">
         <UserChooser
           @id="search-posted-by"

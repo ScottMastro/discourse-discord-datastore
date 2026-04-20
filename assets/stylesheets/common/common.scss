@@ -1,3 +1,11 @@
+.discord-header-image{
+  display: block;
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  margin: 0 auto 1em;
+}
+
 .discord-join-info{
   color: #dcddde;
   padding: 20px;
@@ -76,6 +84,47 @@
   border: 1px solid #5865F2;
   display: flex;
   flex-direction: column;
+}
+
+
+.discord-anon{
+  padding: 1.5em 2em;
+  align-items: flex-start;
+
+  .discord-anon-intro{
+    margin: 0 0 1em;
+    font-size: 1.1em;
+  }
+
+  .discord-anon-actions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75em;
+  }
+
+  .discord-anon-btn{
+    display: inline-block;
+    padding: 0.6em 1.2em;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: filter 0.15s ease;
+  }
+
+  .discord-anon-btn:hover{
+    filter: brightness(1.15);
+    text-decoration: none;
+  }
+
+  .discord-anon-btn--invite{
+    background: #5865F2;
+    color: #fff;
+  }
+
+  .discord-anon-btn--login{
+    background: #4f545c;
+    color: #fff;
+  }
 }
 .discord-data-stats{
   margin: auto;

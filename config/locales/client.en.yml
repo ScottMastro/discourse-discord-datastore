@@ -16,6 +16,8 @@ en:
       warning_no_account_found: "Your associated Discord account could not be found."
       join_discord_message: "Join our Discord server"
       connect_discord_message: "Connect your Discord account"
+      anon_intro: "Connect with our community on Discord. Log in to link your account and track your stats."
+      anon_login_message: "Log in"
 
       verified_username: "Verified"
 

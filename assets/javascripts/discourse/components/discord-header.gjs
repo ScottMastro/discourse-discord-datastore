@@ -9,6 +9,7 @@ export default class DiscordHeader extends Component {
   <template>
     {{#if this.siteSettings.discord_header_image}}
       <img
+        class="discord-header-image"
         src={{this.siteSettings.discord_header_image}}
         alt="header_image"
       />
