@@ -9,10 +9,13 @@ module DiscordDatastore::BotHelper
   module_function
 
   def get_server
-    DiscordDatastore::BotInstance.bot.servers.each do |s|
+    bot = DiscordDatastore::BotInstance.bot
+    return nil if bot.nil?
+
+    bot.servers.each do |s|
       server_id = s[0]
       if server_id.to_s == SiteSetting.discord_server_id
-        return DiscordDatastore::BotInstance.bot.servers[server_id]
+        return bot.servers[server_id]
       end
     end
     nil
@@ -43,7 +46,9 @@ module DiscordDatastore::BotHelper
       next if channel.type != 0 # text channel
 
       create_time = Time.now
-      existingchannels.each { |c| create_time = c.created_at if c.id == channel.id }
+      existingchannels.each do |c|
+        create_time = c.created_at if c.id == channel.id
+      end
 
       discordchannel = {
         "id" => channel.id,
@@ -51,7 +56,7 @@ module DiscordDatastore::BotHelper
         "voice" => (!channel.text?),
         "position" => channel.position,
         "created_at" => create_time,
-        "updated_at" => Time.now,
+        "updated_at" => Time.now
       }
       DiscordDatastore::DiscordChannel.upsert(discordchannel)
     end
@@ -59,14 +64,17 @@ module DiscordDatastore::BotHelper
 
   def upsert_users
     status_string = "Scanning users"
-    status_message = DiscordDatastore::BotInstance.send_to_channel(status_string)
+    status_message =
+      DiscordDatastore::BotInstance.send_to_channel(status_string)
 
     existingusers = DiscordDatastore::DiscordUser.all
 
     i = 0
     get_users.each do |user|
       i += 1
-      status_message.edit(status_string + " -- " + i.to_s + " users") if i % USER_SCAN_UPDATE == 0
+      if i % USER_SCAN_UPDATE == 0
+        status_message.edit(status_string + " -- " + i.to_s + " users")
+      end
 
       create_time = Time.now
       is_verified = false
@@ -87,7 +95,7 @@ module DiscordDatastore::BotHelper
         "verified" => is_verified,
         "discourse_account_id" => discourse_id,
         "created_at" => create_time,
-        "updated_at" => Time.now,
+        "updated_at" => Time.now
       }
       DiscordDatastore::DiscordUser.upsert(discorduser)
     end
@@ -115,7 +123,7 @@ module DiscordDatastore::BotHelper
       "verified" => is_verified,
       "discourse_account_id" => discourse_id,
       "created_at" => create_time,
-      "updated_at" => Time.now,
+      "updated_at" => Time.now
     }
 
     DiscordDatastore::DiscordUser.upsert(discorduser)
@@ -123,7 +131,10 @@ module DiscordDatastore::BotHelper
 
   def get_oldest_message_id(channel)
     messages =
-      DiscordDatastore::DiscordMessage.where(discord_channel_id: channel.id).order(:date).limit(1)
+      DiscordDatastore::DiscordMessage
+        .where(discord_channel_id: channel.id)
+        .order(:date)
+        .limit(1)
 
     return messages[0].id if messages.length > 0
 
@@ -161,13 +172,14 @@ module DiscordDatastore::BotHelper
         "content" => message.content,
         "attachments" => attachments,
         "created_at" => Time.now,
-        "updated_at" => Time.now,
+        "updated_at" => Time.now
       }
     end
   end
 
   def browse_history
-    status_message = DiscordDatastore::BotInstance.send_to_channel("Scanning started.")
+    status_message =
+      DiscordDatastore::BotInstance.send_to_channel("Scanning started.")
     total_messages = 0
 
     get_channels.each do |channel|
@@ -241,11 +253,14 @@ module DiscordDatastore::BotHelper
 
       status_message.edit(status_string + " -- " + i.to_s + " messages (done)")
     end
-    status_message.edit("Message history -- " + total_messages.to_s + " new messages (done)")
+    status_message.edit(
+      "Message history -- " + total_messages.to_s + " new messages (done)"
+    )
   end
 
   def update_ranks
-    status_message = DiscordDatastore::BotInstance.send_to_channel("Updating ranks...")
+    status_message =
+      DiscordDatastore::BotInstance.send_to_channel("Updating ranks...")
 
     rank_names = SiteSetting.discord_rank_name.split("|")
     requirements = SiteSetting.discord_rank_count.split("|")
@@ -272,7 +287,7 @@ module DiscordDatastore::BotHelper
           next
         rescue StandardError
           Rails.logger.error(
-            "DiscordDatastore Bot: failed to ban user id=#{user.id} — check permissions",
+            "DiscordDatastore Bot: failed to ban user id=#{user.id} — check permissions"
           )
         end
       end
@@ -310,11 +325,11 @@ module DiscordDatastore::BotHelper
       if rank_changed
         if target_rank.nil?
           DiscordDatastore::BotInstance.send_to_channel(
-            "USER: " + user.name + " | UPDATED RANK: (none)",
+            "USER: " + user.name + " | UPDATED RANK: (none)"
           )
         else
           DiscordDatastore::BotInstance.send_to_channel(
-            "USER: " + user.name + " | UPDATED RANK: " + target_rank.name,
+            "USER: " + user.name + " | UPDATED RANK: " + target_rank.name
           )
         end
         user.set_roles user_ranks

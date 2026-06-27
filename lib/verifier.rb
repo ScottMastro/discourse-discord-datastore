@@ -1,17 +1,27 @@
 # frozen_string_literal: true
 class DiscordDatastore::Verifier
   def self.get_server
-    DiscordDatastore::BotInstance.bot.servers.each do |s|
+    # The bot only runs in the sidekiq process; in the web process (where the
+    # after_auth login hook fires) BotInstance.bot is nil, so bail gracefully
+    # instead of raising NoMethodError and 500ing the login. Role sync still
+    # happens later from the bot-side update_ranks/verify_from_discord pass.
+    bot = DiscordDatastore::BotInstance.bot
+    return nil if bot.nil?
+
+    bot.servers.each do |s|
       server_id = s[0]
       if server_id.to_s == SiteSetting.discord_server_id
-        return DiscordDatastore::BotInstance.bot.servers[server_id]
+        return bot.servers[server_id]
       end
     end
     nil
   end
 
   def self.verify_from_discord(discord_id)
-    builder = DB.build("select u.* from user_associated_accounts uaa, users u /*where*/ limit 1")
+    builder =
+      DB.build(
+        "select u.* from user_associated_accounts uaa, users u /*where*/ limit 1"
+      )
     builder.where("provider_name = :provider_name", provider_name: "discord")
     builder.where("uaa.user_id = u.id")
     builder.where("uaa.provider_uid = :discord_id", discord_id: discord_id.to_s)
@@ -21,9 +31,13 @@ class DiscordDatastore::Verifier
     if result.size == 0
       # No profile on Discourse
       server = get_server()
+      return if server.nil?
+
       member = server.member(discord_id)
       member.roles.each do |role|
-        member.remove_role(role) if role.name == SiteSetting.discord_verified_rank
+        if role.name == SiteSetting.discord_verified_rank
+          member.remove_role(role)
+        end
       end
     else
       result.each { |t| self.verify_user(t) }
@@ -33,6 +47,8 @@ class DiscordDatastore::Verifier
   def self.find_role(role_name)
     discord_role = nil
     server = get_server()
+    return nil if server.nil?
+
     server.roles.each { |role| discord_role = role if role.name == role_name }
 
     discord_role
@@ -42,13 +58,17 @@ class DiscordDatastore::Verifier
     discord_id = nil
 
     builder =
-      DB.build("select uaa.provider_uid from user_associated_accounts uaa /*where*/ limit 1")
+      DB.build(
+        "select uaa.provider_uid from user_associated_accounts uaa /*where*/ limit 1"
+      )
     builder.where("provider_name = :provider_name", provider_name: "discord")
     builder.where("uaa.user_id = :user_id", user_id: user.id)
     builder.query.each { |t| discord_id = t.provider_uid }
 
     unless discord_id.nil?
       server = get_server()
+      return if server.nil?
+
       member = server.member(discord_id)
 
       if SiteSetting.discord_verified_rank != ""
@@ -57,7 +77,7 @@ class DiscordDatastore::Verifier
           member.add_role(role)
           DiscordDatastore::BotInstance.bot.send_message(
             SiteSetting.discord_bot_channel_id,
-            "Verified! Discourse: #{user.username}, id=#{user.id} | Discord: #{member.username}, id=#{member.id}",
+            "Verified! Discourse: #{user.username}, id=#{user.id} | Discord: #{member.username}, id=#{member.id}"
           )
         end
       end
